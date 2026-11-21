@@ -83,7 +83,7 @@
   const subjects = {
     mathe: {
       title: "Analysis 1",
-      eyebrow: "Mathematik · Abitur 2027 · 12. Klasse · 1. Semester",
+      eyebrow: "Mathematik · 12. Klasse · 1. Semester",
       categories: window.MATHE_CATEGORIES,
       topics: window.MATHE_QUESTION_TOPICS,
       questionPool: window.MATHE_QUESTION_POOL,
@@ -97,9 +97,20 @@
         folgen: "folgen"
       }
     },
+    stochastik: {
+      title: "Stochastik",
+      eyebrow: "Mathematik · 12. Klasse · 2. Semester",
+      categories: window.STOCHASTIK_CATEGORIES,
+      topics: window.STOCHASTIK_QUESTION_TOPICS,
+      questionPool: window.STOCHASTIK_QUESTION_POOL,
+      learnPage: "Stochastik-quiz-app/lernseite.html",
+      categoryLearnAnchors: Object.fromEntries(
+        window.STOCHASTIK_CATEGORIES.map((category) => [category.id, category.id])
+      )
+    },
     informatik: {
       title: "Informatik",
-      eyebrow: "Informatik-Klausur · 13. Klasse · 1. Semester",
+      eyebrow: "Informatik · 13. Klasse · 1. Semester",
       categories: window.INFORMATIK_CATEGORIES,
       topics: window.INFORMATIK_QUESTION_TOPICS,
       questionPool: window.INFORMATIK_QUESTION_POOL,
@@ -108,7 +119,7 @@
     },
     dvt: {
       title: "DVT",
-      eyebrow: "DVT-Klausur · 13. Klasse · 1. Semester",
+      eyebrow: "DVT · 13. Klasse · 1. Semester",
       categories: window.DVT_CATEGORIES,
       topics: window.DVT_QUESTION_TOPICS,
       questionPool: window.DVT_QUESTION_POOL,
@@ -576,7 +587,7 @@
   function selectSubject(subjectId) {
     activeSubjectId = subjectId;
     activeSubject = subjects[subjectId];
-    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe");
+    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe", "theme-stochastik");
     document.body.classList.add(`theme-${subjectId}`);
     elements.subjectEyebrow.textContent = activeSubject.eyebrow;
     elements.subjectTitle.textContent = `${activeSubject.title}-Quiz einrichten`;
@@ -611,7 +622,7 @@
     elements.progressBar.style.width = "0%";
     elements.categoryGrid.replaceChildren();
     elements.topicShortcuts.replaceChildren();
-    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe");
+    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe", "theme-stochastik");
     activeSubject = null;
     activeSubjectId = null;
     elements.timerCard.hidden = false;

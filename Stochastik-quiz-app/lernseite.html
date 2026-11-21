@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Stochastik · 12. Klasse · 2. Semester</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../learn.css">
+  <script src="../theme.js" defer></script>
+  <script src="../learn-page.js" defer></script>
+</head>
+<body class="theme-stochastik">
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="Zurück zum Lernhub"><span class="brand-mark">∑</span><span>STOCHASTIK <span class="brand-light">LERNSEITE</span></span></a>
+      <div class="topbar-actions">
+        <a class="header-link" href="../index.html">Zum Lernhub</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Darstellung wechseln">Dunkel</button>
+        <span class="course-tag">12. Klasse · 2. Semester</span>
+      </div>
+    </header>
+    <main class="learn-layout">
+      <header class="learn-hero">
+        <p class="eyebrow">Mathematik · 12. Klasse · 2. Semester</p>
+        <h1>Stochastik <span>verstehen und anwenden.</span></h1>
+        <p class="intro">Von Baumdiagrammen und Zählverfahren über Verteilungen bis zum statistischen Test: Modelle auswählen, rechnen und Ergebnisse im Zusammenhang deuten.</p>
+        <a class="learn-pdf-link" href="../index.html#mathe-vorabhinweise">Abitur 2027: Vorabhinweise für Grund- und Leistungskurs →</a>
+      </header>
+      <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
+        <a href="#zufall">Zufall &amp; Pfade</a>
+        <a href="#kombinatorik">Kombinatorik</a>
+        <a href="#verteilungen">Binomial &amp; Poisson</a>
+        <a href="#kennwerte">Kennwerte &amp; Spiel</a>
+        <a href="#bedingt">Bedingte Wahrscheinlichkeit</a>
+        <a href="#normalverteilung">Normalverteilung</a>
+        <a href="#tests">Hypothesentests</a>
+        <a href="#lernblatt">Lernblatt</a>
+      </nav>
+      <article class="learn-content">
+        <details id="lernblatt" class="learn-section">
+          <summary><span class="eyebrow">Lernmaterial · Mathematik</span><span class="learn-section-title">Lernblatt · 12. Klasse · 2. Semester</span></summary>
+          <p>Das bereitgestellte Stochastik-Lernblatt direkt ansehen oder separat öffnen.</p>
+          <a class="learn-pdf-link" href="../Mathematik%20Klausur%2012-2.pdf" target="_blank" rel="noopener">Lernblatt als PDF öffnen ↗</a>
+          <iframe class="learn-pdf" src="../Mathematik%20Klausur%2012-2.pdf" title="Mathematik-Lernblatt Stochastik, 12. Klasse" loading="lazy"></iframe>
+          <p>Wird die Vorschau nicht angezeigt, öffne das Lernblatt über den Link.</p>
+        </details>
+
+        <details id="zufall" class="learn-section">
+          <summary><span class="eyebrow">01 · Grundlagen</span><span class="learn-section-title">Zufall, Ereignisse und Pfadregeln</span></summary>
+          <p>Ein Zufallsexperiment hat eine Ergebnismenge Ω. Ein Ereignis A ist eine Teilmenge davon; Ā bedeutet „nicht A“. Nur bei gleich wahrscheinlichen Ergebnissen gilt die Laplace-Regel: P(A) = günstige / mögliche Ergebnisse. Allgemein liegt jede Wahrscheinlichkeit zwischen 0 und 1 und P(Ω) = 1.</p>
+          <div class="formula-card"><strong>Rechenregeln</strong>
+            <code>P(Ā) = 1 − P(A)</code>
+            <code>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</code>
+            <code>P(A ∩ B) = P(A) · P(B | A)</code>
+            <span>Entlang eines Pfades multiplizieren; Wahrscheinlichkeiten disjunkter passender Pfade addieren. An jedem Knoten summieren sich die ausgehenden Zweige zu 1.</span>
+          </div>
+          <h3>Beispiel: Ziehen ohne Zurücklegen</h3>
+          <p>In einer Urne liegen drei rote und zwei blaue Kugeln. Für Rot, dann Blau gilt 3/5 · 2/4 = 3/10; für Blau, dann Rot 2/5 · 3/4 = 3/10. Genau eine rote Kugel ergibt über beide disjunkten Pfade 3/5.</p>
+          <p><strong>Mindestens einmal:</strong> Bei drei unabhängigen Versuchen mit Trefferwahrscheinlichkeit 0,2 ist P(mindestens ein Treffer) = 1 − P(kein Treffer) = 1 − 0,8³ = 0,488.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Ohne Zurücklegen ändern sich die Zweigwahrscheinlichkeiten. „Oder“ meint in der Mathematik normalerweise auch „beides“; Überschneidungen werden beim Addieren einmal abgezogen.</p></div>
+        </details>
+
+        <details id="kombinatorik" class="learn-section">
+          <summary><span class="eyebrow">02 · Zählen</span><span class="learn-section-title">Kombinatorik: Reihenfolge und Wiederholung</span></summary>
+          <p>Vor dem Rechnen zwei Fragen klären: Spielt die Reihenfolge eine Rolle? Darf dasselbe Objekt mehrfach gewählt werden? Für n unterscheidbare Objekte und k Plätze gilt:</p>
+          <div class="table-wrap"><table><thead><tr><th></th><th>Mit Wiederholung</th><th>Ohne Wiederholung</th></tr></thead><tbody>
+            <tr><th>Reihenfolge wichtig</th><td>n<sup>k</sup></td><td>n!/(n−k)!, für k ≤ n</td></tr>
+            <tr><th>Reihenfolge unwichtig</th><td>(n+k−1 über k), für n ≥ 1</td><td>(n über k) = n!/[k!(n−k)!], für k ≤ n</td></tr>
+          </tbody></table></div>
+          <p>n! = n·(n−1)·…·1, und 0! = 1. Eine Anordnung aller n verschiedenen Objekte heißt Permutation und hat n! Möglichkeiten. Bei gleichen Objekten mit Häufigkeiten n₁, n₂, … teilt man durch n₁!·n₂!·… .</p>
+          <p><strong>Beispiele:</strong> Drei verschiedene Ämter aus fünf Personen besetzen: 5·4·3 = 60. Ein Dreierteam aus fünf Personen wählen: (5 über 3) = 10. Zwei Eissorten aus drei Sorten wählen, Wiederholung erlaubt und Reihenfolge egal: (4 über 2) = 6.</p>
+          <p><strong>Urne und Lotto:</strong> Bei sechs Ziehungen ohne Zurücklegen aus 49 nummerierten Kugeln sind ohne Beachtung der Reihenfolge (49 über 6) = 13 983 816 Auswahlen möglich. Bei fairer Ziehung ist die Wahrscheinlichkeit für sechs bestimmte Zahlen daher 1/13 983 816.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Das Team {A, B, C} ist nicht sechsmal verschieden. Zählformeln zählen Möglichkeiten; zur Wahrscheinlichkeit wird erst bei gleich wahrscheinlichen Ergebnissen durch die Gesamtzahl geteilt.</p></div>
+        </details>
+
+        <details id="verteilungen" class="learn-section">
+          <summary><span class="eyebrow">03 · Modelle</span><span class="learn-section-title">Binomial- und Poissonverteilung</span></summary>
+          <p>Eine Bernoulli-Kette besteht aus n unabhängigen Versuchen mit je zwei Ausgängen und konstantem Trefferanteil p. X zählt Treffer. Dann gilt X ~ B(n; p), für k = 0, …, n:</p>
+          <div class="formula-card"><strong>Binomialverteilung</strong>
+            <code>P(X = k) = (n über k) · p<sup>k</sup> · (1−p)<sup>n−k</sup></code>
+            <code>P(X ≤ k) = Σ<sub>j=0</sub><sup>k</sup> P(X = j)</code>
+            <span>Bei einer kumulierten Tabelle F(k) = P(X ≤ k): P(X ≥ k) = 1 − F(k−1); P(a ≤ X ≤ b) = F(b) − F(a−1).</span>
+          </div>
+          <p><strong>Beispiel:</strong> Vier unabhängige Versuche mit p = 0,5: P(X = 2) = 6·0,5²·0,5² = 0,375. Für „mehr als zwei“ zählt man 3 und 4, also 1 − P(X ≤ 2) = 5/16.</p>
+          <h3>Poissonmodell</h3>
+          <p>Für zufällige Anzahlen unabhängiger Ereignisse in einem festen Intervall bei konstanter mittlerer Rate λ &gt; 0 kann X ~ Pois(λ) geeignet sein. Für k = 0, 1, 2, … gilt P(X = k) = e<sup>−λ</sup>λ<sup>k</sup>/k!. Erwartungswert und Varianz sind beide λ. Bei doppelter Intervalllänge verdoppelt sich λ, wenn die Rate konstant bleibt.</p>
+          <p><strong>Beispiel:</strong> Bei λ = 2 ist P(X = 0) = e<sup>−2</sup> ≈ 0,1353 und P(X ≥ 1) = 1 − e<sup>−2</sup> ≈ 0,8647. Eine Binomialverteilung mit großem n und kleinem p kann durch Pois(np) approximiert werden; die Modellannahmen und die Näherung müssen zum Kontext passen.</p>
+          <p><strong>Näherung:</strong> Für 1000 unabhängige Versuche mit p = 0,002 gilt λ = np = 2. Die exakte Wahrscheinlichkeit für keinen Treffer ist 0,998<sup>1000</sup> ≈ 0,1351; die Poissonnäherung e<sup>−2</sup> ≈ 0,1353 liegt hier nahe.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>„Höchstens k“ enthält k, „weniger als k“ nicht. Ziehen ohne Zurücklegen aus einer kleinen endlichen Population ist im Allgemeinen nicht binomialverteilt; die Trefferwahrscheinlichkeit ändert sich.</p></div>
+        </details>
+
+        <details id="kennwerte" class="learn-section">
+          <summary><span class="eyebrow">04 · Zufallsgrößen</span><span class="learn-section-title">Erwartungswert, Varianz und faires Spiel</span></summary>
+          <p>Eine Zufallsgröße X ordnet Ergebnissen Zahlen zu. Ihr Erwartungswert μ ist der langfristige Durchschnitt, nicht zwingend ein möglicher Einzelwert. Die Varianz misst die mittlere quadratische Abweichung; die Standardabweichung σ hat dieselbe Einheit wie X.</p>
+          <div class="formula-card"><strong>Kennwerte</strong>
+            <code>E(X) = Σ x<sub>i</sub> · P(X = x<sub>i</sub>)</code>
+            <code>x̄ = (x₁ + ⋯ + x<sub>n</sub>)/n</code>
+            <code>Var(X) = Σ (x<sub>i</sub> − μ)² · P(X = x<sub>i</sub>) = E(X²) − μ²; &nbsp; σ = √Var(X)</code>
+            <code>X ~ B(n; p): μ = np, &nbsp; Var(X) = np(1−p)</code>
+            <code>E(aX+b) = aE(X)+b; &nbsp; Var(aX+b) = a²Var(X)</code>
+          </div>
+          <p>Das arithmetische Mittel x̄ beschreibt die tatsächlich beobachteten Werte einer Stichprobe; E(X) ist dagegen ein mit Wahrscheinlichkeiten gewichteter Modellwert. Für die Beobachtungen 2, 3 und 7 ist x̄ = 12/3 = 4.</p>
+          <p><strong>Beispiel:</strong> Eine Auszahlung beträgt mit Wahrscheinlichkeit 0,25 vier Euro und sonst null. Ihre erwartete Auszahlung ist 1 €. Kostet die Teilnahme 1 €, ist der erwartete Nettogewinn 0 €: Das Spiel ist im Erwartungswert fair. Bei 1,50 € Einsatz ist er −0,50 €.</p>
+          <p>Bei einem fairen Würfel sind E(X) = 3,5 und Var(X) = 35/12. Der Erwartungswert 3,5 muss nicht als Augenzahl auftreten.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Auszahlung und Nettogewinn unterscheiden: Einsatz abziehen. Ein faires Spiel garantiert weder Gewinn noch Ausgleich in einer kurzen Serie; Varianz und Standardabweichung nicht verwechseln.</p></div>
+        </details>
+
+        <details id="bedingt" class="learn-section">
+          <summary><span class="eyebrow">05 · Zusammenhänge</span><span class="learn-section-title">Vierfeldertafel, bedingte Wahrscheinlichkeit und Unabhängigkeit</span></summary>
+          <p>Eine Vierfeldertafel zerlegt die Gesamtheit nach A/Ā und B/B̄. Die vier Innenfelder sind Schnittmengen, die Randwerte ihre Summen. Aus absoluten Häufigkeiten werden durch Division durch die Gesamtzahl relative Häufigkeiten.</p>
+          <div class="formula-card"><strong>Bedingung und Umkehrung</strong>
+            <code>P(A | B) = P(A ∩ B) / P(B), &nbsp; P(B) &gt; 0</code>
+            <code>P(A) = P(A | B)P(B) + P(A | B̄)P(B̄)</code>
+            <code>P(B | A) = P(A | B)P(B) / P(A), &nbsp; P(A) &gt; 0</code>
+            <span>Unabhängigkeit genau dann, wenn P(A ∩ B) = P(A)P(B). Bei positiven Nennern äquivalent zu P(A | B) = P(A).</span>
+          </div>
+          <h3>Beispiel: Test und Grundrate</h3>
+          <p>Von 1000 Personen seien 100 betroffen. Von diesen testen 80 positiv; von den 900 nicht Betroffenen testen 90 positiv. Insgesamt sind 170 Tests positiv: P(positiv) = 0,17 und P(betroffen | positiv) = 80/170 = 8/17 ≈ 0,471. P(positiv | betroffen) = 80/100 = 0,8 ist eine andere Frage.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th></th><th>Betroffen</th><th>Nicht betroffen</th><th>Summe</th></tr></thead>
+            <tbody>
+              <tr><th>Positiv</th><td>80</td><td>90</td><td>170</td></tr>
+              <tr><th>Negativ</th><td>20</td><td>810</td><td>830</td></tr>
+              <tr><th>Summe</th><td>100</td><td>900</td><td>1000</td></tr>
+            </tbody>
+          </table></div>
+          <p>Hier gilt P(betroffen ∩ positiv) = 0,08, aber P(betroffen)P(positiv) = 0,017; also sind die Ereignisse nicht unabhängig.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Beim Bedingen durch die Größe der gegebenen Gruppe teilen. Unabhängig ist nicht dasselbe wie unvereinbar: Zwei disjunkte Ereignisse mit positiver Wahrscheinlichkeit sind abhängig.</p></div>
+        </details>
+
+        <details id="normalverteilung" class="learn-section">
+          <summary><span class="eyebrow">06 · Stetige Modelle</span><span class="learn-section-title">Normalverteilung und Kontinuitätskorrektur</span></summary>
+          <p>Für Y ~ N(μ; σ²) mit σ &gt; 0 ist die Dichte glockenförmig und symmetrisch um μ. Wahrscheinlichkeiten sind Flächen unter der Dichte; bei einem stetigen Modell gilt P(Y = a) = 0. Die Dichtehöhe selbst ist keine Punktwahrscheinlichkeit.</p>
+          <div class="formula-card"><strong>Standardisieren</strong>
+            <code>Z = (Y − μ)/σ ~ N(0; 1), &nbsp; Φ(z) = P(Z ≤ z)</code>
+            <code>P(a ≤ Y ≤ b) = Φ((b−μ)/σ) − Φ((a−μ)/σ)</code>
+            <span>Φ(−z) = 1 − Φ(z); etwa 68,3 % liegen innerhalb einer, 95,4 % innerhalb zweier Standardabweichungen.</span>
+          </div>
+          <p><strong>Beispiel:</strong> Y ~ N(100; 15²): P(Y ≤ 115) = Φ(1) ≈ 0,8413. P(Y &gt; 115) ≈ 0,1587. Bei stetigen Größen spielt das Gleichheitszeichen an einer einzelnen Grenze keine Rolle.</p>
+          <h3>Diskrete Binomialverteilung annähern</h3>
+          <p>Wenn die Normalnäherung für X ~ B(n; p) hinreichend gut ist (häufige Faustregel: np und n(1−p) jeweils mindestens 5; Genauigkeit prüfen), setze μ = np und σ = √(np(1−p)). Weil X ganzzahlig ist, die Grenzen um 0,5 verschieben:</p>
+          <div class="formula-card"><strong>Kontinuitätskorrektur</strong>
+            <code>P(X ≤ k) ≈ P(Y ≤ k + 0,5)</code>
+            <code>P(X ≥ k) ≈ P(Y ≥ k − 0,5)</code>
+            <code>P(a ≤ X ≤ b) ≈ P(a − 0,5 ≤ Y ≤ b + 0,5)</code>
+          </div>
+          <p><strong>Beispiel:</strong> X ~ B(100; 0,5), μ = 50, σ = 5. P(X ≤ 55) ≈ Φ((55,5−50)/5) = Φ(1,1) ≈ 0,8643.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>In der Standardisierung durch σ, nicht σ² teilen. Die ±0,5-Korrektur gehört zur Näherung einer ganzzahligen Verteilung, nicht zu jeder normalen Messgröße.</p></div>
+        </details>
+
+        <details id="tests" class="learn-section">
+          <summary><span class="eyebrow">07 · Entscheiden</span><span class="learn-section-title">Hypothesentests und Fehler 1. und 2. Art</span></summary>
+          <p>Ein Test prüft eine Nullhypothese H₀ gegen eine Alternative H₁. Die Prüfgröße X und ihre Verteilung unter H₀ festlegen, Signifikanzniveau α vorab wählen und einen Ablehnungsbereich bestimmen. Die Richtung der Alternative legt fest, ob kleine, große oder beide extremen Werte gegen H₀ sprechen.</p>
+          <ol>
+            <li>H₀ und H₁ einschließlich Parameter formulieren, Modell und Stichprobengröße angeben.</li>
+            <li>Ablehnungsbereich so wählen, dass die Wahrscheinlichkeit einer Ablehnung unter H₀ höchstens α ist; bei zusammengesetztem H₀ muss dies für alle zulässigen Parameter gelten.</li>
+            <li>Beobachteten Wert vergleichen und im Sachzusammenhang formulieren: H₀ verwerfen oder nicht verwerfen.</li>
+          </ol>
+          <p><strong>Beispiel:</strong> H₀: p = 0,5 gegen H₁: p &gt; 0,5; X ~ B(10; p), α = 5 %. Ablehnung bei X ≥ 9: Unter H₀ ist P(X ≥ 9) = (10 + 1)/1024 ≈ 1,07 %. Bei X ≥ 8 wären es 56/1024 ≈ 5,47 % und damit zu viel. Beobachtung X = 9 führt zur Ablehnung.</p>
+          <div class="formula-card"><strong>Fehler und Teststärke</strong>
+            <code>Fehler 1. Art: H₀ verwerfen, obwohl H₀ wahr ist. P(Fehler 1. Art) ≤ α.</code>
+            <code>Fehler 2. Art: H₀ nicht verwerfen, obwohl H₁ wahr ist. β(p) = P<sub>p</sub>(nicht verwerfen).</code>
+            <code>Teststärke bei p ∈ H₁: 1 − β(p) = P<sub>p</sub>(verwerfen).</code>
+          </div>
+          <p>Im Beispiel ist bei p = 0,8 der Fehler 2. Art β(0,8) = P<sub>0,8</sub>(X ≤ 8) ≈ 0,6242; die Teststärke beträgt etwa 0,3758. β hängt vom konkreten alternativen Parameter ab. Das tatsächliche Niveau kann wegen diskreter Werte kleiner als α sein.</p>
+          <p>Der <strong>p-Wert</strong> ist unter H₀ die Wahrscheinlichkeit für ein mindestens so extremes Ergebnis wie das beobachtete, entsprechend der festgelegten Testrichtung. Ist er höchstens α, wird H₀ verworfen. Ein zweiseitiger Test verteilt den Ablehnungsbereich auf beide Seiten; die genaue Definition muss zum gewählten Verfahren passen.</p>
+          <p><strong>Zweiseitiges Beispiel:</strong> H₀: p = 0,5 gegen H₁: p ≠ 0,5, n = 10 und α = 5 %. Wählt man symmetrische Randbereiche, ergibt X ≤ 1 oder X ≥ 9 unter H₀ die Fehlerwahrscheinlichkeit 22/1024 ≈ 2,15 %. Die nächstgrößeren Ränder X ≤ 2 oder X ≥ 8 ergeben 112/1024 ≈ 10,94 % und überschreiten α. Bei X = 1 wird H₀ verworfen.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>„Nicht verwerfen“ beweist H₀ nicht. α ist weder die Wahrscheinlichkeit, dass H₀ wahr ist, noch β. Vor einer Beobachtung Test und Grenzen festlegen; β ohne konkrete Alternative ist keine einzelne Zahl.</p></div>
+        </details>
+      </article>
+    </main>
+    <footer class="site-footer"><span>Stochastik · 12. Klasse · 2. Semester · Abiturvorbereitung 2027</span><a href="../index.html">Zum Lernhub</a></footer>
+  </div>
+</body>
+</html>
