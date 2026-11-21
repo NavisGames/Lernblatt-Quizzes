@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="style.css">
   <script src="Informatik-quiz-app/questions.js" defer></script>
   <script src="DVT-quiz-app/questions.js" defer></script>
+  <script src="Mathematik-quiz-app/questions.js" defer></script>
+  <script src="Stochastik-quiz-app/questions.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -34,9 +36,9 @@
         </div>
         <section class="subject-group" aria-labelledby="abiturGroupTitle">
           <div class="subject-group-heading">
-            <p class="eyebrow">Gemeinsamer Lernbereich</p>
-            <h2 id="abiturGroupTitle">Datenverarbeitungstechnik – Abitur</h2>
-            <p>Die Fachkarten zeigen die jeweiligen Themenbereiche deiner Klausuren.</p>
+            <p class="eyebrow">Lernbereich</p>
+            <h2 id="abiturGroupTitle">Datenverarbeitungstechnik</h2>
+            <p>PC-Technik · Netzwerktechnik · Assembler</p>
           </div>
           <div class="subject-grid" aria-label="Fachauswahl">
             <button class="subject-card subject-card-informatik" type="button" data-subject="informatik">
@@ -77,7 +79,7 @@
             </div>
             <p class="abitur-resource-note">Die Vorabhinweise sind keine Prüfungsaufgaben. Originalaufgaben für 2027 liegen hier nicht vor.</p>
             <details class="abitur-summary">
-              <summary>DVT-Abitur 2027 · Das Wichtigste im Überblick</summary>
+              <summary>Aufbau und Inhalte</summary>
               <p>Zusammenfassung der offiziellen Vorabhinweise, Abschnitt 4, Seiten 15–16:</p>
               <ul>
                 <li><strong>Prüfung:</strong> Schriftlich, 300 Minuten; zwei Aufgabenblöcke, einer davon zur Programmierung.</li>
@@ -87,6 +89,71 @@
                 <li><strong>Hilfsmittel:</strong> Offline-PC mit Entwicklungsumgebung und Assembler-Simulation oder alternativ Microcomputer/Mikrocontroller; Software für grafische Programmabläufe, schulisch eingeführter Taschenrechner und Datenblätter. Die allgemeinen Vorgaben in Kapitel III gelten ebenfalls.</li>
               </ul>
             </details>
+          </section>
+        </section>
+        <section class="subject-group" aria-labelledby="analysisGroupTitle">
+          <div class="subject-group-heading">
+            <p class="eyebrow">Lernbereich</p>
+            <h2 id="analysisGroupTitle">Mathematik</h2>
+            <p>Analysis · Stochastik · Geometrie</p>
+          </div>
+          <div class="subject-grid" aria-label="Mathematik-Fachauswahl">
+            <button class="subject-card subject-card-mathe" type="button" data-subject="mathe">
+              <span class="subject-mark" aria-hidden="true">ƒ</span>
+              <span class="subject-card-copy">
+                <strong>Analysis 1</strong>
+                <span>Änderungsraten, Ableitungen, Kurvendiskussion und Folgen</span>
+                <small class="subject-term">12. Klasse · 1. Semester</small>
+                <small data-subject-stats="mathe"></small>
+              </span>
+              <span class="subject-arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="subject-card subject-card-stochastik" type="button" data-subject="stochastik">
+              <span class="subject-mark" aria-hidden="true">P</span>
+              <span class="subject-card-copy">
+                <strong>Stochastik</strong>
+                <span>Wahrscheinlichkeiten, Verteilungen und Hypothesentests</span>
+                <small class="subject-term">12. Klasse · Abiturvorbereitung 2027</small>
+                <small data-subject-stats="stochastik"></small>
+              </span>
+              <span class="subject-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <section id="mathe-vorabhinweise" class="abitur-resources abitur-resources-mathe" aria-labelledby="mathAbiturTitle">
+            <div class="abitur-resources-heading">
+              <div>
+                <p class="eyebrow">Mecklenburg-Vorpommern</p>
+                <h3 id="mathAbiturTitle">Mathematik · Abitur 2027</h3>
+              </div>
+              <p>Offizielle Vorabhinweise für Grundkurs und Leistungskurs.</p>
+            </div>
+            <div class="abitur-resource-grid">
+              <a class="abitur-resource" href="https://www.bildung-mv.de/export/sites/bildungsserver/.galleries/dokumente/pruefungen/Vorabhinweise_ABI-AB_2027.pdf#page=54" target="_blank" rel="noopener">
+                <span class="abitur-year">2027</span>
+                <span class="abitur-resource-copy"><strong>Vorabhinweise Mathematik</strong><small>Bildungsserver M-V · PDF · Grund- und Leistungskurs</small></span>
+                <span class="abitur-resource-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="abitur-resource-note">Zusammenfassung von Abschnitt 14, Seiten 52–55. Die Vorabhinweise sind keine Prüfungsaufgaben. Dieser Lernbereich enthält Analysis 1 und Stochastik; Geometrie ist noch nicht enthalten. Die vorhandenen Inhalte decken nicht den gesamten Abiturstoff ab.</p>
+            <details class="abitur-summary">
+              <summary>Grundkurs · Aufbau und Inhalte</summary>
+              <ul>
+                <li><strong>Zeit:</strong> 285 Minuten einschließlich Auswahlzeit; Teil A höchstens 100 Minuten.</li>
+                <li><strong>Teil A:</strong> Hilfsmittelfrei; drei Pflichtaufgaben und je eine Wahlaufgabe aus zwei Aufgabengruppen. Jede bearbeitete Aufgabe zählt 5 BE.</li>
+                <li><strong>Teil B:</strong> Mit Hilfsmitteln; Analysis als Pflichtaufgabe (25 BE), dazu je eine Wahlaufgabe in Geometrie und Stochastik (je 15 BE). Insgesamt 80 BE.</li>
+                <li><strong>Inhalte:</strong> Keine Rahmenplaninhalte ausgeschlossen; in Analysis werden in Teil B nur ganzrationale Funktionen und Exponentialfunktionen zur Basis e betrachtet.</li>
+              </ul>
+            </details>
+            <details class="abitur-summary">
+              <summary>Leistungskurs · Aufbau und Inhalte</summary>
+              <ul>
+                <li><strong>Zeit:</strong> 330 Minuten einschließlich Auswahlzeit; Teil A höchstens 110 Minuten.</li>
+                <li><strong>Teil A:</strong> Hilfsmittelfrei; vier Pflichtaufgaben und zwei Wahlaufgaben aus Aufgabengruppe 2. Jede bearbeitete Aufgabe zählt 5 BE.</li>
+                <li><strong>Teil B:</strong> Mit Hilfsmitteln; Analysis als Pflichtaufgabe (30 BE), dazu je eine Wahlaufgabe in Geometrie und Stochastik (je 20 BE). Insgesamt 100 BE.</li>
+                <li><strong>Inhalte:</strong> Keine im Rahmenplan genannten Inhalte ausgeschlossen.</li>
+              </ul>
+            </details>
+            <p class="abitur-resource-note">Für beide Kurse gelten die Vorgaben zu WTR bzw. CAS und schulisch eingeführter Formelsammlung im Dokument; im hilfsmittelfreien Teil A sind diese nicht zugelassen.</p>
           </section>
         </section>
       </section>

@@ -49,15 +49,15 @@
 13|13 12 12 11 10 10 9 8 8 7 6 6 5 4 3
 12|12 11 11 10 9 9 8 8 7 6 6 5 4 4 3
 11|11 11 10 10 9 9 8 8 7 7 6 5 5 4 3
-10|10 9 9 8 8 7 7 6 6 5 5 4 4 3 2
+10|10 10 9 9 8 8 7 7 6 6 5 5 4 4
 `.trim();
 
   const GRADE_THRESHOLDS = new Map(
     gradeTableSource.split("\n").map((line) => {
       const [maximum, values] = line.split("|");
       const thresholds = values.split(/\s+/).map(Number);
-      if (thresholds.length !== 15) {
-        throw new Error(`Notenpunktematrix für ${maximum} muss 15 Werte enthalten.`);
+      if (thresholds.length !== (maximum === "10" ? 14 : 15)) {
+        throw new Error(`Notenpunktematrix für ${maximum} enthält eine unerwartete Anzahl von Werten.`);
       }
       return [Number(maximum), thresholds];
     })
@@ -81,6 +81,22 @@
   };
 
   const subjects = {
+    mathe: {
+      title: "Analysis 1",
+      eyebrow: "Mathematik · Abitur 2027 · 12. Klasse · 1. Semester",
+      categories: window.MATHE_CATEGORIES,
+      topics: window.MATHE_QUESTION_TOPICS,
+      questionPool: window.MATHE_QUESTION_POOL,
+      learnPage: "Mathematik-quiz-app/lernseite.html",
+      categoryLearnAnchors: {
+        aenderung: "aenderung",
+        funktionen: "funktionen",
+        ableitung: "ableitung",
+        kurven: "kurven",
+        anwendung: "anwendung",
+        folgen: "folgen"
+      }
+    },
     informatik: {
       title: "Informatik",
       eyebrow: "Informatik-Klausur · 13. Klasse · 1. Semester",
@@ -560,7 +576,7 @@
   function selectSubject(subjectId) {
     activeSubjectId = subjectId;
     activeSubject = subjects[subjectId];
-    document.body.classList.remove("theme-informatik", "theme-dvt");
+    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe");
     document.body.classList.add(`theme-${subjectId}`);
     elements.subjectEyebrow.textContent = activeSubject.eyebrow;
     elements.subjectTitle.textContent = `${activeSubject.title}-Quiz einrichten`;
@@ -595,7 +611,7 @@
     elements.progressBar.style.width = "0%";
     elements.categoryGrid.replaceChildren();
     elements.topicShortcuts.replaceChildren();
-    document.body.classList.remove("theme-informatik", "theme-dvt");
+    document.body.classList.remove("theme-informatik", "theme-dvt", "theme-mathe");
     activeSubject = null;
     activeSubjectId = null;
     elements.timerCard.hidden = false;
@@ -939,7 +955,7 @@
     if (GRADE_THRESHOLDS.has(maximum)) return GRADE_THRESHOLDS.get(maximum);
 
     if (maximum < keys[0]) {
-      return GRADE_THRESHOLDS.get(keys[0]).map((threshold) => Math.ceil((threshold / keys[0]) * maximum));
+      return null;
     }
     if (maximum > keys[keys.length - 1]) {
       return GRADE_THRESHOLDS.get(keys[keys.length - 1]).map((threshold) =>
@@ -958,10 +974,11 @@
 
   function calculateGrade(score, maximum) {
     const thresholds = thresholdsForMaximum(maximum);
+    if (!thresholds) return null;
     for (let index = 0; index < thresholds.length; index++) {
       if (score >= thresholds[index]) return 15 - index;
     }
-    return 0;
+    return thresholds.length === 15 ? 0 : null;
   }
 
   function submitQuiz(byTimer = false) {
@@ -989,7 +1006,7 @@
       sum + (isCorrect(question) ? question.points : 0), 0);
     const percentage = maximum ? (score / maximum) * 100 : 0;
     const grade = calculateGrade(score, maximum);
-    const [schoolGrade, gradeLabel] = gradeDescriptions[grade];
+    const gradeDescription = grade === null ? null : gradeDescriptions[grade];
     const unansweredCount = quizQuestions.filter((question) => !hasAnswer(question)).length;
     const unsureCount = unsureQuestions.size;
     const unsureCorrectCount = quizQuestions.filter((question) =>
@@ -1024,10 +1041,12 @@
         ? "Die verfügbare Bearbeitungszeit ist abgelaufen. Deine Antworten wurden automatisch ausgewertet."
         : "Deine Antworten wurden automatisch ausgewertet.";
     elements.primaryScoreLabel.textContent = flashcardMode ? "Gewusst" : "Notenpunkte";
-    elements.gradePoints.textContent = flashcardMode ? String(correctCount) : String(grade);
+    elements.gradePoints.textContent = flashcardMode ? String(correctCount) : grade === null ? "–" : String(grade);
     elements.gradeName.textContent = flashcardMode
       ? `${correctCount} von ${quizQuestions.length} Karten`
-      : `${schoolGrade} · ${gradeLabel}`;
+      : gradeDescription
+        ? `${gradeDescription[0]} · ${gradeDescription[1]}${GRADE_THRESHOLDS.has(maximum) ? "" : " · näherungsweise"}`
+        : "Notenmaßstab für diese Punktzahl nicht vollständig";
     elements.scoreValue.textContent = flashcardMode
       ? `${correctCount} / ${quizQuestions.length}`
       : `${Number(score.toFixed(2))} / ${maximum}`;
@@ -1098,7 +1117,7 @@
       link.href = `${activeSubject.learnPage}#${anchor}`;
       link.textContent = category.label;
       const value = document.createElement("span");
-      value.textContent = `${score.correct}/${score.total} · ${percentage}% · ${formatPoints(score.earnedPoints)}/${formatPoints(score.maxPoints)} P`;
+      value.textContent = `${score.correct}/${score.total} Aufgaben · ${percentage}% · ${formatPoints(score.earnedPoints)}/${formatPoints(score.maxPoints)} Punkte`;
       const meter = document.createElement("div");
       meter.className = "category-result-meter";
       meter.setAttribute("role", "meter");

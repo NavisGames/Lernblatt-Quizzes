@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Analysis 1 · 12. Klasse · 1. Semester</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../learn.css">
+  <script src="../theme.js" defer></script>
+  <script src="../learn-page.js" defer></script>
+</head>
+<body class="theme-mathe">
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="Zurück zum Lernhub"><span class="brand-mark">ƒ</span><span>ANALYSIS <span class="brand-light">LERNSEITE</span></span></a>
+      <div class="topbar-actions">
+        <a class="header-link" href="../index.html">Zum Lernhub</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Darstellung wechseln">Dunkel</button>
+        <span class="course-tag">12. Klasse · 1. Semester</span>
+      </div>
+    </header>
+    <main class="learn-layout">
+      <header class="learn-hero">
+        <p class="eyebrow">Mathematik · Abitur 2027 · 12. Klasse · 1. Semester</p>
+        <h1>Analysis 1 <span>verstehen und anwenden.</span></h1>
+        <p class="intro">Von Änderungsraten und Ableitungen über Kurvendiskussion bis zu Zahlenfolgen und Grenzwerten. Wähle ein Kapitel zum Wiederholen.</p>
+        <a class="learn-pdf-link" href="../index.html#mathe-vorabhinweise">Abitur 2027: Vorabhinweise für Grund- und Leistungskurs →</a>
+      </header>
+      <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
+        <a href="#aenderung">Änderungsraten</a>
+        <a href="#funktionen">Funktionen</a>
+        <a href="#ableitung">Ableitungen</a>
+        <a href="#kurven">Kurvendiskussion</a>
+        <a href="#anwendung">Extremwertaufgaben</a>
+        <a href="#folgen">Folgen &amp; Grenzwerte</a>
+        <a href="#lernblatt">Lernblatt</a>
+      </nav>
+      <article class="learn-content">
+
+        <details id="lernblatt" class="learn-section">
+          <summary><span class="eyebrow">Lernmaterial · Mathematik</span><span class="learn-section-title">Lernblatt · 12. Klasse · 1. Semester</span></summary>
+          <p>Das vorhandene Lernblatt zu Änderungsraten, Ableitungen und Monotonie direkt ansehen oder separat öffnen.</p>
+          <a class="learn-pdf-link" href="../Mathematik%20Klausur%2012-1.pdf" target="_blank" rel="noopener">Lernblatt als PDF öffnen ↗</a>
+          <iframe class="learn-pdf" src="../Mathematik%20Klausur%2012-1.pdf" title="Mathematik-Lernblatt, 12. Klasse, 1. Semester" loading="lazy"></iframe>
+          <p>Wird die Vorschau nicht angezeigt, öffne das Lernblatt über den Link.</p>
+        </details>
+        
+        <details id="aenderung" class="learn-section">
+          <summary><span class="eyebrow">01 · Änderung</span><span class="learn-section-title">Sekante, Tangente und Ableitung</span></summary>
+          <p>Die <strong>mittlere Änderungsrate</strong> beschreibt die durchschnittliche Veränderung zwischen zwei verschiedenen Stellen. Geometrisch ist sie die Steigung der Sekante durch beide Punkte.</p>
+          <div class="formula-card"><strong>Mittlere und lokale Änderungsrate</strong>
+            <code>m<sub>mittel</sub> = (f(x₂) − f(x₁)) / (x₂ − x₁), &nbsp; x₂ ≠ x₁</code>
+            <code>f′(x₀) = lim<sub>h→0</sub> [f(x₀ + h) − f(x₀)] / h</code>
+            <span>Für den Differenzenquotienten gilt h ≠ 0. Sein Grenzwert ist die Tangentensteigung und lokale Änderungsrate.</span>
+          </div>
+          <h3>Musterlösung: Ableitung aus dem Grenzwert</h3>
+          <p>Für f(x) = x² und x₀ = 2 verwenden wir (2 + h)² = 4 + 4h + h². Der Differenzenquotient ist (4 + 4h + h² − 4)/h = 4 + h für h ≠ 0. Für h → 0 folgt f′(2) = 4.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>h darf im ursprünglichen Bruch nicht null sein. Erst den Ausdruck für h ≠ 0 vereinfachen und danach den Grenzwert betrachten. Bei (a + b)² den Mittelterm 2ab nicht vergessen.</p></div>
+          <h3>Deutung in Sachaufgaben</h3>
+          <p>Weg s in Metern und Zeit t in Sekunden: [s(t₂) − s(t₁)]/(t₂ − t₁) ist die mittlere Geschwindigkeit in m/s; s′(t₀) die momentane Geschwindigkeit. Für Kosten K(x) in Euro und Menge x in Stück beschreibt K′(x) die lokale Kostenänderung in Euro pro Stück. Temperatur- oder Höhenänderungen werden genauso mit passenden Einheiten interpretiert.</p>
+          <p><strong>Tipp:</strong> Schreibe die Einheit immer als Einheit des Funktionswerts pro Einheit der Eingabe. Achte auf das Vorzeichen und auf den betrachteten Zeitraum.</p>
+        </details>
+
+        <details id="funktionen" class="learn-section">
+          <summary><span class="eyebrow">02 · Funktionen</span><span class="learn-section-title">Elementarfunktionen und Parameter</span></summary>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Typ</th><th>Beispiel und Eigenschaften</th></tr></thead>
+            <tbody>
+              <tr><th>Linear / quadratisch</th><td>mx + b: Gerade mit konstanter Steigung m. ax² + bx + c: Parabel (a ≠ 0).</td></tr>
+              <tr><th>Potenz / Wurzel</th><td>xⁿ; √x = x<sup>1/2</sup> ist reell für x ≥ 0 definiert. Bei negativen Exponenten ist x = 0 ausgeschlossen.</td></tr>
+              <tr><th>Exponential</th><td>aˣ für a &gt; 0; bei a &gt; 1 wachsend, bei 0 &lt; a &lt; 1 fallend. eˣ ist stets positiv.</td></tr>
+              <tr><th>Logarithmus</th><td>ln x ist für x &gt; 0 definiert und die Umkehrfunktion von eˣ.</td></tr>
+              <tr><th>Trigonometrisch</th><td>sin x und cos x sind periodisch mit Periode 2π; Ableitungen gelten im Bogenmaß.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="formula-card"><strong>Transformation</strong><code>f(x) = a · g(b(x − c)) + d</code><span>Für b ≠ 0 wird ein Punkt (u|v) von g zu (c + u/b | av + d).</span></div>
+          <p><strong>a:</strong> vertikale Streckung/Stauchung mit |a|, bei a &lt; 0 Spiegelung an der x-Achse. <strong>b:</strong> horizontaler Faktor 1/|b|, bei b &lt; 0 zusätzlich Spiegelung in der horizontalen Richtung. <strong>c:</strong> Verschiebung um c nach rechts; <strong>d:</strong> um d nach oben. Der verschobene Ursprung (c|d) dient als Hilfskoordinatensystem.</p>
+          <p><strong>Musterlösung:</strong> g(x) = x², f(x) = −2(3(x − 1))² + 4. Der Scheitel wandert nach (1|4); die y-Werte werden gespiegelt und verdoppelt, horizontal erfolgt eine Stauchung auf ein Drittel.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Im Argument wirkt der Faktor b reziprok: g(2x) ist horizontal gestaucht, nicht gestreckt. Die Definitionsmenge muss nach einer Transformation erneut geprüft werden.</p></div>
+        </details>
+
+        <details id="ableitung" class="learn-section">
+          <summary><span class="eyebrow">03 · Ableitungen</span><span class="learn-section-title">Regeln und höhere Ableitungen</span></summary>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Regel</th><th>Ableitung</th></tr></thead>
+            <tbody>
+              <tr><th>Konstante / Potenz</th><td>(c)′ = 0; (xⁿ)′ = nxⁿ⁻¹ auf dem jeweiligen Definitionsbereich.</td></tr>
+              <tr><th>Faktor / Summe</th><td>(c·u)′ = c·u′; (u ± v)′ = u′ ± v′.</td></tr>
+              <tr><th>Produkt</th><td>(uv)′ = u′v + uv′.</td></tr>
+              <tr><th>Quotient</th><td>(u/v)′ = (u′v − uv′)/v², wobei v ≠ 0.</td></tr>
+              <tr><th>Kette</th><td>(u(v(x)))′ = u′(v(x)) · v′(x).</td></tr>
+              <tr><th>Weitere</th><td>(eˣ)′ = eˣ; (aˣ)′ = aˣ ln a für a &gt; 0; (ln x)′ = 1/x für x &gt; 0; (sin x)′ = cos x; (cos x)′ = −sin x.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Wurzeln und Brüche zunächst als Potenzen schreiben: √x = x<sup>1/2</sup>, 1/x² = x<sup>−2</sup>. Daraus folgen für x &gt; 0: (√x)′ = 1/(2√x), und für x ≠ 0: (1/x²)′ = −2/x³. Die Randstelle x = 0 muss separat betrachtet werden.</p>
+          <h3>Musterlösungen</h3>
+          <p><strong>Kettenregel:</strong> f(x) = (3x + 1)⁴. Außen ableiten: 4(3x + 1)³; innen ableiten: 3. Also f′(x) = 12(3x + 1)³.</p>
+          <p><strong>Produktregel:</strong> f(x) = x·eˣ. Daher f′(x) = 1·eˣ + x·eˣ = (1 + x)eˣ. Für f(x) = x⁴ ergeben sich f′(x) = 4x³, f″(x) = 12x² und f‴(x) = 24x.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Bei Produkt und Quotient nicht einfach beide Faktoren getrennt ableiten und multiplizieren bzw. dividieren. Bei verketteten Funktionen die innere Ableitung nicht vergessen.</p></div>
+        </details>
+
+        <details id="kurven" class="learn-section">
+          <summary><span class="eyebrow">04 · Kurven</span><span class="learn-section-title">Monotonie, Extrempunkte, Krümmung und Geraden</span></summary>
+          <p>Eine Kurvendiskussion beginnt mit Definitionsbereich und gegebenenfalls Symmetrie, Achsenschnitten und Grenzverhalten. Danach f′ und f″ bestimmen, kritische Stellen berechnen und Vorzeichen auf Intervallen untersuchen.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Kriterium</th><th>Deutung</th></tr></thead>
+            <tbody>
+              <tr><th>f′ &gt; 0 / f′ &lt; 0</th><td>Streng steigend / streng fallend auf dem betrachteten Intervall.</td></tr>
+              <tr><th>f′(x₀) = 0</th><td>Notwendig für einen inneren Extrempunkt einer differenzierbaren Funktion; allein nicht hinreichend.</td></tr>
+              <tr><th>f″(x₀) &gt; 0 / &lt; 0</th><td>Bei f′(x₀) = 0 hinreichend für lokales Minimum / Maximum. Bei f″(x₀) = 0 Vorzeichenwechsel von f′ prüfen.</td></tr>
+              <tr><th>f″ &gt; 0 / f″ &lt; 0</th><td>Linksgekrümmt (konvex) / rechtsgekrümmt (konkav). Ein Wendepunkt erfordert einen Krümmungswechsel.</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Monotonieschema:</strong> Kritische Stellen auf dem Zahlenstrahl markieren und in jedem Intervall das Vorzeichen von f′ prüfen. Wechsel + → −: Hochpunkt; − → +: Tiefpunkt. Randstellen und nicht differenzierbare Stellen gegebenenfalls gesondert untersuchen.</p>
+          <p><strong>Musterlösung:</strong> f(x) = x³ − 3x: f′ = 3x² − 3 = 3(x − 1)(x + 1). Das Schema ist + | − | + auf (−∞, −1), (−1, 1), (1, ∞). Hochpunkt (−1|2), Tiefpunkt (1|−2). Aus f″ = 6x folgt ein Krümmungswechsel bei (0|0).</p>
+          <div class="formula-card"><strong>Tangente und Normale in P(x₀|f(x₀))</strong><code>t(x) = f′(x₀) · (x − x₀) + f(x₀)</code><code>m<sub>n</sub> = −1 / f′(x₀), &nbsp; n(x) = m<sub>n</sub>(x − x₀) + f(x₀)</code><span>Die Normalenformel gilt nur für f′(x₀) ≠ 0. Bei waagerechter Tangente ist die Normale die vertikale Gerade x = x₀.</span></div>
+          <p><strong>Beispiel:</strong> f(x) = x² bei x₀ = 1: P(1|1), m<sub>t</sub> = 2. Tangente t(x) = 2x − 1; Normale n(x) = −½(x − 1) + 1.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>f″(x₀) = 0 allein beweist keinen Wendepunkt: Bei f(x) = x⁴ wechselt f″ = 12x² an 0 nicht das Vorzeichen.</p></div>
+        </details>
+
+        <details id="anwendung" class="learn-section">
+          <summary><span class="eyebrow">05 · Anwendungen</span><span class="learn-section-title">Extremwerte und Ortskurven</span></summary>
+          <p><strong>Vorgehen:</strong> Skizze und Größen festlegen; Zielfunktion und Nebenbedingung aufstellen; Nebenbedingung einsetzen; zulässigen Bereich bestimmen; Ableitung null setzen und innere Kandidaten sowie zulässige Randwerte vergleichen; Ergebnis mit Einheit deuten.</p>
+          <h3>Musterlösung: Zaun und Rechteck</h3>
+          <p>Ein Rechteck hat Umfang 20 m. Mit Seiten x und y gilt 2x + 2y = 20, also y = 10 − x. Die Zielfunktion ist A(x) = x(10 − x) für 0 ≤ x ≤ 10. A′(x) = 10 − 2x = 0 ergibt x = 5; A″ = −2 &lt; 0. Die Randwerte liefern Fläche 0. Maximum: 5 m × 5 m mit 25 m².</p>
+          <h3>Weitere Modelle</h3>
+          <ul>
+            <li><strong>Offene Kiste:</strong> Aus einem Quadrat der Seite 10 werden Ecken der Seite x entfernt: V(x) = x(10 − 2x)², für positive Abmessungen 0 &lt; x &lt; 5.</li>
+            <li><strong>Geschlossene Dose:</strong> V = πr²h und Oberfläche O = 2πr² + 2πrh. Für festes V ist h = V/(πr²), r &gt; 0; diese Nebenbedingung in O einsetzen.</li>
+            <li><strong>Rechteck unter einer Kurve:</strong> Bei y = 4 − x², einer Grundseite auf der x-Achse und symmetrischen oberen Ecken (±x|4 − x²) ist A(x) = 2x(4 − x²) für 0 ≤ x ≤ 2.</li>
+          </ul>
+          <h3>Ortskurven</h3>
+          <p>Bei einer Funktionenschar f<sub>t</sub> werden beispielsweise die Extrempunkte E(t) = (x(t)|y(t)) ermittelt. Löse x(t) nach t auf und setze das Ergebnis in y(t) ein. Beachte Einschränkungen des Parameters und der erhaltenen x-Werte.</p>
+          <p><strong>Beispiel:</strong> f<sub>t</sub>(x) = (x − t)² + t hat den Tiefpunkt E(t) = (t|t). Mit x = t folgt als Ortskurve y = x.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Die Ableitungsnullstelle ist nur ein Kandidat. Sachbereich, Randwerte und Art des Extremums entscheiden über die Lösung.</p></div>
+        </details>
+
+        <details id="folgen" class="learn-section">
+          <summary><span class="eyebrow">06 · Folgen</span><span class="learn-section-title">Zahlenfolgen und Grenzwerte</span></summary>
+          <p>Eine Folge ordnet jedem natürlichen Index n einen Wert a<sub>n</sub> zu. Eine <strong>explizite</strong> Vorschrift berechnet a<sub>n</sub> direkt; eine <strong>rekursive</strong> verwendet vorherige Glieder und benötigt ausreichende Anfangswerte.</p>
+          <div class="formula-card"><strong>Ab Index 1</strong><code>Arithmetisch: a<sub>n</sub> = a₁ + (n − 1)d, &nbsp; a<sub>n+1</sub> = a<sub>n</sub> + d</code><code>Geometrisch: a<sub>n</sub> = a₁q<sup>n−1</sup>, &nbsp; a<sub>n+1</sub> = q·a<sub>n</sub></code></div>
+          <p><strong>Beispiele:</strong> a₁ = 2, d = 3 ergibt a₅ = 2 + 4·3 = 14. Bei a₁ = 3, q = 2 ist a₄ = 3·2³ = 24.</p>
+          <h3>Monotonie und Beschränktheit</h3>
+          <p>a<sub>n+1</sub> − a<sub>n</sub> &gt; 0 für alle n bedeutet streng steigend, &lt; 0 streng fallend. Der Quotient a<sub>n+1</sub>/a<sub>n</sub> kann bei positiven Gliedern entsprechend mit 1 verglichen werden; bei null oder negativen Gliedern ist Vorsicht nötig. Eine obere Schranke S erfüllt a<sub>n</sub> ≤ S für alle n; eine untere Schranke s erfüllt a<sub>n</sub> ≥ s.</p>
+          <h3>Konvergenz und ε-Umgebung</h3>
+          <p>a<sub>n</sub> konvergiert gegen L, wenn zu jedem ε &gt; 0 ein N existiert, sodass für alle n ≥ N gilt: |a<sub>n</sub> − L| &lt; ε. Ab N liegen also alle Glieder in (L − ε, L + ε). 1/n → 0; (−1)ⁿ divergiert trotz Beschränktheit: Die geraden Glieder sind 1 und die ungeraden −1. Für |q| &lt; 1 gilt a₁q<sup>n−1</sup> → 0.</p>
+          <h3>Grenzwertsätze und rationale Folgen</h3>
+          <p>Konvergente Folgen dürfen gliedweise addiert und multipliziert werden. Für Quotienten muss der Nennergrenzwert ungleich null sein. Bei rationalen Ausdrücken mit n durch die höchste auftretende Potenz teilen.</p>
+          <p><strong>Musterlösung:</strong> (2n² + 3)/(n² − 1) = (2 + 3/n²)/(1 − 1/n²) → 2/1 = 2. Einzelne nicht definierte Indizes müssen ausgeschlossen werden; für den Grenzwert zählt das Verhalten für große n.</p>
+          <div class="learn-callout"><strong>Typische Falle</strong><p>Ein Nennergrenzwert von null erlaubt keine direkte Anwendung des Quotientensatzes. Untersuche den Ausdruck gesondert; weder 0/0 noch eine Division durch null ist ein Ergebnis.</p></div>
+        </details>
+
+      </article>
+    </main>
+    <footer class="site-footer"><span>Analysis 1 · 12. Klasse · 1. Semester</span><a href="../index.html">Zum Lernhub</a></footer>
+  </div>
+</body>
+</html>
