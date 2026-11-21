@@ -318,6 +318,7 @@ h1, h2, p { margin-top: 0; }
 .subject-card-copy strong { font-size: 21px; letter-spacing: -.02em; }
 .subject-card-copy > span { color: var(--muted); font-size: 13px; line-height: 1.55; }
 .subject-card-copy small { color: var(--muted); font-size: 11px; font-weight: 750; }
+.subject-card-copy .subject-term { color: var(--blue-dark); }
 .subject-arrow { margin: 2px 0 0 auto; color: var(--blue); font-size: 22px; }
 .hub-return { min-height: 36px; padding: 0 10px; white-space: nowrap; }
 .quiz-hub-return { margin-left: auto; }

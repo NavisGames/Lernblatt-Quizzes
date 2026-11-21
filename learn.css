@@ -1,0 +1,71 @@
+.learn-layout { min-width: 0; padding: 32px 0 48px; }
+.learn-hero { max-width: 760px; padding: 12px 0 20px; }
+.learn-hero h1 { margin: 0 0 12px; font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.045em; }
+.learn-hero h1 span { color: var(--blue); }
+.learn-nav { position: sticky; top: 8px; z-index: 2; display: flex; flex-wrap: wrap; gap: 5px; margin: 4px 0 16px; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--surface) 92%, transparent); box-shadow: 0 8px 26px rgba(32,54,91,.06); backdrop-filter: blur(12px); }
+.learn-nav a { padding: 6px 8px; border-radius: 8px; color: var(--muted); font-size: 10px; font-weight: 720; text-decoration: none; }
+.learn-nav a:hover { background: var(--blue-soft); color: var(--blue-dark); }
+.learn-content { display: grid; gap: 9px; }
+.learn-section { min-width: 0; scroll-margin-top: 100px; padding: 0 clamp(16px, 3vw, 24px); border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: 0 6px 20px rgba(32,54,91,.035); }
+.learn-section > summary { display: flex; align-items: baseline; gap: 12px; min-height: 58px; padding: 16px 0; color: var(--ink); cursor: pointer; list-style: none; }
+.learn-section > summary::-webkit-details-marker { display: none; }
+.learn-section > summary::after { margin-left: auto; color: var(--blue); content: "+"; font-size: 20px; font-weight: 700; }
+.learn-section[open] > summary::after { content: "−"; }
+.learn-section > summary .eyebrow { flex: 0 0 auto; margin: 0; font-size: 9px; }
+.learn-section-title { font-size: clamp(16px, 2.4vw, 20px); font-weight: 780; letter-spacing: -.02em; }
+.learn-section > :not(summary) { max-width: 100%; }
+.learn-section h3 { margin: 20px 0 8px; font-size: 16px; }
+.learn-section p, .learn-section li { color: var(--muted); font-size: 13px; line-height: 1.75; }
+.learn-section strong { color: var(--ink); }
+.learn-section code { padding: 2px 5px; border-radius: 5px; background: var(--blue-soft); color: var(--blue-dark); font: .9em "Cascadia Code", Consolas, monospace; }
+.table-wrap { width: 100%; max-width: 100%; min-width: 0; margin: 14px 0; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+.learn-section table { width: 100%; min-width: 520px; border-collapse: collapse; background: var(--surface); font-size: 11px; line-height: 1.55; }
+.learn-section th, .learn-section td { padding: 9px 11px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.learn-section thead th { background: var(--blue-soft); color: var(--blue-dark); font-weight: 800; }
+.learn-section tbody th { min-width: 115px; color: var(--ink); font-weight: 760; }
+.learn-section tbody td { color: var(--muted); }
+.learn-section tbody tr:last-child th, .learn-section tbody tr:last-child td { border-bottom: 0; }
+.learn-code { margin: 14px 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #253651; border-radius: 10px; background: #152238; color: #e3ecff; font: 12px/1.7 "Cascadia Code", "SFMono-Regular", Consolas, monospace; tab-size: 4; }
+.learn-code code { padding: 0; background: transparent; color: inherit; font: inherit; }
+.learn-callout, .formula-card { margin: 14px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 11px; background: var(--blue-soft); color: var(--ink); }
+.learn-callout strong, .formula-card strong { display: block; margin-bottom: 6px; color: var(--blue-dark); font-size: 12px; }
+.learn-callout ul { margin: 7px 0 0; padding-left: 20px; }
+.learn-callout li { margin: 4px 0; }
+.formula-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; min-width: 0; }
+.formula-card code { display: block; min-width: 0; padding: 6px 0; overflow-wrap: anywhere; background: transparent; color: var(--ink); font-size: 15px; font-weight: 800; }
+.formula-card span { color: var(--muted); font-size: 11px; line-height: 1.6; }
+.cycle-calculator { margin: 16px 0; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.cycle-calculator h3 { margin: 0 0 7px; }
+.cycle-calculator > p { margin-bottom: 12px; }
+.cycle-inputs, .cycle-results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
+.cycle-counts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 9px; }
+.cycle-inputs label { display: grid; align-content: start; gap: 6px; color: var(--ink); font-size: 11px; font-weight: 700; }
+.cycle-inputs label.calculator-checkbox { display: flex; align-items: center; }
+.cycle-inputs input { min-width: 0; min-height: 40px; }
+.calculator-checkbox { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0; color: var(--ink); font-size: 11px; font-weight: 700; cursor: pointer; }
+.calculator-checkbox input { flex: 0 0 auto; width: 17px; height: 17px; margin: 0; accent-color: var(--blue); }
+.single-loop-calculator { margin-top: 12px; }
+.single-loop-inputs { align-items: end; }
+.single-load-toggle { min-height: 40px; margin: 0; }
+.single-loop-result { min-width: 0; padding: 10px; border-radius: 9px; background: var(--blue-soft); }
+.single-loop-result span, .single-loop-result output { display: block; }
+.single-loop-result span, .cycle-results span { margin-bottom: 5px; color: var(--muted); font-size: 10px; }
+.single-loop-result output, .cycle-results output { color: var(--ink); font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.calculator-note { margin: 12px 0; color: var(--muted); font-size: 10px !important; }
+.cycle-results > div { min-width: 0; padding: 10px; border-radius: 9px; background: var(--blue-soft); }
+.cycle-results span, .cycle-results output { display: block; }
+.calculator-message { min-height: 1em; margin: 8px 0 0 !important; color: var(--red) !important; font-size: 11px !important; }
+.cycle-inputs input[aria-invalid="true"] { border-color: var(--red); }
+:root[data-theme="dark"] .learn-nav { background: color-mix(in srgb, var(--surface) 92%, transparent); }
+:root[data-theme="dark"] .learn-callout, :root[data-theme="dark"] .formula-card { border-color: #344a76; }
+@media (max-width: 600px) {
+  .learn-layout { padding-top: 22px; }
+  .learn-nav { position: static; gap: 3px; padding: 7px; }
+  .learn-nav a { font-size: 9px; }
+  .learn-section > summary { align-items: flex-start; flex-direction: column; gap: 4px; padding: 13px 0; }
+  .learn-section > summary::after { position: absolute; right: 28px; }
+  .learn-section { position: relative; }
+  .cycle-inputs, .cycle-counts, .cycle-results { grid-template-columns: 1fr; }
+  .learn-section table { min-width: 480px; }
+  .learn-code { font-size: 11px; }
+}

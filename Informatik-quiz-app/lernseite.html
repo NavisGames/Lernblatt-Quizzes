@@ -3,121 +3,314 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Netzwerktechnik-Lernseite | FG43</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="learn.css">
-  <script src="theme.js" defer></script>
+  <meta name="theme-color" content="#f4f7fb">
+  <title>Informatik-Lernseite · 13-1 | FG43</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../learn.css">
+  <script src="../theme.js" defer></script>
+  <script src="../learn-page.js" defer></script>
 </head>
-<body>
+<body class="theme-informatik">
   <div class="page-shell">
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Zurück zur Informatik-Klausur">
-        <span class="brand-mark">I</span><span>INFO <span class="brand-light">LERNNETZ</span></span>
+      <a class="brand" href="../index.html" aria-label="Zurück zum Lernhub">
+        <span class="brand-mark">I</span><span>INFO <span class="brand-light">LERNSEITE</span></span>
       </a>
       <div class="topbar-actions">
-        <a class="header-link" href="index.html">Zur Klausur</a>
-        <button id="themeToggle" class="theme-toggle" type="button">Dunkel</button>
-        <span class="course-tag">FG43 · 13. Klasse</span>
+        <a class="header-link" href="../index.html">Zum Lernhub</a>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Darstellung wechseln">Dunkel</button>
+        <span class="course-tag">FG43 · 13-1 · 13. Klasse, 1. Semester</span>
       </div>
     </header>
 
     <main class="learn-layout">
       <header class="learn-hero">
-        <p class="eyebrow">Berufliche Informatik · Netzwerkkommunikation</p>
-        <h1>TCP, Web &amp; <span>Dienste verstehen.</span></h1>
-        <p class="intro">Prüfungsgerechter Überblick über Transport, Adressierung, Anwendungsdienste und Netzwerkdiagnose.</p>
+        <p class="eyebrow">Berufliche Informatik · Klausurstoff 13-1</p>
+        <h1>Netzwerke verstehen und <span>Fehler finden.</span></h1>
+        <p class="intro">Kompakter Lernüberblick zu den Themen der Klausur: Grundlagen, OSI, Medien, Ethernet, IP-Adressierung, Routing und Netzwerkdienste. Kapitel zum Wiederholen aufklappen.</p>
       </header>
 
       <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <a href="#grundlagen">Grundlagen</a>
+        <a href="#osi">OSI &amp; TCP/IP</a>
+        <a href="#medien">Medien</a>
+        <a href="#ethernet">Ethernet &amp; Switches</a>
+        <a href="#ip">IP &amp; Subnetting</a>
+        <a href="#routing">Routing &amp; ARP</a>
         <a href="#tcpudp">TCP &amp; UDP</a>
-        <a href="#adressierung">Ports, Sockets &amp; Web</a>
-        <a href="#dienste">DNS, HTTP &amp; FTP</a>
-        <a href="#ports">Standardports &amp; Sicherheit</a>
-        <a href="#diagnose">Fehlerdiagnose</a>
+        <a href="#dienste">Dienste &amp; Ports</a>
+        <a href="#diagnose">Diagnose</a>
       </nav>
 
       <article class="learn-content">
-        <section id="tcpudp" class="learn-section">
-          <p class="eyebrow">01 · Transportschicht</p>
-          <h2>TCP und UDP</h2>
+        <details id="grundlagen" class="learn-section">
+          <summary><span class="eyebrow">01 · Netzwerke</span><span class="learn-section-title">Grundbegriffe, Topologien und Kommunikation</span></summary>
+          <p>Ein <strong>Netzwerk</strong> verbindet Systeme zum Datenaustausch. Ein <strong>Host</strong> ist ein netzwerkfähiges Gerät; ein <strong>Client</strong> fordert Dienste an, ein <strong>Server</strong> stellt sie bereit. Ein Intranet bietet interne Dienste, ein Extranet gibt ausgewählten externen Partnern kontrollierten Zugriff.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Netzgröße</th><th>Reichweite / Beispiel</th></tr></thead>
+            <tbody>
+              <tr><th>PAN</th><td>Persönlicher Nahbereich, z. B. Bluetooth.</td></tr>
+              <tr><th>LAN</th><td>Gebäude oder Standort.</td></tr>
+              <tr><th>CAN</th><td>Mehrere Gebäude eines Campus.</td></tr>
+              <tr><th>MAN</th><td>Stadt oder Region.</td></tr>
+              <tr><th>WAN</th><td>Große Entfernungen und Provider-Netze.</td></tr>
+              <tr><th>GAN</th><td>Weltumspannende Netze.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Topologie</th><th>Aufbau und typische Eigenschaft</th></tr></thead>
+            <tbody>
+              <tr><th>Stern / erweiterter Stern</th><td>Endgeräte führen zu einem zentralen Switch; einfach zu verwalten, aber zentrale Geräte sind mögliche Ausfallpunkte.</td></tr>
+              <tr><th>Mesh</th><td>Mehrere direkte Wege erhöhen die Ausfallsicherheit, benötigen aber mehr Verbindungen.</td></tr>
+              <tr><th>Bus</th><td>Stationen teilen ein gemeinsames Medium; Kollisionen und Störungen sind möglich.</td></tr>
+              <tr><th>Ring / Linie</th><td>Geschlossene Weiterleitung im Ring bzw. hintereinander verbundene Geräte in einer Linie.</td></tr>
+              <tr><th>Zelle</th><td>Funkversorgung über einen Access Point; Mobilität, aber begrenzte Reichweite und mögliche Störungen.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Im <strong>Peer-to-Peer</strong>-Netz sind Teilnehmer gleichberechtigt. Im <strong>Client-Server</strong>-Modell stellen spezialisierte Server Dienste bereit und ermöglichen zentrale Verwaltung, Rechtevergabe und Sicherung.</p>
+          <p>Ein Kommunikationsprotokoll legt Syntax, Bedeutung, Reihenfolge und Ablauf von Nachrichten fest. Übertragungsarten: <strong>Unicast</strong> (ein Empfänger), <strong>Broadcast</strong> (alle im Netzsegment), <strong>Multicast</strong> (Empfängergruppe) und <strong>Anycast</strong> (geeignete bzw. nächste Instanz einer Gruppe).</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Zugriffsverfahren</th><th>Prinzip</th></tr></thead>
+            <tbody>
+              <tr><th>CSMA/CD</th><td>Klassisches geteiltes bzw. halbduplexes Ethernet erkennt Kollisionen und sendet nach Wartezeit erneut.</td></tr>
+              <tr><th>CSMA/CA</th><td>WLAN versucht Kollisionen zu vermeiden, z. B. durch Warten und optional RTS/CTS.</td></tr>
+              <tr><th>Token Passing</th><td>Nur die Station mit dem Token darf senden.</td></tr>
+            </tbody>
+          </table></div>
+        </details>
+
+        <details id="osi" class="learn-section">
+          <summary><span class="eyebrow">02 · Schichtenmodelle</span><span class="learn-section-title">OSI, TCP/IP und Kapselung</span></summary>
+          <div class="table-wrap"><table>
+            <thead><tr><th>OSI</th><th>Aufgabe / Beispiel</th><th>PDU</th><th>TCP/IP</th></tr></thead>
+            <tbody>
+              <tr><th>7 Anwendung</th><td>Dienste und Programme, z. B. HTTP, DNS</td><td>Daten</td><td rowspan="3">Anwendung</td></tr>
+              <tr><th>6 Darstellung</th><td>Formatierung, Komprimierung, Verschlüsselung</td><td>Daten</td></tr>
+              <tr><th>5 Sitzung</th><td>Aufbau, Steuerung und Ende von Sitzungen</td><td>Daten</td></tr>
+              <tr><th>4 Transport</th><td>Ende-zu-Ende-Kommunikation, TCP/UDP</td><td>Segment / Datagramm</td><td>Transport</td></tr>
+              <tr><th>3 Vermittlung</th><td>Logische Adressen und Routing, IP</td><td>Paket</td><td>Internet</td></tr>
+              <tr><th>2 Sicherung</th><td>Lokale Frames, MAC-Adressen, FCS</td><td>Frame</td><td rowspan="2">Netzzugang</td></tr>
+              <tr><th>1 Bitübertragung</th><td>Signale, Leitungspegel und Medium</td><td>Bit</td></tr>
+            </tbody>
+          </table></div>
+          <p>Beim Senden werden Nutzdaten von oben nach unten schichtweise um Header (teilweise auch Trailer) ergänzt: <strong>Kapselung</strong>. Beim Empfangen werden diese Informationen von unten nach oben ausgewertet und entfernt. Für die Klausur besonders wichtig: Layer 1 = Signal/Medium, Layer 2 = Frame/MAC, Layer 3 = Paket/IP, Layer 4 = Ende-zu-Ende-Transport.</p>
+          <div class="learn-callout"><strong>Eselsbrücke für Schicht 1 bis 7</strong>
+            <p>Von unten nach oben: Physikalisch, Sicherung, Vermittlung, Transport, Sitzung, Darstellung, Anwendung (PSVTSDA).</p>
+          </div>
+        </details>
+
+        <details id="medien" class="learn-section">
+          <summary><span class="eyebrow">03 · OSI-Schicht 1</span><span class="learn-section-title">Kupfer, Glasfaser und strukturierte Verkabelung</span></summary>
+          <p>Die Bitübertragungsschicht beschreibt mechanische Eigenschaften (Stecker), elektrische Eigenschaften (Pegel, Impedanz, Bitrate) sowie Kodierung, Taktsynchronisation und Übertragungsverfahren.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Medium</th><th>Merkmale</th></tr></thead>
+            <tbody>
+              <tr><th>UTP</th><td>Ungeschirmtes Twisted Pair; verdrillte Adernpaare reduzieren Störungen.</td></tr>
+              <tr><th>STP / FTP / SSTP</th><td>Twisted-Pair-Kabel mit unterschiedlichen Schirmungen: Gesamtschirm oder zusätzliche Paarabschirmung.</td></tr>
+              <tr><th>Koaxialkabel</th><td>Innenleiter, Isolierung, Außenleiter und Mantel; früher häufig in Busnetzen.</td></tr>
+              <tr><th>Multimode-Faser</th><td>Mehrere Lichtmoden, meist für kürzere Strecken; Fasertypen OM1 bis OM5.</td></tr>
+              <tr><th>Singlemode-Faser</th><td>Ein Hauptmodus, große Reichweite; Fasertypen OS1 und OS2.</td></tr>
+              <tr><th>WLAN</th><td>Funkübertragung ohne Kabel; flexibel, aber abhängig von Reichweite, Hindernissen und Störungen.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Kabelkategorie</th><th>Typische Eignung laut Lernblatt</th></tr></thead>
+            <tbody>
+              <tr><th>CAT5e</th><td>1 Gbit/s in verbreiteten LAN-Strecken.</td></tr>
+              <tr><th>CAT6</th><td>1 Gbit/s; 10 Gbit/s über begrenzte Strecken.</td></tr>
+              <tr><th>CAT6a</th><td>10 Gbit/s bis 100 m.</td></tr>
+              <tr><th>CAT7/7a</th><td>Hochgeschwindigkeitsverkabelung; Schirmung beachten.</td></tr>
+              <tr><th>CAT8</th><td>25/40 Gbit/s auf kurzen Strecken, z. B. im Rechenzentrum.</td></tr>
+            </tbody>
+          </table></div>
+          <p>In Glasfasern wird Licht durch Totalreflexion im Kern geführt. Glasfaser bietet hohe Bandbreite, große Reichweite und Unempfindlichkeit gegenüber elektromagnetischen Störungen.</p>
+        </details>
+
+        <details id="ethernet" class="learn-section">
+          <summary><span class="eyebrow">04 · OSI-Schicht 2</span><span class="learn-section-title">Ethernet-Frames, MAC-Adressen und VLANs</span></summary>
+          <p>Eine MAC-Adresse ist 48 Bit lang und wird meist hexadezimal geschrieben. Die ersten 24 Bit bilden üblicherweise die Hersteller-OUI; der Rest kennzeichnet die Schnittstelle. Die Broadcast-MAC lautet <code>FF:FF:FF:FF:FF:FF</code>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Ethernet-II-Feld</th><th>Größe</th><th>Funktion</th></tr></thead>
+            <tbody>
+              <tr><th>Präambel / SFD</th><td>7 + 1 Byte</td><td>Synchronisation und Kennzeichnung des Frame-Anfangs; nicht in der üblichen Frame-Länge enthalten.</td></tr>
+              <tr><th>Ziel-/Quell-MAC</th><td>6 + 6 Byte</td><td>Empfänger und Sender im lokalen Ethernet.</td></tr>
+              <tr><th>Typ / Länge</th><td>2 Byte</td><td>EtherType bei Ethernet II bzw. Längenfeld bei IEEE 802.3.</td></tr>
+              <tr><th>Daten / Padding</th><td>46–1500 Byte</td><td>Nutzdaten; zu kurze Daten werden aufgefüllt.</td></tr>
+              <tr><th>FCS / CRC</th><td>4 Byte</td><td>Erkennung von Übertragungsfehlern.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Ein Standardframe ist <strong>64 bis 1518 Byte</strong> groß (ohne Präambel und SFD). Ein 802.1Q-Tag ergänzt 4 Byte; Tagged Frames können 1522 Byte erreichen. Das Tag enthält unter anderem eine 12-Bit-VLAN-ID.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Gerät</th><th>Wirkung / Domäne</th></tr></thead>
+            <tbody>
+              <tr><th>Repeater / Hub</th><td>Schicht 1; Hub leitet Bits an alle Ports weiter. Eine gemeinsame Kollisionsdomäne.</td></tr>
+              <tr><th>Bridge / Switch</th><td>Schicht 2; MAC-Lernen und gezielte Frame-Weiterleitung. Jeder Switchport ist eine eigene Kollisionsdomäne, Broadcasts bleiben im VLAN.</td></tr>
+              <tr><th>Router</th><td>Schicht 3; leitet anhand von IP-Adressen zwischen Netzen und trennt Broadcast-Domänen.</td></tr>
+              <tr><th>Layer-3-Switch</th><td>Kombiniert Switching und Routing, z. B. zwischen VLANs.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Ein Switch lernt Quell-MAC-Adressen mit dem zugehörigen Eingangsport. Bekannte Ziele werden gezielt weitergeleitet; eine unbekannte Ziel-MAC wird an alle Ports außer dem Eingangsport geflutet. <strong>VLANs</strong> trennen logische Broadcast-Domänen. Trunk-Ports transportieren mehrere VLANs mit Tags; Access-Ports ordnen Endgeräte einem VLAN zu.</p>
+          <p>Store-and-Forward prüft den vollständigen Frame vor dem Weiterleiten. Cut-Through beginnt früher, Fragment-Free prüft mindestens den ersten Frame-Teil.</p>
+          <div class="learn-callout"><strong>Weitere Frame- und Zugriffsbegriffe</strong>
+            <ul>
+              <li>HDLC ist ein serielles WAN-Frameformat für Punkt-zu-Punkt-Verbindungen; es ist kein Ethernet-MAC-Frame.</li>
+              <li>IEEE 802.5 (Token Ring) regelt den Zugriff über ein Token; LLC/802.2 verbindet höhere Protokolle mit unterschiedlichen IEEE-Netzen.</li>
+              <li>Die historische 5-4-3-Regel beschrieb klassische Shared-Ethernet-Segmente mit bis zu fünf Segmenten, vier Repeatern und drei Mischsegmenten.</li>
+            </ul>
+          </div>
+        </details>
+
+        <details id="ip" class="learn-section">
+          <summary><span class="eyebrow">05 · OSI-Schicht 3</span><span class="learn-section-title">IPv4, Subnetzmasken, Subnetting und IPv6</span></summary>
+          <p>IPv4-Adressen haben <strong>32 Bit</strong> in vier Oktetten (je 0–255). Eine Subnetzmaske trennt Netz- und Hostanteil: Eins-Bits stehen für den Netzanteil, Null-Bits für Hosts. CIDR notiert die Zahl der Netzbits, z. B. <code>/24 = 255.255.255.0</code>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Privater Bereich</th><th>Präfix</th><th>Historische Klasse</th></tr></thead>
+            <tbody>
+              <tr><th>10.0.0.0–10.255.255.255</th><td>10.0.0.0/8</td><td>A</td></tr>
+              <tr><th>172.16.0.0–172.31.255.255</th><td>172.16.0.0/12</td><td>B</td></tr>
+              <tr><th>192.168.0.0–192.168.255.255</th><td>192.168.0.0/16</td><td>C</td></tr>
+            </tbody>
+          </table></div>
+          <p>Das Klassenmodell A/B/C ist historisch; heute wird mit CIDR geplant. <code>127.0.0.1</code> ist Loopback. NAT übersetzt typischerweise private Adressen auf eine öffentliche Adresse oder einen öffentlichen Pool.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Historische Klasse</th><th>Erstes Oktett</th><th>Ursprüngliches Präfix</th></tr></thead>
+            <tbody>
+              <tr><th>A</th><td>1–126</td><td>/8</td></tr>
+              <tr><th>B</th><td>128–191</td><td>/16</td></tr>
+              <tr><th>C</th><td>192–223</td><td>/24</td></tr>
+            </tbody>
+          </table></div>
+          <p>Auf Schicht 3 werden Pakete anhand logischer IP-Adressen weitergeleitet. Ist ein Paket größer als die unterstützte Übertragungsgröße, kann IPv4 es fragmentieren.</p>
+          <div class="learn-callout"><strong>Subnetting-Formeln</strong>
+            <ul>
+              <li>Hostbits: <code>H = 32 − Präfix</code>.</li>
+              <li>Nutzbare Hosts pro Subnetz: <code>2ᴴ − 2</code> (Netz- und Broadcastadresse ausgenommen).</li>
+              <li>Ausgeliehene Bits: <code>S = neues Präfix − ursprüngliches Präfix</code>; Subnetze: <code>2ˢ</code>.</li>
+              <li>Blockgröße im interessanten Oktett: <code>256 − Maskenwert</code>.</li>
+              <li>Netzadresse: IP bitweise AND Subnetzmaske; Broadcast: Hostbits auf 1 setzen.</li>
+            </ul>
+          </div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Präfix</th><th>Subnetzmaske</th><th>Blockgröße</th></tr></thead>
+            <tbody>
+              <tr><th>/24</th><td>255.255.255.0</td><td>256</td></tr>
+              <tr><th>/25</th><td>255.255.255.128</td><td>128</td></tr>
+              <tr><th>/26</th><td>255.255.255.192</td><td>64</td></tr>
+              <tr><th>/27</th><td>255.255.255.224</td><td>32</td></tr>
+              <tr><th>/28</th><td>255.255.255.240</td><td>16</td></tr>
+              <tr><th>/29</th><td>255.255.255.248</td><td>8</td></tr>
+              <tr><th>/30</th><td>255.255.255.252</td><td>4</td></tr>
+            </tbody>
+          </table></div>
+          <div class="formula-card"><strong>Netz- und Broadcastadresse bitweise bestimmen</strong>
+            <code>192.145.96.201 AND 255.255.255.240 = 192.145.96.192<br>Broadcast: 192.145.96.192 OR 0.0.0.15 = 192.145.96.207</code>
+            <span>Die invertierte Maske enthält im Hostanteil Einsen; das Ergebnis .192–.207 ist ein Block mit 16 Adressen.</span>
+          </div>
+          <h3>Beispiel: 192.168.10.0/24 in /27 teilen</h3>
+          <p><code>/27</code> hat 5 Hostbits, also 30 nutzbare Hosts je Subnetz. Drei Bits werden ausgeliehen: <code>2³ = 8</code> Subnetze. Die Maske endet auf 224, daher beträgt die Blockgröße <code>256 − 224 = 32</code>. Netzadressen: .0, .32, .64, .96, .128, .160, .192 und .224.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Netz</th><th>Netzadresse</th><th>Hostbereich</th><th>Broadcast</th></tr></thead>
+            <tbody>
+              <tr><th>1</th><td>192.168.10.0</td><td>.1–.30</td><td>.31</td></tr>
+              <tr><th>2</th><td>192.168.10.32</td><td>.33–.62</td><td>.63</td></tr>
+              <tr><th>3</th><td>192.168.10.64</td><td>.65–.94</td><td>.95</td></tr>
+              <tr><th>4</th><td>192.168.10.96</td><td>.97–.126</td><td>.127</td></tr>
+            </tbody>
+          </table></div>
+          <p>Bei der IP-Zusammenfassung werden gemeinsame führende Bits zusammengefasst. <strong>VLSM</strong> erlaubt unterschiedlich große Subnetze passend zum jeweiligen Hostbedarf.</p>
+          <p>IPv6 hat <strong>128 Bit</strong>, dargestellt als acht hexadezimale Blöcke. Führende Nullen je Block dürfen entfallen; eine zusammenhängende Folge von Nullblöcken darf genau einmal durch <code>::</code> ersetzt werden. IPv6 kennt keinen Broadcast, sondern unter anderem Unicast, Multicast und Anycast.</p>
+          <div class="formula-card"><strong>IPv6-Kürzung</strong><code>2001:0db8:0000:0000:0000:ff00:0042:8329<br>→ 2001:db8::ff00:42:8329</code><span>Die Kurzform lässt führende Blocknullen und genau eine zusammenhängende Nullblockfolge weg.</span></div>
+        </details>
+
+        <details id="routing" class="learn-section">
+          <summary><span class="eyebrow">06 · Routing</span><span class="learn-section-title">Routingtabellen, ARP und Weiterleitung</span></summary>
+          <p>Ein Router verbindet IP-Netze. Er entfernt den eingehenden Layer-2-Frame, prüft die Ziel-IP und wählt anhand der Routingtabelle die passendste Route (längstes passendes Präfix). Gibt es keine spezifischere Route, kann die Default-Route <code>0.0.0.0/0</code> greifen.</p>
+          <p>Beim Weiterleiten bleiben Quell- und Ziel-IP des Pakets grundsätzlich gleich; die Quell- und Ziel-MAC-Adressen werden auf jedem Layer-2-Abschnitt neu gesetzt. Die TTL wird pro Router-Hop verringert.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Routingart</th><th>Prinzip</th><th>Beispiele</th></tr></thead>
+            <tbody>
+              <tr><th>Statisch</th><td>Routen werden manuell konfiguriert; einfach und vorhersehbar, aber ohne automatische Anpassung.</td><td>Manuelle Route</td></tr>
+              <tr><th>Distance Vector</th><td>Nachbarn tauschen Entfernungen aus; RIP verwendet Hop Count (maximal 15, 16 = unerreichbar).</td><td>RIP / RIPv2</td></tr>
+              <tr><th>Link State</th><td>Router tauschen Linkzustände aus und berechnen den kürzesten Pfad.</td><td>OSPF, IS-IS</td></tr>
+              <tr><th>Inter-AS</th><td>Routen zwischen autonomen Systemen; berücksichtigt Richtlinien und Pfadinformation.</td><td>BGP</td></tr>
+            </tbody>
+          </table></div>
+          <p>Ein <strong>Routed Protocol</strong> (z. B. IPv4/IPv6) transportiert adressierte Nutzdaten. Ein <strong>Routingprotokoll</strong> tauscht Informationen zum Ermitteln von Routen aus. Eine Metrik kann Hop Count, Bandbreite, Verzögerung oder Kosten berücksichtigen.</p>
+          <h3>ARP: lokale IPv4-Adresse zur MAC-Adresse</h3>
+          <ol>
+            <li>Der Host sendet eine ARP-Request als Broadcast.</li>
+            <li>Der Host mit der gesuchten IPv4-Adresse antwortet mit seiner MAC-Adresse.</li>
+            <li>Die Zuordnung wird vorübergehend im ARP-Cache gespeichert und im Frame verwendet.</li>
+          </ol>
+          <p>Liegt das Ziel in einem anderen Netz, fragt der Host nicht die entfernte Ziel-MAC ab, sondern die MAC seines <strong>Default Gateways</strong>. Der Router bildet anschließend einen neuen Frame für den nächsten Abschnitt.</p>
+        </details>
+
+        <details id="tcpudp" class="learn-section">
+          <summary><span class="eyebrow">07 · OSI-Schicht 4</span><span class="learn-section-title">TCP und UDP</span></summary>
           <div class="table-wrap"><table>
             <thead><tr><th>Merkmal</th><th>TCP</th><th>UDP</th></tr></thead>
             <tbody>
-              <tr><th>Verbindungsaufbau</th><td>Three-Way Handshake</td><td>Keiner</td></tr>
-              <tr><th>Zustellung</th><td>Bestätigt und geordnet</td><td>Unbestätigt</td></tr>
-              <tr><th>Steuerung</th><td>Fluss- und Überlastkontrolle</td><td>Keine eingebaute Steuerung</td></tr>
-              <tr><th>Overhead</th><td>Höher</td><td>Niedriger</td></tr>
-              <tr><th>Typische Dienste</th><td>Web, Dateien, Banking</td><td>DNS, VoIP, Live-Streaming</td></tr>
+              <tr><th>Verbindungsaufbau</th><td>Three-Way Handshake (SYN, SYN+ACK, ACK)</td><td>Kein Verbindungsaufbau</td></tr>
+              <tr><th>Zustellung</th><td>Bestätigt, geordnet und erneut übertragen</td><td>Keine Zustell- oder Reihenfolgegarantie</td></tr>
+              <tr><th>Steuerung</th><td>Fluss- und Überlastkontrolle</td><td>Weniger Protokollaufwand</td></tr>
+              <tr><th>Typischer Einsatz</th><td>Web, Dateiübertragung, E-Mail</td><td>Zeitkritische oder einfache Abfragen</td></tr>
             </tbody>
           </table></div>
-          <p><strong>TCP:</strong> SYN → SYN+ACK → ACK. Die empfangsseitige Fenstergröße begrenzt die Flusssteuerung; die Überlastkontrolle passt die Sendemenge an die vermutete Netzlast an.</p>
-        </section>
+          <p>TCP und UDP nutzen Portnummern, um Anwendungen auf einem Host anzusprechen. DNS verwendet meist UDP, kann für bestimmte Antworten und Zonentransfers aber auch TCP verwenden.</p>
+        </details>
 
-        <section id="adressierung" class="learn-section">
-          <p class="eyebrow">02 · Endpunkte und Web</p>
-          <h2>IP, Port und Socket</h2>
-          <p>Eine IP-Adresse erreicht einen Host oder Netzwerkendpunkt. Eine Portnummer unterscheidet Anwendungen auf diesem Host. Ein Socket ist die Kombination <code>IP-Adresse:Port</code>, zum Beispiel <code>192.168.1.5:1099</code>.</p>
+        <details id="dienste" class="learn-section">
+          <summary><span class="eyebrow">08 · Ports und Dienste</span><span class="learn-section-title">Sockets, Protokolle und Standardports</span></summary>
+          <p>Ein Port ist eine 16-Bit-Nummer der Transportschicht (0–65535), keine physische Schnittstelle. Ein Socket kombiniert IP-Adresse und Port, z. B. <code>192.168.1.5:1099</code>. Eine TCP-Verbindung wird durch Quell- und Ziel-Socket beschrieben.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Portbereich</th><th>Bezeichnung</th></tr></thead>
             <tbody>
               <tr><th>0–1023</th><td>Well-known Ports</td></tr>
               <tr><th>1024–49151</th><td>Registrierte Ports</td></tr>
-              <tr><th>49152–65535</th><td>Dynamische/private Ports</td></tr>
+              <tr><th>49152–65535</th><td>Dynamische/private Ports; oft temporäre Client-Quellports</td></tr>
             </tbody>
           </table></div>
-          <p>Eine URI identifiziert eine Ressource. Eine URL lokalisiert sie mit Schema, Host, optionalem Port, Pfad, Query und Fragment. HTTP läuft standardmäßig über TCP 80, HTTPS über TCP 443 mit TLS.</p>
-        </section>
-
-        <section id="dienste" class="learn-section">
-          <p class="eyebrow">03 · Anwendungsdienste</p>
-          <h2>DNS, HTTP und FTP</h2>
-          <p><strong>DNS</strong> löst Namen über Resolver und hierarchische DNS-Server auf. Standardport 53 wird sowohl über UDP als auch TCP verwendet.</p>
-          <p>Ein Browser löst den Hostnamen auf, baut zu Ziel-IP und 80/443 eine TCP-Verbindung auf und fordert mit HTTP/HTTPS eine Ressource an.</p>
-          <p><strong>FTP</strong> verwendet TCP 21 als Steuerkanal. Beim aktiven Modus öffnet der Server den Datenkanal typischerweise über TCP 20; beim passiven Modus handelt der Client einen Datenport aus.</p>
-        </section>
-
-        <section id="ports" class="learn-section">
-          <p class="eyebrow">04 · Standardports und Sicherheit</p>
-          <h2>Wichtige Zuordnungen</h2>
           <div class="table-wrap"><table>
-            <thead><tr><th>Dienst</th><th>Transport</th><th>Port</th></tr></thead>
+            <thead><tr><th>Dienst</th><th>Transport</th><th>Port(s)</th><th>Aufgabe</th></tr></thead>
             <tbody>
-              <tr><th>HTTP / HTTPS</th><td>TCP</td><td>80 / 443</td></tr>
-              <tr><th>DNS</th><td>UDP/TCP</td><td>53</td></tr>
-              <tr><th>DHCP</th><td>UDP</td><td>67/68</td></tr>
-              <tr><th>SSH / Telnet</th><td>TCP</td><td>22 / 23</td></tr>
-              <tr><th>FTP</th><td>TCP</td><td>21 Steuer, 20 aktiv</td></tr>
-              <tr><th>SMTP / Submission</th><td>TCP</td><td>25 / 587</td></tr>
-              <tr><th>POP3 / IMAP</th><td>TCP</td><td>110 / 143</td></tr>
-              <tr><th>IMAPS / POP3S</th><td>TCP</td><td>993 / 995</td></tr>
+              <tr><th>HTTP / HTTPS</th><td>TCP</td><td>80 / 443</td><td>Web; HTTPS mit TLS.</td></tr>
+              <tr><th>DNS</th><td>UDP/TCP</td><td>53</td><td>Namensauflösung.</td></tr>
+              <tr><th>DHCP</th><td>UDP</td><td>67 / 68</td><td>IP-Konfiguration (Server / Client).</td></tr>
+              <tr><th>SSH / Telnet</th><td>TCP</td><td>22 / 23</td><td>Fernzugriff; Telnet typischerweise unverschlüsselt.</td></tr>
+              <tr><th>FTP</th><td>TCP</td><td>21 / 20</td><td>Steuerkanal / aktiver Datenkanal; passiver Modus handelt Ports aus.</td></tr>
+              <tr><th>SFTP / FTPS</th><td>TCP</td><td>22 / 21</td><td>SFTP läuft über SSH; FTPS ist FTP mit TLS.</td></tr>
+              <tr><th>SMTP</th><td>TCP</td><td>25 / 587</td><td>E-Mail-Zustellung / Client-Submission.</td></tr>
+              <tr><th>POP3 / IMAP</th><td>TCP</td><td>110 / 143</td><td>E-Mail-Abruf und Synchronisation.</td></tr>
+              <tr><th>SNMP</th><td>UDP</td><td>161 / 162</td><td>Netzwerkmanagement / Traps.</td></tr>
+              <tr><th>RDP</th><td>TCP</td><td>3389</td><td>Grafischer Fernzugriff.</td></tr>
+              <tr><th>LDAP / LDAPS</th><td>TCP/UDP</td><td>389 / 636</td><td>Verzeichnisdienst.</td></tr>
+              <tr><th>NTP / TFTP</th><td>UDP</td><td>123 / 69</td><td>Zeitsynchronisation / einfacher Dateiübertrag.</td></tr>
+              <tr><th>SMB/CIFS</th><td>TCP</td><td>445</td><td>Datei- und Druckdienste.</td></tr>
             </tbody>
           </table></div>
-          <p>SSH verschlüsselt die Verwaltungssitzung, Telnet sendet üblicherweise Klartext. Ein Port allein ist eine Konvention und garantiert keinen tatsächlichen Dienst.</p>
-        </section>
+          <p>Eine URI bezeichnet eine Ressource; eine URL lokalisiert sie beispielsweise mit Schema, Host, Port und Pfad. Ein Port ist eine Konvention und beweist allein nicht, welcher Dienst tatsächlich läuft.</p>
+        </details>
 
-        <section id="diagnose" class="learn-section">
-          <p class="eyebrow">05 · Fehleranalyse</p>
-          <h2>Vom Nahen zum Fernen diagnostizieren</h2>
+        <details id="diagnose" class="learn-section">
+          <summary><span class="eyebrow">09 · Fehleranalyse</span><span class="learn-section-title">Diagnose vom lokalen Netz bis zum Dienst</span></summary>
           <div class="table-wrap"><table>
             <thead><tr><th>Befehl</th><th>Prüfung</th></tr></thead>
             <tbody>
-              <tr><th><code>ipconfig</code></th><td>Lokale Adresse und grundlegende Konfiguration</td></tr>
-              <tr><th><code>ipconfig /all</code></th><td>IP, Maske, Gateway, DHCP und DNS</td></tr>
-              <tr><th><code>/release</code> &amp; <code>/renew</code></th><td>DHCP-Lease freigeben bzw. erneuern</td></tr>
-              <tr><th><code>ping</code></th><td>IP-Konnektivität testen</td></tr>
-              <tr><th><code>tracert</code></th><td>Pfad und möglicherweise fehlende Routerhops</td></tr>
-              <tr><th><code>nslookup</code></th><td>DNS-Auflösung prüfen</td></tr>
-              <tr><th><code>netstat -ano</code></th><td>Verbindungen, Ports und Prozess-ID anzeigen</td></tr>
+              <tr><th><code>ipconfig /all</code></th><td>IP-Adresse, Maske, Gateway, MAC, DHCP und DNS.</td></tr>
+              <tr><th><code>ping</code></th><td>IP-Konnektivität und Antwortzeit, z. B. Loopback, Gateway oder Remote-IP.</td></tr>
+              <tr><th><code>tracert</code></th><td>Router-Hops auf dem Weg zum Ziel.</td></tr>
+              <tr><th><code>nslookup</code></th><td>DNS-Auflösung prüfen.</td></tr>
+              <tr><th><code>netstat -ano</code></th><td>Verbindungen und Listening-Sockets mit Prozess-ID anzeigen.</td></tr>
             </tbody>
           </table></div>
-          <p>Diagnosekette: Loopback → lokale IP/Maske → Gateway → Remote-IP → DNS → TCP/UDP-Dienst und Port. Ein <code>*</code> bei <code>tracert</code> oder Timeout bei <code>ping</code> kann blockiertes ICMP bedeuten.</p>
-        </section>
+          <p>Sinnvolle Reihenfolge: lokale Konfiguration prüfen → Loopback/Gateway anpingen → Remote-IP testen → Route untersuchen → DNS prüfen → Dienst und Port prüfen. Gateway erreichbar, Remote-IP nicht erreichbar: Route, Firewall oder Netz prüfen. Ein Timeout kann auch daran liegen, dass ICMP gefiltert wird.</p>
+        </details>
       </article>
     </main>
 
     <footer class="site-footer">
-      <span>Berufliche Informatik · FG43</span>
-      <span>Netzwerkkommunikation</span>
+      <span>Berufliche Informatik · FG43 · 13-1</span>
+      <span><a href="../index.html">Zum Lernhub</a></span>
     </footer>
   </div>
 </body>

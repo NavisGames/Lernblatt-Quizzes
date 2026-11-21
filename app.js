@@ -73,7 +73,7 @@
     basics: "grundlagen",
     media: "medien",
     ethernet: "ethernet",
-    ip: "adressierung",
+    ip: "ip",
     routing: "routing"
   };
 
@@ -105,7 +105,7 @@
         ports: "hardware",
         banking: "hardware",
         branching: "verzweigungen",
-        "code-analysis": "verzweigungen",
+        "code-analysis": "codeanalyse",
         loops: "laufzeit",
         algorithms: "laufzeit",
         flags: "arithmetik",

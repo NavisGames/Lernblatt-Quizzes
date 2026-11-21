@@ -4,61 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f7fb">
-  <title>Lernseite DVT | PIC16F887</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="learn.css">
-  <script src="theme.js" defer></script>
+  <title>DVT-Lernseite · 13-1 | PIC16F887</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../learn.css">
+  <script src="../theme.js" defer></script>
+  <script src="../learn-page.js" defer></script>
   <script src="learn-calculator.js" defer></script>
 </head>
-<body>
+<body class="theme-dvt">
   <div class="page-shell">
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Zurück zum DVT Quiz">
+      <a class="brand" href="../index.html" aria-label="Zurück zum Lernhub">
         <span class="brand-mark">D</span>
         <span>DVT <span class="brand-light">LERNSEITE</span></span>
       </a>
       <div class="topbar-actions">
-        <a class="header-link" href="index.html">Zum Quiz</a>
+        <a class="header-link" href="../index.html">Zum Lernhub</a>
         <button id="themeToggle" class="theme-toggle" type="button" aria-label="Darstellung wechseln">Dunkel</button>
-        <span class="course-tag">Leistungskurs · FG43</span>
+        <span class="course-tag">FG43 · 13-1 · 13. Klasse, 1. Semester</span>
       </div>
     </header>
 
     <main class="learn-layout">
       <header class="learn-hero">
-        <p class="eyebrow">Datenverarbeitungstechnik · PIC16F887</p>
+        <p class="eyebrow">Datenverarbeitungstechnik · Klausurstoff 13-1 · PIC16F887</p>
         <h1>Vom Speicher bis zum <span>Programmablauf.</span></h1>
         <p class="intro">Eine strukturierte Wiederholung der Architektur, Assemblerbefehle und Rechenverfahren. Die Beispiele erläutern Konzepte und sind keine Quizaufgaben.</p>
       </header>
-
-      <aside class="last-minute-check" aria-labelledby="lastMinuteTitle">
-        <div class="last-minute-heading">
-          <p class="eyebrow">Kurz vor der Klausur</p>
-          <h2 id="lastMinuteTitle">Schnell-Check</h2>
-        </div>
-        <div class="last-minute-grid">
-          <article>
-            <h3>TRIS &amp; Pins</h3>
-            <p><code>TRISx = 1</code>: Eingang · <code>TRISx = 0</code>: Ausgang. Bei Analogpins auch <code>ANSEL/ANSELH</code> prüfen.</p>
-          </article>
-          <article>
-            <h3><code>subwf f,d</code></h3>
-            <p>Rechnet <code>f − W</code>. Bei Subtraktion heißt <code>C=1</code> kein Borrow, <code>C=0</code> Borrow; <code>Z=1</code> bedeutet Ergebnis 0.</p>
-          </article>
-          <article>
-            <h3>Befehlszyklus</h3>
-            <p><code>T<sub>cy</sub> = 4 / f<sub>osc</sub></code>. Bei 4 MHz dauert ein normaler Befehl 1 µs; <code>goto</code> benötigt 2 Zyklen.</p>
-          </article>
-          <article>
-            <h3><code>decfsz</code></h3>
-            <p>Bei Ergebnis 0 wird der Folgebefehl übersprungen: normal 1 Zyklus, im Skip-Fall 2. Der übersprungene <code>goto</code> läuft dann nicht.</p>
-          </article>
-          <article>
-            <h3>Bänke &amp; Vergleiche</h3>
-            <p><code>RP1:RP0</code> wählt Bank 0–3; <code>banksel</code> setzt sie passend. Nach <code>A−B</code>: <code>Z=1</code> gleich, sonst <code>C=1</code> bedeutet <code>A&gt;B</code>.</p>
-          </article>
-        </div>
-      </aside>
 
       <nav class="learn-nav" aria-label="Kapitelübersicht">
         <a href="#architektur">Architektur & Speicher</a>
@@ -74,9 +46,8 @@
       </nav>
 
       <article class="learn-content">
-        <section id="architektur" class="learn-section">
-          <p class="eyebrow">01 · Aufbau und Speicher</p>
-          <h2>Harvard-Architektur und Speicherhierarchie</h2>
+        <details id="architektur" class="learn-section">
+          <summary><span class="eyebrow">01 · Aufbau und Speicher</span><span class="learn-section-title">Harvard-Architektur und Speicherhierarchie</span></summary>
           <p>Der PIC16F887 verwendet eine <strong>Harvard-Architektur</strong>: Programmbefehle und Daten liegen in physisch getrennten Speichern. Dadurch können Befehlsabruf und Datenzugriff auf getrennten Wegen stattfinden. Eine Von-Neumann-Architektur nutzt dagegen einen gemeinsamen Speicher und gemeinsame Übertragungswege für Code und Daten; das ist einfacher und flexibler, kann aber zu einem Engpass auf dem gemeinsamen Bus führen.</p>
           <div class="table-wrap">
             <table>
@@ -117,11 +88,10 @@
           </div>
           <p>Ein Datenregister ist <strong>8 Bit</strong> breit, ein Programmbefehl des PIC dagegen <strong>14 Bit</strong>. Die Wortbreiten sind verschieden, weil Befehle neben dem Operationscode auch Register-, Bit-, Literal- oder Adressfelder enthalten.</p>
           <p>Die 8192 Programmspeicherplätze sind Befehlswörter und nicht 8192 Bytes. Der Zugriff auf den Daten-EEPROM erfolgt über spezielle Steuerregister und ist ein eigener Vorgang; die Werte bleiben zwar ohne Versorgung erhalten, aber Schreibvorgänge sind nicht unbegrenzt oft möglich. Für Variablen, die sich während jedes Programmlaufs ändern, ist deshalb der SRAM vorgesehen.</p>
-        </section>
+        </details>
 
-        <section id="cpu" class="learn-section">
-          <p class="eyebrow">02 · CPU, Register und ALU</p>
-          <h2>W-Register, Registerdatei und Rechenwerk</h2>
+        <details id="cpu" class="learn-section">
+          <summary><span class="eyebrow">02 · CPU, Register und ALU</span><span class="learn-section-title">W-Register, Registerdatei und Rechenwerk</span></summary>
           <p>Das <strong>W-Register</strong> (Working Register) ist der zentrale 8-Bit-Akkumulator. Viele Befehle lesen einen Wert aus W und einem File-Register oder schreiben ein Ergebnis zurück in W beziehungsweise in das File-Register. Das Zieloperand <code>W</code> wählt das Arbeitsregister, <code>F</code> das File-Register.</p>
           <p>Die Registerdatei unterscheidet <strong>GPR</strong> (General Purpose Register) für Variablen und Zwischenergebnisse von <strong>SFR</strong> (Special Function Register) mit festgelegten Steuer- und Statusfunktionen. Beispiele für SFR sind STATUS, PORTB, TRISB und der Program Counter. Nicht jede Registeradresse ist daher ein frei nutzbarer GPR.</p>
           <p>Die <strong>ALU</strong> führt arithmetische Operationen (Addieren, Subtrahieren, Inkrementieren, Dekrementieren), logische Operationen (AND, OR, XOR, Komplement), Vergleiche über Rechenergebnisse sowie Bitmanipulationen aus. Dazu gehören auch Rotationen über das Carry-Bit, etwa <code>RLF</code> und <code>RRF</code>.</p>
@@ -166,11 +136,10 @@
               </tbody>
             </table>
           </div>
-        </section>
+        </details>
 
-        <section id="befehle" class="learn-section">
-          <p class="eyebrow">03 · Befehlssatz</p>
-          <h2>Befehlsgruppen, Formate und zentrale Instruktionen</h2>
+        <details id="befehle" class="learn-section">
+          <summary><span class="eyebrow">03 · Befehlssatz</span><span class="learn-section-title">Befehlsgruppen, Formate und zentrale Instruktionen</span></summary>
           <p>Der Befehlssatz wird in byte-orientierte Befehle, bit-orientierte Befehle und Literal-/Steuerbefehle eingeteilt. Der 14-Bit-Opcode legt die Operation fest; je nach Gruppe folgen passende Operandenfelder.</p>
           <div class="table-wrap">
             <table>
@@ -210,11 +179,10 @@
 COUNT
 TEMP
         endc</code></pre>
-        </section>
+        </details>
 
-        <section id="zyklus" class="learn-section">
-          <p class="eyebrow">04 · Zeitliche Ausführung</p>
-          <h2>Befehlszyklus und Taktberechnung</h2>
+        <details id="zyklus" class="learn-section">
+          <summary><span class="eyebrow">04 · Zeitliche Ausführung</span><span class="learn-section-title">Befehlszyklus und Taktberechnung</span></summary>
           <p>Auf hoher Ebene lässt sich ein Befehlszyklus als <strong>Fetch → Decode → Execute → gegebenenfalls Write back</strong> beschreiben. Beim PIC wird ein Befehlszyklus in vier interne Phasen <strong>Q1 bis Q4</strong> unterteilt. Die Pipeline kann den Abruf des nächsten Befehls teilweise mit der Ausführung des aktuellen überlappen. Sprünge und Skip-Befehle unterbrechen diesen Ablauf, weshalb ein übersprungener beziehungsweise neu zu ladender Befehl zusätzliche Zeit kostet.</p>
           <div class="table-wrap">
             <table>
@@ -232,11 +200,10 @@ TEMP
             <code>T<sub>cy</sub> = 4 / f<sub>osc</sub></code>
             <span>Bei f<sub>osc</sub> = 4 MHz gilt T<sub>cy</sub> = 1 µs. Die meisten Standardbefehle brauchen einen Zyklus; ausgeführte Sprünge und Skip-Fälle typischerweise zwei.</span>
           </div>
-        </section>
+        </details>
 
-        <section id="hardware" class="learn-section">
-          <p class="eyebrow">05 · Hardwarekonfiguration</p>
-          <h2>Ports, TRIS und Registerbänke</h2>
+        <details id="hardware" class="learn-section">
+          <summary><span class="eyebrow">05 · Hardwarekonfiguration</span><span class="learn-section-title">Ports, TRIS und Registerbänke</span></summary>
           <p>Ein Portpin wird über das zugehörige <strong>TRIS</strong>-Register konfiguriert: <code>1</code> bedeutet Eingang, <code>0</code> Ausgang. Das PORT-Register liest den Pinzustand beziehungsweise gibt den Ausgangspegel vor. Richtungswahl und Pinwert sind damit unterschiedliche Aufgaben in unterschiedlichen Registern.</p>
           <pre class="learn-code"><code>banksel TRISB
 bcf     TRISB,0       ; RB0 als Ausgang konfigurieren
@@ -260,11 +227,10 @@ banksel PORTB         ; komfortabler: passende Bank für PORTB auswählen</code>
             </table>
           </div>
           <p>Registeradressen sind hexadezimal angegeben. Der PIC16F887 besitzt vier Registerbänke; RP1:RP0 wählen die Bank beim direkten Zugriff. Nicht jedes Register liegt nur an einer einzigen Adresse, denn manche SFR sind gespiegelt.</p>
-        </section>
+        </details>
 
-        <section id="verzweigungen" class="learn-section">
-          <p class="eyebrow">06 · Entscheidungen</p>
-          <h2>Skip-Befehle und Programmablauf</h2>
+        <details id="verzweigungen" class="learn-section">
+          <summary><span class="eyebrow">06 · Entscheidungen</span><span class="learn-section-title">Skip-Befehle und Programmablauf</span></summary>
           <p><code>btfsc</code> und <code>btfss</code> sind keine klassischen bedingten Sprünge zu einem Label. Sie überspringen genau den <strong>unmittelbar folgenden Befehl</strong>, wenn die jeweilige Bitbedingung erfüllt ist. Häufig steht direkt dahinter ein <code>goto</code>, sodass daraus ein bedingter Programmzweig entsteht.</p>
           <pre class="learn-code"><code>        btfss   PORTB,0
         goto    TASTE_NICHT_GEDRUECKT
@@ -279,11 +245,10 @@ banksel PORTB         ; komfortabler: passende Bank für PORTB auswählen</code>
         ; Ende: COUNT ist 0</code></pre>
           <p><code>decfsz</code> dekrementiert ohne STATUS-Flags zu verändern. Bei Ergebnis 0 wird die nächste Instruktion übersprungen; bei einem 8-Bit-Zähler mit Startwert 0 läuft das Register zunächst modulo 256 bis 255 und benötigt daher 256 Dekremente bis zum nächsten Nullergebnis.</p>
           <p>Ein Programmablaufplan (PAP) stellt denselben Kontrollfluss grafisch dar: Rauten symbolisieren Bedingungen, Rechtecke Verarbeitungsschritte und Pfeile den Ablauf. Beim Vergleichen mit Assembler ordnet man jeder Raute den passenden Bit-Test oder Flag-Test zu und verfolgt dann genau den Skip und das mögliche <code>goto</code>. Labels ändern für sich allein noch nicht den Programmfluss.</p>
-        </section>
+        </details>
 
-        <section id="laufzeit" class="learn-section">
-          <p class="eyebrow">07 · Laufzeit und Algorithmen</p>
-          <h2>Cycles in verschachtelten Schleifen</h2>
+        <details id="laufzeit" class="learn-section">
+          <summary><span class="eyebrow">07 · Laufzeit und Algorithmen</span><span class="learn-section-title">Cycles in verschachtelten Schleifen</span></summary>
           <p>Für die Laufzeit wird jede Instruktion in Befehlszyklen gezählt. Bei <code>decfsz f,F</code> gilt: normaler Dekrement-Durchlauf ohne Skip kostet einen Zyklus; wenn das Ergebnis 0 ist und die Folgeinstruktion übersprungen wird, sind es zwei Zyklen. Ein ausgeführtes <code>goto</code> kostet zwei Zyklen.</p>
           <div class="formula-card">
             <strong>Typische innere Schleife</strong>
@@ -372,18 +337,18 @@ goto    OUTER_LOOP</code></pre>
                 <tr><th>O(1)</th><td>Ein fester Registerzugriff</td><td>Konstant</td></tr>
                 <tr><th>O(log n)</th><td>Suchbereich wird je Schritt halbiert</td><td>Langsam steigend</td></tr>
                 <tr><th>O(n)</th><td>Eine Schleife über n Werte</td><td>Linear</td></tr>
+                <tr><th>O(nm)</th><td>Zwei verschachtelte Schleifen mit unterschiedlichen Grenzen n und m</td><td>Produkt beider Durchlaufzahlen</td></tr>
                 <tr><th>O(n log n)</th><td>n Durchläufe mit logarithmischer Arbeit</td><td>Zwischen linear und quadratisch</td></tr>
                 <tr><th>O(n²)</th><td>Zwei n-fache Schleifen ineinander</td><td>Quadratisch</td></tr>
                 <tr><th>O(2ⁿ)</th><td>Jeder Schritt verdoppelt die Zahl der Zweige</td><td>Exponentiell</td></tr>
               </tbody>
             </table>
           </div>
-          <p>Zwei n-fache Schleifen hintereinander bleiben O(n), weil konstante Faktoren vernachlässigt werden. Zwei ineinander verschachtelte n-fache Schleifen benötigen typischerweise O(n²).</p>
-        </section>
+          <p>Zwei n-fache Schleifen hintereinander bleiben O(n), weil konstante Faktoren vernachlässigt werden. Zwei ineinander verschachtelte n-fache Schleifen benötigen typischerweise O(n²); haben die Schleifen verschiedene Grenzen, ist O(nm) die passendere Angabe.</p>
+        </details>
 
-        <section id="arithmetik" class="learn-section">
-          <p class="eyebrow">08 · Arithmetik und Logik</p>
-          <h2>Subtraktion, Vergleiche und Flags</h2>
+        <details id="arithmetik" class="learn-section">
+          <summary><span class="eyebrow">08 · Arithmetik und Logik</span><span class="learn-section-title">Subtraktion, Vergleiche und Flags</span></summary>
           <p><code>subwf f,d</code> berechnet immer <strong>f − W</strong>. Das Ergebnis wird abhängig vom Zielbit <code>d</code> nach W oder zurück nach f geschrieben. Als 8-Bit-Operation wird das Ergebnis modulo 256 gebildet. Bei einer vorzeichenlosen Subtraktion bedeutet C=1 „kein Borrow“ und C=0 „Borrow“; Z=1 bedeutet Ergebnis gleich 0.</p>
           <div class="table-wrap">
             <table>
@@ -419,11 +384,25 @@ goto    OUTER_LOOP</code></pre>
             </table>
           </div>
           <p>AND lässt ein Bit nur dann auf 1, wenn beide Operanden dort 1 haben. XOR setzt ein Bit bei unterschiedlichen Operandenbits. Beispiele in MPASM sind <code>andwf f,d</code> und <code>xorlw k</code>.</p>
-        </section>
+          <div class="formula-card">
+            <strong>Bitmaske mit AND</strong>
+            <code>10110110₂ AND 00001111₂ = 00000110₂</code>
+            <span>Die Maske mit den vier unteren Eins-Bits blendet die oberen Bits aus.</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>8-Bit-Addition</th><th>Gespeichertes Ergebnis</th><th>C</th><th>DC</th><th>Z</th></tr></thead>
+              <tbody>
+                <tr><th>0x0F + 0x01</th><td>0x10</td><td>0</td><td>1</td><td>0</td></tr>
+                <tr><th>0xFF + 0x01</th><td>0x00 (Übertrag über Bit 7)</td><td>1</td><td>1</td><td>1</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Bei <code>addwf</code> zeigt C den Übertrag aus Bit 7 und DC den Übertrag zwischen den unteren und oberen vier Bits. Das gespeicherte Ergebnis bleibt auf 8 Bit begrenzt; ein Ergebnis von 0 setzt Z.</p>
+        </details>
 
-        <section id="zahlen" class="learn-section">
-          <p class="eyebrow">09 · Zahlensysteme</p>
-          <h2>Dezimal, Dual und Hexadezimal</h2>
+        <details id="zahlen" class="learn-section">
+          <summary><span class="eyebrow">09 · Zahlensysteme</span><span class="learn-section-title">Dezimal, Dual und Hexadezimal</span></summary>
           <p>Im Dezimalsystem gilt die Basis 10, im Dualsystem die Basis 2 und im Hexadezimalsystem die Basis 16. Der Wert entsteht als Summe aus Ziffer mal Stellenwert. Eine Hex-Ziffer entspricht genau vier Dualbits: 0–9 sowie A=10, B=11, C=12, D=13, E=14 und F=15.</p>
           <div class="formula-card">
             <strong>Beispiel für dieselbe Zahl</strong>
@@ -450,11 +429,10 @@ goto    OUTER_LOOP</code></pre>
 movlw   B'00100101' ; Dualzahl
 movlw   D'37'       ; Dezimalzahl</code></pre>
           <p>Die Schreibweise <code>0x25</code> wird häufig in C und Dokumentationen verwendet; in MPASM sind insbesondere <code>H'25'</code>, <code>B'...'</code> und <code>D'...'</code> die eindeutigen Zahlbasis-Markierungen.</p>
-        </section>
+        </details>
 
-        <section id="codeanalyse" class="learn-section">
-          <p class="eyebrow">10 · Vorgehensweise</p>
-          <h2>Assemblercode systematisch analysieren</h2>
+        <details id="codeanalyse" class="learn-section">
+          <summary><span class="eyebrow">10 · Vorgehensweise</span><span class="learn-section-title">Assemblercode systematisch analysieren</span></summary>
           <p>Bei Codeaufgaben hilft eine Zustands-Tabelle mehr als das Überschlagen des gesamten Programms. Starte an der ersten Instruktion, notiere jede Änderung an W, den relevanten File-Registern und den getesteten Flags und gehe danach zur nächsten tatsächlich ausgeführten Zeile.</p>
           <ol>
             <li><strong>Startzustand festhalten:</strong> Welche Register- und Eingabewerte sind vorgegeben?</li>
@@ -498,13 +476,13 @@ ENDE:</code></pre>
               <li>Für einen Zählerstartwert 0 nicht null Schleifendurchläufe annehmen: 8-Bit-Dekrementierung läuft modulo 256.</li>
             </ul>
           </div>
-        </section>
+        </details>
       </article>
     </main>
 
     <footer class="site-footer">
-      <span>Datenverarbeitungstechnik · FG43</span>
-      <span><a href="index.html">Quiz starten</a></span>
+      <span>Datenverarbeitungstechnik · FG43 · 13-1</span>
+      <span><a href="../index.html">Zum Lernhub</a></span>
     </footer>
   </div>
 </body>
