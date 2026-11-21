@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Netzwerktechnik-Lernseite | FG43</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="learn.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Zurück zur Informatik-Klausur">
+        <span class="brand-mark">I</span><span>INFO <span class="brand-light">LERNNETZ</span></span>
+      </a>
+      <div class="topbar-actions">
+        <a class="header-link" href="index.html">Zur Klausur</a>
+        <button id="themeToggle" class="theme-toggle" type="button">Dunkel</button>
+        <span class="course-tag">FG43 · 13. Klasse</span>
+      </div>
+    </header>
+
+    <main class="learn-layout">
+      <header class="learn-hero">
+        <p class="eyebrow">Berufliche Informatik · Netzwerkkommunikation</p>
+        <h1>TCP, Web &amp; <span>Dienste verstehen.</span></h1>
+        <p class="intro">Prüfungsgerechter Überblick über Transport, Adressierung, Anwendungsdienste und Netzwerkdiagnose.</p>
+      </header>
+
+      <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <a href="#tcpudp">TCP &amp; UDP</a>
+        <a href="#adressierung">Ports, Sockets &amp; Web</a>
+        <a href="#dienste">DNS, HTTP &amp; FTP</a>
+        <a href="#ports">Standardports &amp; Sicherheit</a>
+        <a href="#diagnose">Fehlerdiagnose</a>
+      </nav>
+
+      <article class="learn-content">
+        <section id="tcpudp" class="learn-section">
+          <p class="eyebrow">01 · Transportschicht</p>
+          <h2>TCP und UDP</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Merkmal</th><th>TCP</th><th>UDP</th></tr></thead>
+            <tbody>
+              <tr><th>Verbindungsaufbau</th><td>Three-Way Handshake</td><td>Keiner</td></tr>
+              <tr><th>Zustellung</th><td>Bestätigt und geordnet</td><td>Unbestätigt</td></tr>
+              <tr><th>Steuerung</th><td>Fluss- und Überlastkontrolle</td><td>Keine eingebaute Steuerung</td></tr>
+              <tr><th>Overhead</th><td>Höher</td><td>Niedriger</td></tr>
+              <tr><th>Typische Dienste</th><td>Web, Dateien, Banking</td><td>DNS, VoIP, Live-Streaming</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>TCP:</strong> SYN → SYN+ACK → ACK. Die empfangsseitige Fenstergröße begrenzt die Flusssteuerung; die Überlastkontrolle passt die Sendemenge an die vermutete Netzlast an.</p>
+        </section>
+
+        <section id="adressierung" class="learn-section">
+          <p class="eyebrow">02 · Endpunkte und Web</p>
+          <h2>IP, Port und Socket</h2>
+          <p>Eine IP-Adresse erreicht einen Host oder Netzwerkendpunkt. Eine Portnummer unterscheidet Anwendungen auf diesem Host. Ein Socket ist die Kombination <code>IP-Adresse:Port</code>, zum Beispiel <code>192.168.1.5:1099</code>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Portbereich</th><th>Bezeichnung</th></tr></thead>
+            <tbody>
+              <tr><th>0–1023</th><td>Well-known Ports</td></tr>
+              <tr><th>1024–49151</th><td>Registrierte Ports</td></tr>
+              <tr><th>49152–65535</th><td>Dynamische/private Ports</td></tr>
+            </tbody>
+          </table></div>
+          <p>Eine URI identifiziert eine Ressource. Eine URL lokalisiert sie mit Schema, Host, optionalem Port, Pfad, Query und Fragment. HTTP läuft standardmäßig über TCP 80, HTTPS über TCP 443 mit TLS.</p>
+        </section>
+
+        <section id="dienste" class="learn-section">
+          <p class="eyebrow">03 · Anwendungsdienste</p>
+          <h2>DNS, HTTP und FTP</h2>
+          <p><strong>DNS</strong> löst Namen über Resolver und hierarchische DNS-Server auf. Standardport 53 wird sowohl über UDP als auch TCP verwendet.</p>
+          <p>Ein Browser löst den Hostnamen auf, baut zu Ziel-IP und 80/443 eine TCP-Verbindung auf und fordert mit HTTP/HTTPS eine Ressource an.</p>
+          <p><strong>FTP</strong> verwendet TCP 21 als Steuerkanal. Beim aktiven Modus öffnet der Server den Datenkanal typischerweise über TCP 20; beim passiven Modus handelt der Client einen Datenport aus.</p>
+        </section>
+
+        <section id="ports" class="learn-section">
+          <p class="eyebrow">04 · Standardports und Sicherheit</p>
+          <h2>Wichtige Zuordnungen</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Dienst</th><th>Transport</th><th>Port</th></tr></thead>
+            <tbody>
+              <tr><th>HTTP / HTTPS</th><td>TCP</td><td>80 / 443</td></tr>
+              <tr><th>DNS</th><td>UDP/TCP</td><td>53</td></tr>
+              <tr><th>DHCP</th><td>UDP</td><td>67/68</td></tr>
+              <tr><th>SSH / Telnet</th><td>TCP</td><td>22 / 23</td></tr>
+              <tr><th>FTP</th><td>TCP</td><td>21 Steuer, 20 aktiv</td></tr>
+              <tr><th>SMTP / Submission</th><td>TCP</td><td>25 / 587</td></tr>
+              <tr><th>POP3 / IMAP</th><td>TCP</td><td>110 / 143</td></tr>
+              <tr><th>IMAPS / POP3S</th><td>TCP</td><td>993 / 995</td></tr>
+            </tbody>
+          </table></div>
+          <p>SSH verschlüsselt die Verwaltungssitzung, Telnet sendet üblicherweise Klartext. Ein Port allein ist eine Konvention und garantiert keinen tatsächlichen Dienst.</p>
+        </section>
+
+        <section id="diagnose" class="learn-section">
+          <p class="eyebrow">05 · Fehleranalyse</p>
+          <h2>Vom Nahen zum Fernen diagnostizieren</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Befehl</th><th>Prüfung</th></tr></thead>
+            <tbody>
+              <tr><th><code>ipconfig</code></th><td>Lokale Adresse und grundlegende Konfiguration</td></tr>
+              <tr><th><code>ipconfig /all</code></th><td>IP, Maske, Gateway, DHCP und DNS</td></tr>
+              <tr><th><code>/release</code> &amp; <code>/renew</code></th><td>DHCP-Lease freigeben bzw. erneuern</td></tr>
+              <tr><th><code>ping</code></th><td>IP-Konnektivität testen</td></tr>
+              <tr><th><code>tracert</code></th><td>Pfad und möglicherweise fehlende Routerhops</td></tr>
+              <tr><th><code>nslookup</code></th><td>DNS-Auflösung prüfen</td></tr>
+              <tr><th><code>netstat -ano</code></th><td>Verbindungen, Ports und Prozess-ID anzeigen</td></tr>
+            </tbody>
+          </table></div>
+          <p>Diagnosekette: Loopback → lokale IP/Maske → Gateway → Remote-IP → DNS → TCP/UDP-Dienst und Port. Ein <code>*</code> bei <code>tracert</code> oder Timeout bei <code>ping</code> kann blockiertes ICMP bedeuten.</p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <span>Berufliche Informatik · FG43</span>
+      <span>Netzwerkkommunikation</span>
+    </footer>
+  </div>
+</body>
+</html>
