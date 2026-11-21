@@ -480,6 +480,190 @@
       correct: [0, 1, 2], tip: "Ordne jeden Befehl seinem typischen Diagnoseziel zu.",
       trap: "netstat -ano zeigt Verbindungen und Listening-Sockets mit Prozess-ID.",
       explanation: "ipconfig /all zeigt Konfiguration, tracert den Pfad und nslookup prüft Namensauflösung; netstat -ano listet Verbindungen und Ports."
+    },
+    {
+      id: "net-14", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche OSI-Schicht verantwortet die fehlerfreie Übertragung von Daten zwischen zwei Systemen?",
+      options: ["Schicht 2 – Sicherungsschicht.", "Schicht 3 – Vermittlungsschicht.", "Schicht 4 – Transportschicht.", "Schicht 1 – Bitübertragung."],
+      correct: 2, tip: "Die Transportschicht nutzt TCP und UDP für end-to-end Verbindungen.",
+      trap: "Die Sicherungsschicht arbeitet lokal zwischen zwei Knoten.",
+      explanation: "Die Transportschicht (Schicht 4) ist verantwortlich für zuverlässige end-to-end Datenübertragung."
+    },
+    {
+      id: "net-15", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zu TCP und UDP sind richtig?",
+      options: ["TCP ist verbindungsorientiert und zuverlässig.", "UDP ist verbindungslos und schneller als TCP.", "TCP prüft automatisch, ob Pakete ankamen.", "UDP garantiert eine fehlerfreie Zustellung."],
+      correct: [0, 1, 2], tip: "TCP benutzt Three-Way-Handshake; UDP sendet einfach los.",
+      trap: "UDP ist nicht zuverlässig und garantiert keine Zustellung.",
+      explanation: "TCP ist verbindungsorientiert und zuverlässig; UDP ist verbindungslos und schneller, aber nicht zuverlässig."
+    },
+    {
+      id: "net-16", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Welche Aussage zum OSI-Modell und Encapsulation ist korrekt?",
+      options: ["Daten auf Schicht 7 werden mit Headers von Schicht 6 bis 1 umhüllt.", "Jede Schicht fügt beim Versenden ihren eigenen Header hinzu.", "Beim Empfangen werden nur die Header der Schicht 1 geprüft.", "Headers werden beim Empfangen von unten nach oben wieder entfernt."],
+      correct: 1, tip: "Dies ist das Encapsulation-Prinzip: jede Schicht wrappt die Daten.",
+      trap: "Es werden nicht nur die Header der untersten Schicht geprüft.",
+      explanation: "Beim Versenden werden Headers von oben nach unten hinzugefügt; beim Empfangen werden sie von unten nach oben entfernt."
+    },
+    {
+      id: "net-17", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "cloze",
+      prompt: "FTP nutzt typischerweise {{0}}, SMTP nutzt {{1}} und HTTP nutzt {{2}}.",
+      blanks: [
+        { options: ["TCP 21", "TCP 23", "UDP 53"], correct: "TCP 21" },
+        { options: ["TCP 25", "TCP 110", "UDP 123"], correct: "TCP 25" },
+        { options: ["TCP 80", "TCP 443", "UDP 69"], correct: "TCP 80" }
+      ],
+      tip: "Merke die Standard-Portnummern für diese Anwendungsschicht-Protokolle.",
+      trap: "UDP wird typischerweise für zeitkritische Dienste wie DNS verwendet.",
+      explanation: "FTP nutzt TCP 21, SMTP nutzt TCP 25 und HTTP nutzt TCP 80."
+    },
+    {
+      id: "eth-11", topic: "ethernet", category: "ethernet", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche Aussage zu Full-Duplex und Half-Duplex beschreibt die Situation richtig?",
+      options: ["Full-Duplex ermöglicht gleichzeitiges Senden und Empfangen.", "Half-Duplex bedeutet, man kann nur noch 50% Daten übertragen.", "Full-Duplex wird ausschließlich in Hubs verwendet.", "Half-Duplex nutzt immer ein gemeinsames Übertragungsmedium und CSMA/CD."],
+      correct: 0, tip: "Full-Duplex mit Switches ermöglicht Vollduplexverkehr; Half-Duplex mit Hubs teilt sich das Medium.",
+      trap: "Half-Duplex verringert nicht die Datenrate pauschal.",
+      explanation: "Full-Duplex ermöglicht gleichzeitiges bidirektionales Senden; Half-Duplex wechselt zwischen Senden und Empfangen."
+    },
+    {
+      id: "eth-12", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zur MAC-Adressierung im Ethernet-Netz stimmen?",
+      options: ["Die OUI identifiziert den Gerätehersteller.", "Alle MAC-Adressen sind weltweit einzigartig.", "Broadcast-MAC ist FF:FF:FF:FF:FF:FF.", "Eine Multicast-MAC beginnt mit einer geraden ersten Hexadezimalziffer des ersten Bytes."],
+      correct: [0, 2], tip: "Die OUI ist der Herstellerteil; FF:FF... ist Broadcasting; Multicast beginnt mit ungerader zweiter Hexadezimalziffer.",
+      trap: "Nicht alle MAC-Adressen sind weltweit einzigartig; lokale Adressen sind möglich.",
+      explanation: "OUI identifiziert den Hersteller, Broadcast ist FF:FF:FF:FF:FF:FF, Multicast beginnt mit ungerader Stelle im ersten Byte."
+    },
+    {
+      id: "eth-13", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein Switch empfängt einen Frame mit Ziel-MAC D. Wenn die MAC nicht in der Tabelle eingetragen ist, was macht der Switch normalerweise?",
+      options: ["Er flooded den Frame über alle Ports außer dem Eingangsport.", "Er verwirft den Frame sofort.", "Er sendet eine Anfrage per ARP an alle Ports.", "Er wartet, bis ein DHCP-Server antwortet."],
+      correct: 0, tip: "Flooded bedeutet, den Frame über alle anderen Ports zu senden.",
+      trap: "Verwerfen würde zu unerreichbaren Zielen führen.",
+      explanation: "Unbekannte Ziel-MACs werden geflooded, bis der Switch die MAC-Adresse irgendwann durch Learning erfährt."
+    },
+    {
+      id: "ip-13", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "cloze",
+      prompt: "In einem /28-Netz gibt es {{0}} nutzbare Hostadressen pro Subnetz; die Blockgröße ist {{1}}.",
+      blanks: [
+        { options: ["14", "16", "8"], correct: "14" },
+        { options: ["8", "16", "32"], correct: "16" }
+      ],
+      tip: "Ein /28 lässt 4 Hostbits: 2^4=16 Adressen insgesamt minus Netz und Broadcast ergibt 14.",
+      trap: "16 ist die Gesamtzahl der Adressen, nicht die nutzbaren.",
+      explanation: "16 Adressen insgesamt, minus Netz- und Broadcastadresse ergibt 14 nutzbare Hosts."
+    },
+    {
+      id: "ip-14", topic: "ip", category: "ip", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Welche Netzadresse gehört zu 10.50.75.100/22?",
+      options: ["10.50.72.0.", "10.50.76.0.", "10.50.75.0.", "10.50.64.0."],
+      correct: 0, tip: "/22 bildet Blöcke der Größe 4 im dritten Oktett: .0, .4, .8, .12, ..., .72, .76.",
+      trap: "Achte auf die richtige Blockgröße für /22.",
+      explanation: "/22 hat Blöcke zu 4; .75 liegt im Netz .72."
+    },
+    {
+      id: "ip-15", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zu IPv4-Fragmentierung und MTU sind richtig?",
+      options: ["Die MTU bestimmt die maximale Größe eines Frames ohne Fragmentierung.", "IPv4-Header können bis zu 60 Byte groß sein.", "Jedes Fragment hat seinen eigenen IPv4-Header.", "Die Ziel-IP ändert sich bei Fragmentierung."],
+      correct: [0, 1, 2], tip: "IPv4-Fragmente müssen zusammengesetzt werden; die Ziel-IP bleibt gleich.",
+      trap: "Die Ziel-IP ist über alle Fragmente konstant.",
+      explanation: "MTU begrenzt Framegröße, IPv4-Header bis 60 Byte, jedes Fragment hat einen Header."
+    },
+    {
+      id: "rt-11", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Aussage zum ARP-Protokoll ist richtig?",
+      options: ["ARP ermittelt die MAC-Adresse zu einer bekannten IPv4-Adresse im lokalen Netz.", "ARP funktioniert auch über Router hinweg für entfernte Ziele.", "ARP arbeitet auf Schicht 3 und nutzt IP-Adressen zur Anfrage.", "ARP-Antworten werden typischerweise als Broadcast gesendet."],
+      correct: 0, tip: "ARP ist auf lokale Netze beschränkt; es arbeitet auf Schicht 2/3-Grenze.",
+      trap: "ARP funktioniert nicht over Router; für entfernte Ziele wird die MAC des Gateways ermittelt.",
+      explanation: "ARP löst lokale IPv4-Adressen in MAC-Adressen auf; es funktioniert nicht über Router."
+    },
+    {
+      id: "rt-12", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "cloze",
+      prompt: "Ein Host möchte ein Paket an 10.20.30.50/24 mit Gateway 10.20.30.1 senden. Um das Ziel zu erreichen, braucht er die MAC des {{0}}, weil {{1}}.",
+      blanks: [
+        { options: ["Gateways", "Ziel-Hosts", "Routers in der Ferne"], correct: "Gateways" },
+        { options: ["das Ziel im eigenen Netz liegt, aber vor Versand die MAC des Gateways bekannt sein muss", "der Gateway die richtige Route ins Zielnetz verwaltet", "ein Gateway ein spezieller Router ist"], correct: "das Ziel im eigenen Netz liegt, aber vor Versand die MAC des Gateways bekannt sein muss" }
+      ],
+      tip: "Der Host prüft mit AND-Verknüpfung, ob das Ziel lokal liegt.",
+      trap: "Lokale Ziele benötigen die MAC des Ziels direkt.",
+      explanation: "Mit /24 liegt das Ziel im eigenen Netz und braucht keine Gateway-MAC. Entfernte Ziele gehen zum Gateway."
+    },
+    {
+      id: "eth-14", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Aussage zum 802.1Q-VLAN-Tag ist korrekt?",
+      options: ["Es fügt 4 Bytes hinzu und enthält die 12-Bit VLAN-ID.", "Es ersetzt die Ziel-MAC-Adresse durch eine VLAN-Nummer.", "Es kann maximal 256 verschiedene VLANs auf einem Switch adressieren.", "Es funktioniert auch bei untagged Ports ohne Konfiguration."],
+      correct: 0, tip: "802.1Q-Tag: TPID (2 Bytes) + PCP (3 Bit) + CFI (1 Bit) + VLAN-ID (12 Bit).",
+      trap: "Mit 12 Bit VLAN-ID können 2^12=4096 VLANs adressiert werden.",
+      explanation: "Das 802.1Q-Tag ist 4 Bytes groß und enthält eine 12-Bit VLAN-ID."
+    },
+    {
+      id: "net-18", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "cloze",
+      prompt: "Das TCP/IP-Modell hat typischerweise {{0}} Schichten; das OSI-Modell hat {{1}} Schichten.",
+      blanks: [
+        { options: ["4", "5", "7"], correct: "4" },
+        { options: ["4", "5", "7"], correct: "7" }
+      ],
+      tip: "TCP/IP ist kompakter; OSI ist umfassender.",
+      trap: "Manche Varianten teilen TCP/IP in 5 Schichten.",
+      explanation: "Das TCP/IP-Modell hat 4 Schichten; das OSI-Modell hat 7 Schichten."
+    },
+    {
+      id: "eth-15", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zu Switched Ethernet und Kollisionsdomänen treffen zu?",
+      options: ["Jeder Switch-Port ist eine separate Kollisionsdomäne.", "Bridges und Switches trennen Kollisionsdomänen.", "Ein Hub verbindet mehrere Kollisionsdomänen.", "In einem Full-Duplex-Switch-Port gibt es keine Kollisionen."],
+      correct: [0, 1, 3], tip: "Switches trennen Kollisionsdomänen pro Port; Hubs teilen eine Domäne.",
+      trap: "Ein Hub verbindet Stationen in einer gemeinsamen Kollisionsdomäne.",
+      explanation: "Switches und Bridges trennen Kollisionsdomänen; Full-Duplex verhindert Kollisionen ganz."
+    },
+    {
+      id: "ip-16", topic: "ip", category: "ip", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Was bedeutet die Notation 10.0.0.0/8?",
+      options: ["Das Netz 10.0.0.0 mit Präfixlänge 8; es enthält 16.777.216 Adressen.", "8 Hosts in einem kleinen lokalen Netz.", "10 Computer mit 8-Bit-MAC-Adressen.", "Ein IPv6-Netz mit 8 Oktetten."],
+      correct: 0, tip: "/8 bedeutet, die ersten 8 Bits sind Netz, die restlichen 24 sind Host.",
+      trap: "/8 ist ein sehr großes Netz, nicht ein kleines.",
+      explanation: "10.0.0.0/8 hat 2^24 = 16.777.216 Adressen insgesamt."
+    },
+    {
+      id: "rt-13", topic: "routing", category: "routing", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche Aussage zum Default Gateway ist korrekt?",
+      options: ["Es ist der Router, an den der Host Pakete für unbekannte Ziele sendet.", "Es ist immer die erste Adresse im Subnetz.", "Es kann sich während einer Sitzung mehrfach ändern.", "Es wird von DNS automatisch zugeteilt."],
+      correct: 0, tip: "Der Gateway ist typischerweise die erste oder eine andere nutzbare Adresse im lokalen Netz.",
+      trap: "Das Default Gateway wird nicht von DNS zugeteilt.",
+      explanation: "Das Default Gateway ist der Router, an den unbekannte Remote-Ziele weitergeleitet werden."
+    },
+    {
+      id: "net-19", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche PDU-Einheit wird auf Schicht 5 des OSI-Modells verwendet?",
+      options: ["Session (bei manchen Modellen), ansonsten Layer-7-PDU.", "Paket.", "Frame.", "Bit."],
+      correct: 0, tip: "Die Schichten 5–7 werden oft unter Daten/Message zusammengefasst.",
+      trap: "Schicht 5 ist nicht standardisiert in der Praxis.",
+      explanation: "Schicht 5 (Session) nutzt bei Bedarf Session-PDU; in der Praxis werden Schichten 5–7 oft zusammengefasst."
+    },
+    {
+      id: "eth-16", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "cloze",
+      prompt: "Ein ungelabelter Port eines Switches gehört zum VLAN {{0}}; ein Tagged Port {{1}}.",
+      blanks: [
+        { options: ["dem Management-VLAN, typischerweise VLAN 1", "einem beliebigen Passthrough-VLAN", "VLAN 65535"], correct: "dem Management-VLAN, typischerweise VLAN 1" },
+        { options: ["kann Frames mehrerer VLANs mit Tags weiterleiten", "kann nur Frames eines einzigen VLAN tragen", "hat kein spezielles VLAN"], correct: "kann Frames mehrerer VLANs mit Tags weiterleiten" }
+      ],
+      tip: "Untagged Ports führen normalerweise nur Frames eines Standard-VLAN; Tagged Ports tragen mehrere VLANs.",
+      trap: "Tagged Ports tragen Tags von vielen VLANs gleichzeitig.",
+      explanation: "Untagged Ports gehören typischerweise zu VLAN 1; Tagged Ports führen Frames mehrerer VLANs mit Tags."
+    },
+    {
+      id: "ip-17", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zum Subnetting sind richtig?",
+      options: ["Subnetting teilt ein größeres Netz in kleinere Subnetze auf.", "Es erhöht die Anzahl der verfügbaren Hosts insgesamt.", "Das neue Präfix wird länger als das Original-Präfix.", "Es hilft bei der Netzoptimierung und Ressourcenschonung."],
+      correct: [0, 2, 3], tip: "Subnetting ist eine Art hierarchische Adressierung.",
+      trap: "Subnetting ändert nicht die Gesamtzahl der Adressen.",
+      explanation: "Subnetting teilt Netze auf, verlängert das Präfix und hilft bei Ressourcenschonung."
+    },
+    {
+      id: "net-20", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Nach einer OSI-Schicht-7-Anfrage eines Browsers müssen die Daten alle Schichten durchlaufen. Welche Reihenfolge beim Versand ist korrekt?",
+      options: ["7 → 6 → 5 → 4 → 3 → 2 → 1 (oben nach unten, dazu Encapsulation)", "1 → 2 → 3 → 4 → 5 → 6 → 7 (unten nach oben, Decapsulation)", "2 → 1 → 7 → 6 → 5 (zufällige Reihenfolge)", "Nur Schicht 1 wird benutzt; der Rest ist optional."],
+      correct: 0, tip: "Die Daten werden von oben nach unten mit Headers umwickelt.",
+      trap: "Decapsulation passiert beim Empfang, nicht beim Versand.",
+      explanation: "Beim Versand werden Daten von Schicht 7 bis 1 mit Headers umwickelt (Encapsulation)."
     }
   ];
 
