@@ -32,28 +32,35 @@
           <h1>Welches Fach willst du lernen?</h1>
           <p class="intro">Wähle ein Fach, um passende Themen, Fragen und Lernmaterialien zu öffnen.</p>
         </div>
-        <div class="subject-grid" aria-label="Fachauswahl">
-          <button class="subject-card subject-card-informatik" type="button" data-subject="informatik">
-            <span class="subject-mark" aria-hidden="true">I</span>
-            <span class="subject-card-copy">
-              <strong>Informatik</strong>
-              <span>Netzwerke, Protokolle und Fehlerdiagnose</span>
-              <small class="subject-term">13-1 · 13. Klasse · 1. Semester</small>
-              <small data-subject-stats="informatik"></small>
-            </span>
-            <span class="subject-arrow" aria-hidden="true">→</span>
-          </button>
-          <button class="subject-card subject-card-dvt" type="button" data-subject="dvt">
-            <span class="subject-mark" aria-hidden="true">D</span>
-            <span class="subject-card-copy">
-              <strong>DVT</strong>
-              <span>Digitale Datenverarbeitung · PIC16F887</span>
-              <small class="subject-term">13-1 · 13. Klasse · 1. Semester</small>
-              <small data-subject-stats="dvt"></small>
-            </span>
-            <span class="subject-arrow" aria-hidden="true">→</span>
-          </button>
-        </div>
+        <section class="subject-group" aria-labelledby="abiturGroupTitle">
+          <div class="subject-group-heading">
+            <p class="eyebrow">Gemeinsamer Lernbereich</p>
+            <h2 id="abiturGroupTitle">Datenverarbeitungstechnik – Abitur</h2>
+            <p>Die Fachkarten zeigen die jeweiligen Themenbereiche deiner Klausuren.</p>
+          </div>
+          <div class="subject-grid" aria-label="Fachauswahl">
+            <button class="subject-card subject-card-informatik" type="button" data-subject="informatik">
+              <span class="subject-mark" aria-hidden="true">I</span>
+              <span class="subject-card-copy">
+                <strong>Informatik</strong>
+                <span>Anfänge der Netzwerktechnik</span>
+                <small class="subject-term">13. Klasse · 1. Semester</small>
+                <small data-subject-stats="informatik"></small>
+              </span>
+              <span class="subject-arrow" aria-hidden="true">→</span>
+            </button>
+            <button class="subject-card subject-card-dvt" type="button" data-subject="dvt">
+              <span class="subject-mark" aria-hidden="true">D</span>
+              <span class="subject-card-copy">
+                <strong>DVT</strong>
+                <span>Datenverarbeitungstechnik · Assembler-Grundlagen · PIC16F887</span>
+                <small class="subject-term">13. Klasse · 1. Semester</small>
+                <small data-subject-stats="dvt"></small>
+              </span>
+              <span class="subject-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
       </section>
 
       <section id="startView" class="view start-view" hidden>
@@ -150,7 +157,7 @@
             <aside id="tipPanel" class="tip-panel" hidden></aside>
             <div id="questionContent" class="question-content"></div>
             <div id="instantFeedback" class="instant-feedback" hidden aria-live="polite"></div>
-            <p class="keyboard-hint">Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · T für Tipp (ohne Eingabefeld-Fokus)</p>
+            <p class="keyboard-hint">Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · Pos1/Ende zur ersten/letzten Aufgabe · T Tipp · U unsicher markieren · Esc Tipp schließen (ohne Eingabefeld-Fokus)</p>
             <div class="question-navigation">
               <button id="prevButton" class="button button-secondary" type="button">← Zurück</button>
               <button id="nextButton" class="button button-secondary" type="button">Weiter →</button>

@@ -27,6 +27,8 @@
 .learn-section tbody tr:last-child th, .learn-section tbody tr:last-child td { border-bottom: 0; }
 .learn-code { margin: 14px 0; padding: 14px 16px; overflow-x: auto; border: 1px solid #253651; border-radius: 10px; background: #152238; color: #e3ecff; font: 12px/1.7 "Cascadia Code", "SFMono-Regular", Consolas, monospace; tab-size: 4; }
 .learn-code code { padding: 0; background: transparent; color: inherit; font: inherit; }
+.learn-pdf-viewer { display: block; width: 100%; height: min(72vh, 760px); min-height: 420px; margin: 12px 0 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.learn-pdf-link { color: var(--blue-dark); font-weight: 750; }
 .learn-callout, .formula-card { margin: 14px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 11px; background: var(--blue-soft); color: var(--ink); }
 .learn-callout strong, .formula-card strong { display: block; margin-bottom: 6px; color: var(--blue-dark); font-size: 12px; }
 .learn-callout ul { margin: 7px 0 0; padding-left: 20px; }
@@ -68,4 +70,5 @@
   .cycle-inputs, .cycle-counts, .cycle-results { grid-template-columns: 1fr; }
   .learn-section table { min-width: 480px; }
   .learn-code { font-size: 11px; }
+  .learn-pdf-viewer { height: 65vh; min-height: 360px; }
 }

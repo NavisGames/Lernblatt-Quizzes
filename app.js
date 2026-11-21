@@ -974,7 +974,7 @@
     if (elements.quizView.hidden || event.altKey || event.ctrlKey || event.metaKey || event.isComposing) return;
     if (elements.submitDialog.open) return;
     if (event.target instanceof Element
-      && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+      && event.target.closest("input, textarea, select, [contenteditable]")) return;
 
     const key = event.key.toLowerCase();
     if (/^[1-7]$/.test(event.key) && ["single", "multiple"].includes(currentQuestion()?.type)) {
@@ -989,17 +989,22 @@
       }
     } else if (event.key === "ArrowLeft" || key === "p") {
       event.preventDefault();
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderQuestion();
-      }
+      elements.prevButton.click();
     } else if (event.key === "ArrowRight" || key === "n") {
       event.preventDefault();
-      if (currentIndex < quizQuestions.length - 1) {
-        currentIndex++;
-        renderQuestion();
-      }
+      elements.nextButton.click();
+    } else if (key === "home" || key === "end") {
+      event.preventDefault();
+      currentIndex = key === "home" ? 0 : quizQuestions.length - 1;
+      renderQuestion();
     } else if (key === "t") {
+      event.preventDefault();
+      elements.tipButton.click();
+    } else if (key === "u") {
+      event.preventDefault();
+      elements.unsureButton.click();
+    } else if (event.key === "Escape" && !elements.tipPanel.hidden) {
+      event.preventDefault();
       elements.tipButton.click();
     }
   });
