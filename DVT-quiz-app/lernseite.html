@@ -33,6 +33,7 @@
       </header>
 
       <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
         <a href="#architektur">Architektur & Speicher</a>
         <a href="#cpu">CPU, Register & ALU</a>
         <a href="#befehle">Befehle & Befehlswort</a>
@@ -43,10 +44,17 @@
         <a href="#arithmetik">Arithmetik & Flags</a>
         <a href="#zahlen">Zahlensysteme</a>
         <a href="#codeanalyse">Codeanalyse</a>
-        <a href="#originalklausur">Originalklausur</a>
+        <a href="#lernblatt">Lernblatt</a>
       </nav>
 
       <article class="learn-content">
+        <details id="lernblatt" class="learn-section">
+          <summary><span class="eyebrow">Lernmaterial · DVT</span><span class="learn-section-title">Lernblatt · 13. Klasse · 1. Semester</span></summary>
+          <p>Das Lernblatt zu den Assembler-Grundlagen direkt ansehen oder separat öffnen.</p>
+          <a class="learn-pdf-link" href="../DVT%20Klausur%202%2013-1.pdf" target="_blank" rel="noopener">Lernblatt als PDF öffnen ↗</a>
+          <iframe class="learn-pdf" src="../DVT%20Klausur%202%2013-1.pdf" title="DVT-Lernblatt, 13. Klasse, 1. Semester" loading="lazy"></iframe>
+          <p>Wird die Vorschau nicht angezeigt, öffne das Lernblatt über den Link.</p>
+        </details>
         <details id="architektur" class="learn-section">
           <summary><span class="eyebrow">01 · Aufbau und Speicher</span><span class="learn-section-title">Harvard-Architektur und Speicherhierarchie</span></summary>
           <p>Der PIC16F887 verwendet eine <strong>Harvard-Architektur</strong>: Programmbefehle und Daten liegen in physisch getrennten Speichern. Dadurch können Befehlsabruf und Datenzugriff auf getrennten Wegen stattfinden. Eine Von-Neumann-Architektur nutzt dagegen einen gemeinsamen Speicher und gemeinsame Übertragungswege für Code und Daten; das ist einfacher und flexibler, kann aber zu einem Engpass auf dem gemeinsamen Bus führen.</p>
@@ -477,11 +485,6 @@ ENDE:</code></pre>
               <li>Für einen Zählerstartwert 0 nicht null Schleifendurchläufe annehmen: 8-Bit-Dekrementierung läuft modulo 256.</li>
             </ul>
           </div>
-        </details>
-        <details id="originalklausur" class="learn-section">
-          <summary><span class="eyebrow">Klausurmaterial</span><span class="learn-section-title">DVT-Klausur 13-1 als PDF</span></summary>
-          <p>Die Originalklausur zur Datenverarbeitungstechnik ist hier direkt eingebunden. Du kannst sie auch <a class="learn-pdf-link" href="../DVT%20Klausur%202%2013-1.pdf" target="_blank" rel="noopener">in einem neuen Tab öffnen</a> oder <a class="learn-pdf-link" href="../DVT%20Klausur%202%2013-1.pdf" download>herunterladen</a>.</p>
-          <iframe class="learn-pdf-viewer" src="../DVT%20Klausur%202%2013-1.pdf" title="DVT-Klausur 13-1 als PDF" loading="lazy"></iframe>
         </details>
       </article>
     </main>

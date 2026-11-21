@@ -3,7 +3,10 @@
 
   const MAX_DURATION_SECONDS = 90 * 60;
   const SECONDS_PER_QUESTION = 2 * 60;
+  const STUDY_PROGRESS_STORAGE_KEY = "fg43-quiz-study-progress-v1";
+  const DIFFICULTY_RANK = { leicht: 0, mittel: 1, schwer: 2, knobel: 3 };
 
+  // Fachgymnasium-Klausurmaßstab, Stand September 2019: Mindestpunktzahlen je Notenpunkt.
   const gradeTableSource = `
 100|95 90 85 80 75 70 65 60 55 50 45 40 33 27 20
 50|48 45 43 40 38 35 33 30 28 25 23 20 17 14 10
@@ -45,7 +48,7 @@
 14|14 13 12 12 11 10 10 9 8 7 7 6 5 4 3
 13|13 12 12 11 10 10 9 8 8 7 6 6 5 4 3
 12|12 11 11 10 9 9 8 8 7 6 6 5 4 4 3
-11|11 10 10 9 9 8 8 7 7 6 5 5 4 3 3
+11|11 11 10 10 9 9 8 8 7 7 6 5 5 4 3
 10|10 9 9 8 8 7 7 6 6 5 5 4 4 3 2
 `.trim();
 
@@ -123,6 +126,7 @@
     quizView: document.querySelector("#quizView"),
     resultView: document.querySelector("#resultView"),
     startForm: document.querySelector("#startForm"),
+    durationBadge: document.querySelector("#durationBadge"),
     categoryGrid: document.querySelector("#categoryGrid"),
     topicShortcuts: document.querySelector("#topicShortcuts"),
     selectAllCategories: document.querySelector("#selectAllCategories"),
@@ -146,7 +150,12 @@
     questionPoints: document.querySelector("#questionPoints"),
     questionPrompt: document.querySelector("#questionPrompt"),
     questionCode: document.querySelector("#questionCode"),
+    questionTools: document.querySelector("#questionTools"),
     questionContent: document.querySelector("#questionContent"),
+    flashcardControls: document.querySelector("#flashcardControls"),
+    flashcardRevealButton: document.querySelector("#flashcardRevealButton"),
+    flashcardRating: document.querySelector("#flashcardRating"),
+    keyboardHint: document.querySelector("#keyboardHint"),
     tipButton: document.querySelector("#tipButton"),
     tipPanel: document.querySelector("#tipPanel"),
     unsureButton: document.querySelector("#unsureButton"),
@@ -157,12 +166,16 @@
     resultTitle: document.querySelector("#resultTitle"),
     resultSubtitle: document.querySelector("#resultSubtitle"),
     gradePoints: document.querySelector("#gradePoints"),
+    primaryScoreLabel: document.querySelector("#primaryScoreLabel"),
     gradeName: document.querySelector("#gradeName"),
     scoreValue: document.querySelector("#scoreValue"),
     percentValue: document.querySelector("#percentValue"),
     correctValue: document.querySelector("#correctValue"),
+    answerMetricLabel: document.querySelector("#answerMetricLabel"),
     unsureValue: document.querySelector("#unsureValue"),
     unsureCorrectValue: document.querySelector("#unsureCorrectValue"),
+    uncertainMetricLabel: document.querySelector("#uncertainMetricLabel"),
+    progressStorageWarning: document.querySelector("#progressStorageWarning"),
     resultTime: document.querySelector("#resultTime"),
     restartButton: document.querySelector("#restartButton"),
     repeatWrongButton: document.querySelector("#repeatWrongButton"),
@@ -184,15 +197,103 @@
   };
 
   let activeSubject = null;
+  let activeSubjectId = null;
   let quizQuestions = [];
   let answers = new Map();
+  let flashcardRatings = new Map();
+  let revealedFlashcards = new Set();
   let unsureQuestions = new Set();
   let currentIndex = 0;
   let durationSeconds = MAX_DURATION_SECONDS;
+  let startedAt = 0;
   let endTime = 0;
   let timerInterval = null;
   let submittedAt = 0;
   let submittedByTimer = false;
+
+  function isFlashcardMode() {
+    return elements.quizMode.value === "flashcards";
+  }
+
+  function emptySubjectProgress() {
+    return {
+      overall: { attempts: 0, correct: 0 },
+      categories: {}
+    };
+  }
+
+  function isProgressRecord(record) {
+    return record
+      && Number.isSafeInteger(record.attempts)
+      && record.attempts >= 0
+      && Number.isSafeInteger(record.correct)
+      && record.correct >= 0
+      && record.correct <= record.attempts;
+  }
+
+  function loadStudyProgress() {
+    let stored;
+    try {
+      stored = window.localStorage.getItem(STUDY_PROGRESS_STORAGE_KEY);
+    } catch (error) {
+      throw new Error(`Lokaler Lernfortschritt konnte nicht gelesen werden: ${error.message}`);
+    }
+    if (!stored) return { version: 1, subjects: {} };
+
+    let progress;
+    try {
+      progress = JSON.parse(stored);
+    } catch (error) {
+      throw new Error(`Gespeicherter Lernfortschritt ist ungültig: ${error.message}`);
+    }
+    if (!progress || progress.version !== 1 || !progress.subjects
+      || typeof progress.subjects !== "object" || Array.isArray(progress.subjects)) {
+      throw new Error("Gespeicherter Lernfortschritt hat ein unbekanntes Format.");
+    }
+
+    for (const subjectProgress of Object.values(progress.subjects)) {
+      if (!subjectProgress
+        || !isProgressRecord(subjectProgress.overall)
+        || !subjectProgress.categories || typeof subjectProgress.categories !== "object" || Array.isArray(subjectProgress.categories)
+        || !Object.values(subjectProgress.categories).every(isProgressRecord)) {
+        throw new Error("Gespeicherter Lernfortschritt enthält ungültige Werte.");
+      }
+    }
+    return progress;
+  }
+
+  function subjectProgressFrom(progress) {
+    return progress.subjects[activeSubjectId] || emptySubjectProgress();
+  }
+
+  function incrementProgressRecord(records, key, correct) {
+    const record = records[key] || { attempts: 0, correct: 0 };
+    record.attempts++;
+    if (correct) record.correct++;
+    records[key] = record;
+  }
+
+  function incrementOverallProgress(record, correct) {
+    record.attempts++;
+    if (correct) record.correct++;
+  }
+
+  function recordStudyProgress() {
+    const progress = loadStudyProgress();
+    const subjectProgress = progress.subjects[activeSubjectId] || emptySubjectProgress();
+    for (const question of quizQuestions) {
+      if (!hasAnswer(question)) continue;
+      const correct = isCorrect(question);
+      incrementOverallProgress(subjectProgress.overall, correct);
+      incrementProgressRecord(subjectProgress.categories, question.category, correct);
+    }
+    progress.subjects[activeSubjectId] = subjectProgress;
+    try {
+      window.localStorage.setItem(STUDY_PROGRESS_STORAGE_KEY, JSON.stringify(progress));
+    } catch (error) {
+      throw new Error(`Lernfortschritt konnte nicht gespeichert werden: ${error.message}`);
+    }
+  }
 
   function shuffle(items) {
     const result = [...items];
@@ -275,31 +376,61 @@
     const categories = selectedCategories();
     const eligibleCount = eligibleQuestions(categories).length;
     const previousCount = Number(elements.countSelect.value) || 25;
+    const mode = elements.quizMode.value;
     const choices = [90, 75, 60, 50, 40, 30, 25, 20, 15, 10].filter((count) => count <= eligibleCount);
     if (eligibleCount > 0 && !choices.includes(eligibleCount)) choices.unshift(eligibleCount);
+
+    let adaptiveStorageError = "";
+    if (mode === "adaptive") {
+      try {
+        loadStudyProgress();
+      } catch (error) {
+        console.error("Adaptiver Modus kann den Lernfortschritt nicht lesen.", error);
+        adaptiveStorageError = "Der adaptive Modus benötigt lesbaren lokalen Lernfortschritt. Prüfe den Browserspeicher oder lösche den Quiz-Fortschritt.";
+      }
+    }
 
     elements.countSelect.replaceChildren();
     for (const count of choices) {
       const option = document.createElement("option");
       option.value = String(count);
-      option.textContent = `${count} Aufgaben · ${Math.ceil(durationSecondsForQuestionCount(count) / 60)} min`;
+      const duration = durationSecondsForMode(count, mode);
+      option.textContent = duration
+        ? `${count} Aufgaben · ${Math.ceil(duration / 60)} min`
+        : `${count} Aufgaben · ohne Zeitlimit`;
       elements.countSelect.append(option);
     }
     elements.countSelect.disabled = eligibleCount === 0;
-    elements.startForm.querySelector("button[type='submit']").disabled = eligibleCount === 0;
+    elements.startForm.querySelector("button[type='submit']").disabled = eligibleCount === 0 || Boolean(adaptiveStorageError);
+    elements.durationBadge.textContent = mode === "flashcards"
+      ? "ohne Zeitlimit"
+      : mode === "strict" ? "90 min" : "max. 90 min";
     if (choices.length) {
       elements.countSelect.value = String(choices.includes(previousCount) ? previousCount : choices[0]);
     }
-    elements.setupNoteText.textContent = eligibleCount
-      ? `${categories.size} Kategorien ausgewählt · ${eligibleCount} Aufgaben im Pool. Die Bearbeitungszeit beträgt 2 min pro Aufgabe, maximal 90 min. Auswahlantworten werden pro Quiz gemischt; Punkte variieren nach Schwierigkeit und Aufgabentyp.`
+    const modeDescriptions = {
+      exam: "2 min pro Aufgabe, maximal 90 min · Feedback am Ende.",
+      learning: "2 min pro Aufgabe, maximal 90 min · Sofort-Feedback.",
+      flashcards: "Ohne Zeitlimit · Lösung aufdecken und selbst einschätzen.",
+      adaptive: "2 min pro Aufgabe, maximal 90 min · Sofort-Feedback, Schwächen zuerst, Schwierigkeit steigt schrittweise; Lernfortschritt bleibt lokal gespeichert.",
+      strict: "Feste Gesamtzeit von 90 min · keine Tipps, Feedback erst nach Abgabe."
+    };
+    elements.setupNoteText.textContent = adaptiveStorageError || (eligibleCount
+      ? `${categories.size} Kategorien ausgewählt · ${eligibleCount} Aufgaben im Pool. ${modeDescriptions[mode]}`
       : categories.size
         ? "Für diese Kombination aus Kategorien und Schwierigkeitsgrad sind keine Aufgaben vorhanden."
-        : "Wähle mindestens eine Kategorie aus, um ein Quiz zu starten.";
+        : "Wähle mindestens eine Kategorie aus, um ein Quiz zu starten.");
     syncTopicShortcuts(categories);
   }
 
   function durationSecondsForQuestionCount(count) {
     return Math.min(MAX_DURATION_SECONDS, Math.ceil(count * SECONDS_PER_QUESTION));
+  }
+
+  function durationSecondsForMode(count, mode = elements.quizMode.value) {
+    if (mode === "flashcards") return 0;
+    if (mode === "strict") return MAX_DURATION_SECONDS;
+    return durationSecondsForQuestionCount(count);
   }
 
   function chooseQuestions(categories, requestedCount) {
@@ -313,15 +444,14 @@
         selectedIds.add(question.id);
       }
     };
-    const difficultyRank = { leicht: 0, mittel: 1, schwer: 2, knobel: 3 };
     const challenging = ["challenging", "hardKnobel"].includes(elements.difficultyMode.value);
     const weightedShuffle = (questions) => shuffle(questions).sort((a, b) => {
-      const aWeight = difficultyRank[a.difficulty] + (a.code ? 1 : 0);
-      const bWeight = difficultyRank[b.difficulty] + (b.code ? 1 : 0);
+      const aWeight = DIFFICULTY_RANK[a.difficulty] + (a.code ? 1 : 0);
+      const bWeight = DIFFICULTY_RANK[b.difficulty] + (b.code ? 1 : 0);
       return challenging ? bWeight - aWeight : aWeight - bWeight;
     });
 
-    for (const difficulty of ["leicht", "mittel", "schwer", "knobel"]) {
+    for (const difficulty of Object.keys(DIFFICULTY_RANK)) {
       const candidate = weightedShuffle(eligible.filter((question) => question.difficulty === difficulty))[0];
       addQuestion(candidate);
     }
@@ -337,6 +467,44 @@
     return shuffle(selected);
   }
 
+  function chooseAdaptiveQuestions(categories, requestedCount, progress) {
+    const remaining = eligibleQuestions(categories);
+    const count = Math.min(requestedCount, remaining.length);
+    const subjectProgress = subjectProgressFrom(progress);
+    const overallAccuracy = subjectProgress.overall.attempts
+      ? subjectProgress.overall.correct / subjectProgress.overall.attempts
+      : 0;
+    const availableRanks = remaining.map((question) => DIFFICULTY_RANK[question.difficulty]);
+    const minRank = Math.min(...availableRanks);
+    const maxRank = Math.max(...availableRanks);
+    const startingRank = overallAccuracy >= 0.85 ? 2 : overallAccuracy >= 0.65 ? 1 : 0;
+    const selected = [];
+
+    while (selected.length < count) {
+      const targetRank = Math.max(minRank, Math.min(maxRank, startingRank + Math.floor(selected.length / 5)));
+      const weights = remaining.map((question) => {
+        const categoryProgress = subjectProgress.categories[question.category];
+        const accuracy = categoryProgress
+          ? (categoryProgress.correct + 1) / (categoryProgress.attempts + 2)
+          : 0.5;
+        const topicWeight = 0.6 + (1 - accuracy) * 1.8;
+        const difficultyDistance = Math.abs(DIFFICULTY_RANK[question.difficulty] - targetRank);
+        return topicWeight / (1 + difficultyDistance * 0.75);
+      });
+      const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+      let selection = Math.random() * totalWeight;
+      let selectedIndex = weights.length - 1;
+      for (let index = 0; index < weights.length; index++) {
+        selection -= weights[index];
+        if (selection < 0) {
+          selectedIndex = index;
+          break;
+        }
+      }
+      selected.push(remaining.splice(selectedIndex, 1)[0]);
+    }
+    return selected;
+  }
   function mixQuestionOptions(question) {
     if (question.type === "cloze") return question;
 
@@ -360,28 +528,37 @@
     if (quizQuestions.length === 0) return;
 
     answers = new Map();
+    flashcardRatings = new Map();
+    revealedFlashcards = new Set();
     unsureQuestions = new Set();
     currentIndex = 0;
     submittedAt = 0;
     submittedByTimer = false;
-    durationSeconds = durationSecondsForQuestionCount(quizQuestions.length);
+    durationSeconds = durationSecondsForMode(quizQuestions.length);
+    startedAt = Date.now();
+    endTime = durationSeconds ? startedAt + durationSeconds * 1000 : 0;
     elements.quizTopicLabel.textContent = title;
     elements.totalNumber.textContent = String(quizQuestions.length);
     elements.resultView.hidden = true;
     elements.startView.hidden = true;
     elements.quizView.hidden = false;
+    elements.timerCard.hidden = durationSeconds === 0;
+    elements.timerDisplay.textContent = durationSeconds ? formatDuration(durationSeconds).replace(" min", "") : "--:--";
     elements.timerCard.classList.remove("is-low");
 
-    endTime = Date.now() + durationSeconds * 1000;
     renderQuestionGrid();
     renderQuestion();
     updateProgress();
-    updateTimer();
     window.clearInterval(timerInterval);
-    timerInterval = window.setInterval(updateTimer, 250);
+    timerInterval = null;
+    if (durationSeconds) {
+      updateTimer();
+      timerInterval = window.setInterval(updateTimer, 250);
+    }
   }
 
   function selectSubject(subjectId) {
+    activeSubjectId = subjectId;
     activeSubject = subjects[subjectId];
     document.body.classList.remove("theme-informatik", "theme-dvt");
     document.body.classList.add(`theme-${subjectId}`);
@@ -404,9 +581,12 @@
     if (elements.submitDialog.open) elements.submitDialog.close();
     quizQuestions = [];
     answers = new Map();
+    flashcardRatings = new Map();
+    revealedFlashcards = new Set();
     unsureQuestions = new Set();
     currentIndex = 0;
     durationSeconds = MAX_DURATION_SECONDS;
+    startedAt = 0;
     endTime = 0;
     submittedAt = 0;
     submittedByTimer = false;
@@ -417,6 +597,8 @@
     elements.topicShortcuts.replaceChildren();
     document.body.classList.remove("theme-informatik", "theme-dvt");
     activeSubject = null;
+    activeSubjectId = null;
+    elements.timerCard.hidden = false;
     elements.learnGuideLink.hidden = true;
     elements.backToHubButton.hidden = true;
     elements.hubView.hidden = false;
@@ -434,15 +616,31 @@
       window.alert("Wähle mindestens eine Kategorie aus.");
       return;
     }
-    const questions = chooseQuestions(categories, requestedCount);
+    let questions;
+    if (elements.quizMode.value === "adaptive") {
+      try {
+        questions = chooseAdaptiveQuestions(categories, requestedCount, loadStudyProgress());
+      } catch (error) {
+        console.error("Adaptiver Modus kann nicht gestartet werden.", error);
+        elements.setupNoteText.textContent = "Der adaptive Modus kann den lokalen Lernfortschritt nicht lesen. Prüfe den Browserspeicher oder lösche den Quiz-Fortschritt.";
+        return;
+      }
+    } else {
+      questions = chooseQuestions(categories, requestedCount);
+    }
     if (questions.length === 0) {
       window.alert("Für diesen Themenbereich sind keine Aufgaben vorhanden.");
       return;
     }
 
-    const title = elements.quizMode.value === "exam"
-      ? "Klausurmodus · Feedback am Ende"
-      : "Lernmodus · Sofort-Feedback";
+    const titles = {
+      exam: "Klausurmodus · Feedback am Ende",
+      learning: "Lernmodus · Sofort-Feedback",
+      flashcards: "Karteikartenmodus · Selbsteinschätzung",
+      adaptive: "Adaptiver Lernmodus · Schwächen zuerst",
+      strict: "Strenge Prüfungssimulation · 90 min"
+    };
+    const title = titles[elements.quizMode.value];
     beginQuiz(questions, title);
   }
 
@@ -463,6 +661,7 @@
   }
 
   function hasAnswer(question) {
+    if (isFlashcardMode()) return flashcardRatings.has(question.id);
     const answer = answers.get(question.id);
     if (question.type === "single") return Number.isInteger(answer);
     if (question.type === "multiple") return Array.isArray(answer) && answer.length > 0;
@@ -470,6 +669,7 @@
   }
 
   function hasAttempt(question) {
+    if (isFlashcardMode()) return flashcardRatings.has(question.id);
     const answer = answers.get(question.id);
     if (question.type === "single") return Number.isInteger(answer);
     if (question.type === "multiple") return Array.isArray(answer) && answer.length > 0;
@@ -496,6 +696,8 @@
   function renderQuestion() {
     const question = currentQuestion();
     if (!question) return;
+    const flashcardMode = isFlashcardMode();
+    const strictMode = elements.quizMode.value === "strict";
 
     elements.currentNumber.textContent = String(currentIndex + 1);
     const category = activeSubject.categories.find((entry) => entry.id === question.category);
@@ -514,7 +716,7 @@
     elements.questionDifficulty.dataset.level = question.difficulty;
     elements.questionPoints.textContent = `${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`;
     elements.questionPrompt.textContent = question.type === "cloze"
-      ? "Ergänze die Lücken."
+      ? flashcardMode ? question.prompt.replace(/{{\d+}}/g, "_____") : "Ergänze die Lücken."
       : question.prompt;
     elements.questionContent.replaceChildren();
     elements.tipPanel.textContent = question.tip;
@@ -528,6 +730,20 @@
       : "◇ Unsicher / später prüfen";
     elements.instantFeedback.hidden = true;
     elements.instantFeedback.replaceChildren();
+    elements.questionTools.hidden = flashcardMode;
+    elements.tipButton.hidden = strictMode;
+    elements.unsureButton.hidden = flashcardMode;
+    elements.flashcardControls.hidden = !flashcardMode;
+    elements.keyboardHint.hidden = flashcardMode;
+    elements.keyboardHint.textContent = strictMode
+      ? "Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · Pos1/Ende zur ersten/letzten Aufgabe · U unsicher markieren · Strg/⌘+Enter öffnet den Abgabe-Dialog · Tipps sind deaktiviert"
+      : "Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · Pos1/Ende zur ersten/letzten Aufgabe · T Tipp · U unsicher markieren · Esc Tipp schließen · Strg/⌘+Enter öffnet den Abgabe-Dialog (ohne Eingabefeld-Fokus)";
+    const revealed = flashcardMode && revealedFlashcards.has(question.id);
+    elements.flashcardRevealButton.hidden = revealed;
+    elements.flashcardRating.hidden = !revealed;
+    for (const button of elements.flashcardRating.querySelectorAll("[data-flashcard-rating]")) {
+      button.setAttribute("aria-pressed", String(flashcardRatings.get(question.id) === button.dataset.flashcardRating));
+    }
 
     if (question.code) {
       elements.questionCode.hidden = false;
@@ -537,7 +753,9 @@
       elements.questionCode.querySelector("code").textContent = "";
     }
 
-    if (question.type === "cloze") {
+    if (flashcardMode) {
+      if (revealed) renderFlashcardAnswer(question);
+    } else if (question.type === "cloze") {
       renderCloze(question);
     } else {
       renderChoiceQuestion(question);
@@ -548,6 +766,24 @@
     updateQuestionGrid();
     updateProgress();
     renderInstantFeedback();
+  }
+
+  function renderFlashcardAnswer(question) {
+    const answer = document.createElement("div");
+    answer.className = "flashcard-answer";
+    const heading = document.createElement("strong");
+    heading.textContent = "Lösung";
+    const answerText = document.createElement("p");
+    answerText.textContent = correctAnswerText(question);
+    const explanation = document.createElement("p");
+    explanation.textContent = question.explanation;
+    answer.append(heading, answerText, explanation);
+    if (question.trap) {
+      const trap = document.createElement("p");
+      trap.textContent = `Typische Falle: ${question.trap}`;
+      answer.append(trap);
+    }
+    elements.questionContent.append(answer);
   }
 
   function renderChoiceQuestion(question) {
@@ -654,6 +890,7 @@
   }
 
   function updateTimer() {
+    if (!durationSeconds) return;
     const seconds = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
     const minutes = Math.floor(seconds / 60);
     const remainder = seconds % 60;
@@ -663,6 +900,7 @@
   }
 
   function isCorrect(question) {
+    if (isFlashcardMode()) return flashcardRatings.get(question.id) === "known";
     const answer = answers.get(question.id);
     if (question.type === "single") return answer === question.correct;
     if (question.type === "multiple") {
@@ -678,7 +916,7 @@
 
   function renderInstantFeedback() {
     const question = currentQuestion();
-    const learningMode = elements.quizMode.value === "learning";
+    const learningMode = ["learning", "adaptive"].includes(elements.quizMode.value);
     if (!learningMode || !question || !hasAnswer(question)) {
       elements.instantFeedback.hidden = true;
       return;
@@ -714,6 +952,7 @@
     const lowRow = GRADE_THRESHOLDS.get(lower);
     const highRow = GRADE_THRESHOLDS.get(upper);
     const ratio = (maximum - lower) / (upper - lower);
+    // Interpolated thresholds are minimum whole-point scores, so round them up.
     return lowRow.map((value, index) => Math.ceil(value + (highRow[index] - value) * ratio));
   }
 
@@ -727,7 +966,7 @@
 
   function submitQuiz(byTimer = false) {
     if (elements.quizView.hidden) return;
-    submittedByTimer = byTimer || Date.now() >= endTime;
+    submittedByTimer = byTimer || (durationSeconds > 0 && Date.now() >= endTime);
     if (elements.submitDialog.open) elements.submitDialog.close();
     submittedAt = Date.now();
     window.clearInterval(timerInterval);
@@ -743,6 +982,7 @@
   }
 
   function showResults() {
+    const flashcardMode = isFlashcardMode();
     const correctCount = quizQuestions.filter(isCorrect).length;
     const maximum = quizQuestions.reduce((sum, question) => sum + question.points, 0);
     const score = quizQuestions.reduce((sum, question) =>
@@ -750,32 +990,64 @@
     const percentage = maximum ? (score / maximum) * 100 : 0;
     const grade = calculateGrade(score, maximum);
     const [schoolGrade, gradeLabel] = gradeDescriptions[grade];
+    const unansweredCount = quizQuestions.filter((question) => !hasAnswer(question)).length;
     const unsureCount = unsureQuestions.size;
     const unsureCorrectCount = quizQuestions.filter((question) =>
       unsureQuestions.has(question.id) && isCorrect(question)
     ).length;
-    const elapsedSeconds = Math.min(durationSeconds, Math.max(0, Math.floor((submittedAt - (endTime - durationSeconds * 1000)) / 1000)));
+    const elapsedSeconds = durationSeconds
+      ? Math.min(durationSeconds, Math.max(0, Math.floor((submittedAt - startedAt) / 1000)))
+      : 0;
     const wrongCount = quizQuestions.filter((question) => hasAttempt(question) && !isCorrect(question)).length;
     const unsureCorrectCountForRetry = quizQuestions.filter((question) =>
       unsureQuestions.has(question.id) && isCorrect(question)
     ).length;
 
+    elements.progressStorageWarning.hidden = true;
+    elements.progressStorageWarning.textContent = "";
+    try {
+      recordStudyProgress();
+    } catch (error) {
+      console.error("Quiz-Lernfortschritt konnte nicht gespeichert werden.", error);
+      elements.progressStorageWarning.textContent = "Der Lernfortschritt konnte nicht lokal gespeichert werden. Der adaptive Modus kann deine Ergebnisse daher nicht für spätere Quizze berücksichtigen.";
+      elements.progressStorageWarning.hidden = false;
+    }
+
     elements.quizView.hidden = true;
     elements.resultView.hidden = false;
-    elements.resultTitle.textContent = submittedByTimer ? "Zeit abgelaufen" : "Quiz abgeschlossen";
-    elements.resultSubtitle.textContent = submittedByTimer
-      ? "Die verfügbare Bearbeitungszeit ist abgelaufen. Deine Antworten wurden automatisch ausgewertet."
-      : "Deine Antworten wurden automatisch ausgewertet.";
-    elements.gradePoints.textContent = String(grade);
-    elements.gradeName.textContent = `${schoolGrade} · ${gradeLabel}`;
-    elements.scoreValue.textContent = `${Number(score.toFixed(2))} / ${maximum}`;
-    elements.percentValue.textContent = `${percentage.toFixed(1).replace(".", ",")} %`;
-    elements.correctValue.textContent = `${correctCount} / ${quizQuestions.length}`;
-    elements.unsureValue.textContent = String(unsureCount);
-    elements.unsureCorrectValue.textContent = `${unsureCorrectCount} davon richtig · mögliche Glückstreffer`;
-    elements.resultTime.textContent = submittedByTimer
-      ? `Zeitlimit erreicht · ${formatDuration(durationSeconds)}`
-      : `Bearbeitungszeit: ${formatDuration(elapsedSeconds)}`;
+    elements.resultTitle.textContent = submittedByTimer
+      ? "Zeit abgelaufen"
+      : flashcardMode ? "Karteikartenrunde abgeschlossen" : "Quiz abgeschlossen";
+    elements.resultSubtitle.textContent = flashcardMode
+      ? "Deine Gewusst-/Noch-üben-Markierungen bilden die Selbsteinschätzung dieser Runde."
+      : submittedByTimer
+        ? "Die verfügbare Bearbeitungszeit ist abgelaufen. Deine Antworten wurden automatisch ausgewertet."
+        : "Deine Antworten wurden automatisch ausgewertet.";
+    elements.primaryScoreLabel.textContent = flashcardMode ? "Gewusst" : "Notenpunkte";
+    elements.gradePoints.textContent = flashcardMode ? String(correctCount) : String(grade);
+    elements.gradeName.textContent = flashcardMode
+      ? `${correctCount} von ${quizQuestions.length} Karten`
+      : `${schoolGrade} · ${gradeLabel}`;
+    elements.scoreValue.textContent = flashcardMode
+      ? `${correctCount} / ${quizQuestions.length}`
+      : `${Number(score.toFixed(2))} / ${maximum}`;
+    elements.percentValue.textContent = flashcardMode
+      ? "selbst eingeschätzt"
+      : `${percentage.toFixed(1).replace(".", ",")} %`;
+    elements.answerMetricLabel.textContent = flashcardMode ? "Noch üben" : "Richtige Antworten";
+    elements.correctValue.textContent = flashcardMode
+      ? String(wrongCount)
+      : `${correctCount} / ${quizQuestions.length}`;
+    elements.uncertainMetricLabel.textContent = flashcardMode ? "Noch zu bewerten" : "Unsicher markiert";
+    elements.unsureValue.textContent = flashcardMode ? String(unansweredCount) : String(unsureCount);
+    elements.unsureCorrectValue.textContent = flashcardMode
+      ? `${unansweredCount} nicht bewertet`
+      : `${unsureCorrectCount} davon richtig · mögliche Glückstreffer`;
+    elements.resultTime.textContent = flashcardMode
+      ? "Ohne Zeitlimit"
+      : submittedByTimer
+        ? `Zeitlimit erreicht · ${formatDuration(durationSeconds)}`
+        : `Bearbeitungszeit: ${formatDuration(elapsedSeconds)}`;
     elements.repeatWrongButton.disabled = wrongCount === 0;
     elements.repeatWrongButton.textContent = wrongCount
       ? `Falsche Antworten wiederholen (${wrongCount})`
@@ -794,13 +1066,24 @@
   function renderCategoryResults() {
     const scores = new Map();
     for (const question of quizQuestions) {
-      const current = scores.get(question.category) || { correct: 0, total: 0 };
+      if (isFlashcardMode() && !hasAnswer(question)) continue;
+      const current = scores.get(question.category) || {
+        correct: 0,
+        total: 0,
+        earnedPoints: 0,
+        maxPoints: 0
+      };
       current.total++;
-      if (isCorrect(question)) current.correct++;
+      current.maxPoints += question.points;
+      if (isCorrect(question)) {
+        current.correct++;
+        current.earnedPoints += question.points;
+      }
       scores.set(question.category, current);
     }
 
     elements.categoryResults.replaceChildren();
+    const formatPoints = (points) => points.toLocaleString("de-DE", { maximumFractionDigits: 2 });
     for (const category of activeSubject.categories) {
       const score = scores.get(category.id);
       if (!score) continue;
@@ -815,7 +1098,7 @@
       link.href = `${activeSubject.learnPage}#${anchor}`;
       link.textContent = category.label;
       const value = document.createElement("span");
-      value.textContent = `${score.correct}/${score.total} · ${percentage}%`;
+      value.textContent = `${score.correct}/${score.total} · ${percentage}% · ${formatPoints(score.earnedPoints)}/${formatPoints(score.maxPoints)} P`;
       const meter = document.createElement("div");
       meter.className = "category-result-meter";
       meter.setAttribute("role", "meter");
@@ -839,6 +1122,12 @@
   }
 
   function formatAnswer(question, answer) {
+    if (isFlashcardMode()) {
+      const rating = flashcardRatings.get(question.id);
+      return rating === "known"
+        ? "Selbsteinschätzung: Gewusst"
+        : rating === "review" ? "Selbsteinschätzung: Noch üben" : "Nicht bewertet";
+    }
     if (question.type === "single") {
       return Number.isInteger(answer) ? question.options[answer] : "Keine Antwort";
     }
@@ -872,9 +1161,16 @@
       title.textContent = `${index + 1}. ${question.prompt.replace(/{{\d+}}/g, "_____")}`;
       const status = document.createElement("div");
       status.className = "review-status";
-      status.textContent = correct
-        ? `Richtig · ${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
-        : "Nicht richtig · 0 Punkte";
+      if (isFlashcardMode()) {
+        const rating = flashcardRatings.get(question.id);
+        status.textContent = rating === "known"
+          ? "Selbsteinschätzung: Gewusst"
+          : rating === "review" ? "Selbsteinschätzung: Noch üben" : "Nicht bewertet";
+      } else {
+        status.textContent = correct
+          ? `Richtig · ${question.points} ${question.points === 1 ? "Punkt" : "Punkte"}`
+          : "Nicht richtig · 0 Punkte";
+      }
       if (unsureQuestions.has(question.id)) status.textContent += " · unsicher markiert";
       card.append(title, status);
       if (question.code) {
@@ -907,6 +1203,7 @@
   });
   elements.backToHubButton.addEventListener("click", resetToHub);
   elements.difficultyMode.addEventListener("change", updateCountOptions);
+  elements.quizMode.addEventListener("change", updateCountOptions);
   elements.selectAllCategories.addEventListener("click", () => {
     elements.categoryGrid.querySelectorAll("input[type='checkbox']").forEach((input) => { input.checked = true; });
     updateCountOptions();
@@ -919,6 +1216,21 @@
     elements.tipPanel.hidden = !elements.tipPanel.hidden;
     elements.tipButton.setAttribute("aria-expanded", String(!elements.tipPanel.hidden));
     elements.tipButton.textContent = elements.tipPanel.hidden ? "Tipp anzeigen" : "Tipp ausblenden";
+  });
+  elements.flashcardRevealButton.addEventListener("click", () => {
+    const question = currentQuestion();
+    if (!question) return;
+    revealedFlashcards.add(question.id);
+    renderQuestion();
+  });
+  elements.flashcardRating.addEventListener("click", (event) => {
+    const button = event.target instanceof Element
+      ? event.target.closest("[data-flashcard-rating]")
+      : null;
+    const question = currentQuestion();
+    if (!button || !question || !revealedFlashcards.has(question.id)) return;
+    flashcardRatings.set(question.id, button.dataset.flashcardRating);
+    renderQuestion();
   });
   elements.unsureButton.addEventListener("click", () => {
     const question = currentQuestion();
@@ -971,10 +1283,16 @@
   });
 
   document.addEventListener("keydown", (event) => {
-    if (elements.quizView.hidden || event.altKey || event.ctrlKey || event.metaKey || event.isComposing) return;
-    if (elements.submitDialog.open) return;
-    if (event.target instanceof Element
-      && event.target.closest("input, textarea, select, [contenteditable]")) return;
+    if (elements.quizView.hidden || event.altKey || event.isComposing) return;
+    if (elements.submitDialog.open || event.key === "Tab") return;
+    const targetIsEditable = event.target instanceof Element
+      && event.target.closest("input, textarea, select, [contenteditable]");
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey) && !event.shiftKey && !targetIsEditable) {
+      event.preventDefault();
+      openSubmitDialog();
+      return;
+    }
+    if (event.ctrlKey || event.metaKey || targetIsEditable) return;
 
     const key = event.key.toLowerCase();
     if (/^[1-7]$/.test(event.key) && ["single", "multiple"].includes(currentQuestion()?.type)) {
@@ -997,13 +1315,13 @@
       event.preventDefault();
       currentIndex = key === "home" ? 0 : quizQuestions.length - 1;
       renderQuestion();
-    } else if (key === "t") {
+    } else if (key === "t" && elements.quizMode.value !== "strict" && !isFlashcardMode()) {
       event.preventDefault();
       elements.tipButton.click();
-    } else if (key === "u") {
+    } else if (key === "u" && !isFlashcardMode()) {
       event.preventDefault();
       elements.unsureButton.click();
-    } else if (event.key === "Escape" && !elements.tipPanel.hidden) {
+    } else if (event.key === "Escape" && !elements.tipPanel.hidden && !elements.tipButton.hidden) {
       event.preventDefault();
       elements.tipButton.click();
     }

@@ -31,6 +31,7 @@
       </header>
 
       <nav class="learn-nav" aria-label="Kapitelübersicht">
+        <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
         <a href="#grundlagen">Grundlagen</a>
         <a href="#osi">OSI &amp; TCP/IP</a>
         <a href="#medien">Medien</a>
@@ -40,10 +41,17 @@
         <a href="#tcpudp">TCP &amp; UDP</a>
         <a href="#dienste">Dienste &amp; Ports</a>
         <a href="#diagnose">Diagnose</a>
-        <a href="#originalklausur">Originalklausur</a>
+        <a href="#lernblatt">Lernblatt</a>
       </nav>
 
       <article class="learn-content">
+        <details id="lernblatt" class="learn-section">
+          <summary><span class="eyebrow">Lernmaterial · Informatik</span><span class="learn-section-title">Lernblatt · 13. Klasse · 1. Semester</span></summary>
+          <p>Das Lernblatt zu den Netzwerkgrundlagen direkt ansehen oder separat öffnen.</p>
+          <a class="learn-pdf-link" href="../Informatik%20Klausur%2013-1.pdf" target="_blank" rel="noopener">Lernblatt als PDF öffnen ↗</a>
+          <iframe class="learn-pdf" src="../Informatik%20Klausur%2013-1.pdf" title="Informatik-Lernblatt, 13. Klasse, 1. Semester" loading="lazy"></iframe>
+          <p>Wird die Vorschau nicht angezeigt, öffne das Lernblatt über den Link.</p>
+        </details>
         <details id="grundlagen" class="learn-section">
           <summary><span class="eyebrow">01 · Netzwerke</span><span class="learn-section-title">Grundbegriffe, Topologien und Kommunikation</span></summary>
           <p>Ein <strong>Netzwerk</strong> verbindet Systeme zum Datenaustausch. Ein <strong>Host</strong> ist ein netzwerkfähiges Gerät; ein <strong>Client</strong> fordert Dienste an, ein <strong>Server</strong> stellt sie bereit. Ein Intranet bietet interne Dienste, ein Extranet gibt ausgewählten externen Partnern kontrollierten Zugriff.</p>
@@ -305,11 +313,6 @@
             </tbody>
           </table></div>
           <p>Sinnvolle Reihenfolge: lokale Konfiguration prüfen → Loopback/Gateway anpingen → Remote-IP testen → Route untersuchen → DNS prüfen → Dienst und Port prüfen. Gateway erreichbar, Remote-IP nicht erreichbar: Route, Firewall oder Netz prüfen. Ein Timeout kann auch daran liegen, dass ICMP gefiltert wird.</p>
-        </details>
-        <details id="originalklausur" class="learn-section">
-          <summary><span class="eyebrow">Klausurmaterial</span><span class="learn-section-title">Informatik-Klausur 13-1 als PDF</span></summary>
-          <p>Die Originalklausur ist hier direkt eingebunden. Du kannst sie auch <a class="learn-pdf-link" href="../Informatik%20Klausur%2013-1.pdf" target="_blank" rel="noopener">in einem neuen Tab öffnen</a> oder <a class="learn-pdf-link" href="../Informatik%20Klausur%2013-1.pdf" download>herunterladen</a>.</p>
-          <iframe class="learn-pdf-viewer" src="../Informatik%20Klausur%2013-1.pdf" title="Informatik-Klausur 13-1 als PDF" loading="lazy"></iframe>
         </details>
       </article>
     </main>

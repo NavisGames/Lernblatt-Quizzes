@@ -60,6 +60,34 @@
               <span class="subject-arrow" aria-hidden="true">→</span>
             </button>
           </div>
+          <section class="abitur-resources" aria-labelledby="abiturResourcesTitle">
+            <div class="abitur-resources-heading">
+              <div>
+                <p class="eyebrow">Mecklenburg-Vorpommern</p>
+                <h3 id="abiturResourcesTitle">Abiturvorbereitung 2027</h3>
+              </div>
+              <p>Offizielle Vorabhinweise für berufsbezogene Fächer, einschließlich Datenverarbeitungstechnik.</p>
+            </div>
+            <div class="abitur-resource-grid">
+              <a class="abitur-resource" href="https://www.bildung-mv.de/export/sites/bildungsserver/.galleries/dokumente/pruefungen/Vorabhinweise_ABI-BB_2027.pdf" target="_blank" rel="noopener">
+                <span class="abitur-year">2027</span>
+                <span class="abitur-resource-copy"><strong>Vorabhinweise</strong><small>Bildungsserver M-V · PDF</small></span>
+                <span class="abitur-resource-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <p class="abitur-resource-note">Die Vorabhinweise sind keine Prüfungsaufgaben. Originalaufgaben für 2027 liegen hier nicht vor.</p>
+            <details class="abitur-summary">
+              <summary>DVT-Abitur 2027 · Das Wichtigste im Überblick</summary>
+              <p>Zusammenfassung der offiziellen Vorabhinweise, Abschnitt 4, Seiten 15–16:</p>
+              <ul>
+                <li><strong>Prüfung:</strong> Schriftlich, 300 Minuten; zwei Aufgabenblöcke, einer davon zur Programmierung.</li>
+                <li><strong>Informatiksysteme:</strong> Prozessoren, Mainboards, Chipsätze, Busse und Schnittstellen, Speicher, Peripherie und Energieeffizienz.</li>
+                <li><strong>Netzwerke:</strong> Medien, Geräte, Topologien und Protokolle; OSI und TCP/IP, WLAN, Netzwerksicherheit, IPv4/IPv6, Subnetting und VLANs sowie Datenschutz und Datenspeicherung.</li>
+                <li><strong>Assembler:</strong> Physical Computing planen und programmieren, Programmabläufe als PAP oder Struktogramm darstellen und Transfer-, Arithmetik-, Sprung-, Logik- und Unterprogrammbefehle anwenden.</li>
+                <li><strong>Hilfsmittel:</strong> Offline-PC mit Entwicklungsumgebung und Assembler-Simulation oder alternativ Microcomputer/Mikrocontroller; Software für grafische Programmabläufe, schulisch eingeführter Taschenrechner und Datenblätter. Die allgemeinen Vorgaben in Kapitel III gelten ebenfalls.</li>
+              </ul>
+            </details>
+          </section>
         </section>
       </section>
 
@@ -70,7 +98,7 @@
               <p id="subjectEyebrow" class="eyebrow">Fach auswählen</p>
               <h2 id="subjectTitle">Quiz einrichten</h2>
             </div>
-            <span class="duration-badge">max. 90 min</span>
+            <span id="durationBadge" class="duration-badge">max. 90 min</span>
           </div>
 
           <div class="field-row">
@@ -102,6 +130,9 @@
           <select id="quizMode" class="select-control">
             <option value="exam">Klausurmodus · Feedback am Ende</option>
             <option value="learning">Lernmodus · Sofort-Feedback</option>
+            <option value="flashcards">Karteikarten · Lösung aufdecken</option>
+            <option value="adaptive">Adaptiver Lernmodus · Schwächen zuerst</option>
+            <option value="strict">Strenge Prüfungssimulation · 90 min</option>
           </select>
 
           <div class="setup-note">
@@ -150,14 +181,24 @@
             </div>
             <h2 id="questionPrompt" class="question-prompt"></h2>
             <pre id="questionCode" class="code-block" hidden><code></code></pre>
-            <div class="question-tools">
+            <div id="questionTools" class="question-tools">
               <button id="tipButton" class="button button-tip" type="button" aria-expanded="false">Tipp anzeigen</button>
               <button id="unsureButton" class="button button-unsure" type="button" aria-pressed="false">◇ Unsicher / später prüfen</button>
             </div>
             <aside id="tipPanel" class="tip-panel" hidden></aside>
             <div id="questionContent" class="question-content"></div>
+            <div id="flashcardControls" class="flashcard-controls" hidden>
+              <button id="flashcardRevealButton" class="button button-primary" type="button">Lösung aufdecken</button>
+              <div id="flashcardRating" class="flashcard-rating" hidden>
+                <p>Wie sicher wusstest du die Antwort?</p>
+                <div class="flashcard-rating-actions">
+                  <button class="button button-secondary" type="button" data-flashcard-rating="known" aria-pressed="false">Gewusst</button>
+                  <button class="button button-secondary" type="button" data-flashcard-rating="review" aria-pressed="false">Noch üben</button>
+                </div>
+              </div>
+            </div>
             <div id="instantFeedback" class="instant-feedback" hidden aria-live="polite"></div>
-            <p class="keyboard-hint">Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · Pos1/Ende zur ersten/letzten Aufgabe · T Tipp · U unsicher markieren · Esc Tipp schließen (ohne Eingabefeld-Fokus)</p>
+            <p id="keyboardHint" class="keyboard-hint">Tastatur: 1–7 Antwort wählen/umschalten · ←/→ oder P/N zurück/weiter · Pos1/Ende zur ersten/letzten Aufgabe · T Tipp · U unsicher markieren · Esc Tipp schließen · Strg/⌘+Enter öffnet den Abgabe-Dialog (ohne Eingabefeld-Fokus)</p>
             <div class="question-navigation">
               <button id="prevButton" class="button button-secondary" type="button">← Zurück</button>
               <button id="nextButton" class="button button-secondary" type="button">Weiter →</button>
@@ -180,7 +221,7 @@
 
         <div class="result-summary">
           <article class="score-card score-primary">
-            <span>Notenpunkte</span>
+            <span id="primaryScoreLabel">Notenpunkte</span>
             <strong id="gradePoints">—</strong>
             <small id="gradeName">—</small>
           </article>
@@ -190,16 +231,18 @@
             <small id="percentValue">—</small>
           </article>
           <article class="score-card">
-            <span>Richtige Antworten</span>
+            <span id="answerMetricLabel">Richtige Antworten</span>
             <strong id="correctValue">—</strong>
             <small id="resultTime">—</small>
           </article>
           <article class="score-card score-unsure">
-            <span>Unsicher markiert</span>
+            <span id="uncertainMetricLabel">Unsicher markiert</span>
             <strong id="unsureValue">—</strong>
             <small id="unsureCorrectValue">—</small>
           </article>
         </div>
+
+        <p id="progressStorageWarning" class="storage-warning" hidden role="status"></p>
 
         <section class="category-results" aria-labelledby="categoryResultsTitle">
           <h2 id="categoryResultsTitle">Trefferquote nach Kategorie</h2>
