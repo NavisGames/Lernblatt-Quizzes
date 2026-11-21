@@ -578,10 +578,10 @@
     },
     {
       id: "rt-12", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "cloze",
-      prompt: "Ein Host möchte ein Paket an 10.20.30.50/24 mit Gateway 10.20.30.1 senden. Um das Ziel zu erreichen, braucht er die MAC des {{0}}, weil {{1}}.",
+      prompt: "Ein Host mit 10.20.30.10/24 und Gateway 10.20.30.1 möchte ein Paket an 10.20.30.50 senden. Für den Ethernet-Frame braucht er die MAC des {{0}}, weil {{1}}.",
       blanks: [
-        { options: ["Gateways", "Ziel-Hosts", "Routers in der Ferne"], correct: "Gateways" },
-        { options: ["das Ziel im eigenen Netz liegt, aber vor Versand die MAC des Gateways bekannt sein muss", "der Gateway die richtige Route ins Zielnetz verwaltet", "ein Gateway ein spezieller Router ist"], correct: "das Ziel im eigenen Netz liegt, aber vor Versand die MAC des Gateways bekannt sein muss" }
+        { options: ["Gateways", "Ziel-Hosts", "Routers in der Ferne"], correct: "Ziel-Hosts" },
+        { options: ["das Ziel im eigenen Netz liegt und direkt per ARP aufgelöst wird", "der Gateway die richtige Route ins Zielnetz verwaltet", "ein Gateway ein spezieller Router ist"], correct: "das Ziel im eigenen Netz liegt und direkt per ARP aufgelöst wird" }
       ],
       tip: "Der Host prüft mit AND-Verknüpfung, ob das Ziel lokal liegt.",
       trap: "Lokale Ziele benötigen die MAC des Ziels direkt.",
@@ -664,6 +664,70 @@
       correct: 0, tip: "Die Daten werden von oben nach unten mit Headers umwickelt.",
       trap: "Decapsulation passiert beim Empfang, nicht beim Versand.",
       explanation: "Beim Versand werden Daten von Schicht 7 bis 1 mit Headers umwickelt (Encapsulation)."
+    },
+    {
+      id: "net-hard-01", topic: "basics", category: "basics", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Webdienst funktioniert über seine IP-Adresse, aber nicht über seinen Namen. Der Browser erreicht bei Eingabe der IP dieselbe Anwendung. Welcher nächste Prüfschritt ist am besten begründet?",
+      options: ["Mit nslookup die Namensauflösung und den eingetragenen DNS-Server prüfen.", "Die MAC-Adresse des Webservers auf dem lokalen Switch-Port fest einstellen.", "Die Subnetzmaske des Servers durch /32 ersetzen.", "Den Switch ausschalten, weil die IP-Verbindung funktioniert."],
+      correct: 0, tip: "Vergleiche, welcher zusätzliche Schritt bei der Eingabe eines Namens nötig ist.",
+      trap: "Die Beobachtung allein beweist keinen bestimmten DNS-Defekt; sie liefert einen Ansatzpunkt für die Diagnose.",
+      explanation: "Die erfolgreiche Verbindung zur IP zeigt, dass der Dienst auf diesem Weg erreichbar ist. Beim Namen kommt die DNS-Auflösung hinzu; nslookup und die DNS-Konfiguration helfen, diesen Schritt zu untersuchen."
+    },
+    {
+      id: "media-hard-01", topic: "media", category: "media", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Zwei Gebäude sollen über eine 150 m lange Strecke in einer Umgebung mit starken elektromagnetischen Störungen verbunden werden. Eine Kupfer-Ethernetstrecke ist hier auf 100 m begrenzt. Welche Lösung ist am sinnvollsten?",
+      options: ["Eine für die Strecke geeignete Glasfaserverbindung mit passenden Schnittstellen einsetzen.", "Ein ungeschirmtes 150-m-Kupferkabel verwenden, weil Ethernet immer unbegrenzt lang sein darf.", "Die Ethernet-Frames durch größere IP-Adressen ersetzen.", "Nur die Subnetzmaske ändern."],
+      correct: 0, tip: "Vergleiche die vorgegebene Streckenbegrenzung und die Störanfälligkeit der Medien.",
+      trap: "Glasfaser benötigt passende Transceiver und eine für die Strecke geeignete Faser.",
+      explanation: "Die vorgegebene Kupfergrenze wird überschritten. Lichtwellenleiter sind gegenüber elektromagnetischen Störungen unempfindlich; Fasertyp und optische Schnittstellen müssen zur Entfernung passen."
+    },
+    {
+      id: "media-hard-02", topic: "media", category: "media", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Kupferkabel verläuft dicht an einer starken Störquelle. Die Verbindung ist fehlerhaft; ein kurzer Test mit einer geeigneten geschirmten Leitung und korrekter Schirmanbindung funktioniert. Was ist die sinnvollste Schlussfolgerung?",
+      options: ["Eine Einstreuung ist ein plausibler Verdacht; Verkabelung, Schirmung und Verlegung sollten weiter geprüft werden.", "Der Test beweist, dass die IP-Adresse falsch ist.", "Die DNS-Auflösung verursacht zwingend Bitfehler auf der Leitung.", "Eine geschirmte Leitung macht jede Reichweitenbegrenzung gegenstandslos."],
+      correct: 0, tip: "Der Test verändert das Übertragungsmedium, nicht die logische Adressierung.",
+      trap: "Ein einzelner Vergleich belegt die Ursache noch nicht eindeutig.",
+      explanation: "Das Ergebnis spricht für einen Zusammenhang mit Kabel, Verlegung oder elektromagnetischer Einstreuung. Weitere Messungen sind nötig; Schirmung hebt die jeweiligen Strecken- und Installationsvorgaben nicht auf."
+    },
+    {
+      id: "eth-hard-01", topic: "ethernet", category: "ethernet", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Switch empfängt in VLAN 10 einen Unicast-Frame von Port 1. Die Ziel-MAC ist in VLAN 10 unbekannt. Ports 2 und 3 gehören ebenfalls zu VLAN 10, Port 4 nur zu VLAN 20. Wo wird der Frame bei normalem Flooding ausgegeben?",
+      options: ["An Ports 2 und 3, nicht an Port 1 oder Port 4.", "An allen vier Ports.", "Nur an Port 4.", "An keinem Port, bis ARP geantwortet hat."],
+      correct: 0, tip: "Flooding bleibt in der zugehörigen VLAN-Broadcastdomäne und vermeidet den Eingangsport.",
+      trap: "Ein unbekanntes Unicast-Ziel ist nicht dasselbe wie ein VLAN-übergreifendes Routing.",
+      explanation: "Der Switch flutet einen unbekannten Unicast im betreffenden VLAN an die dafür geeigneten anderen Ports. Port 1 ist der Eingangsport; Port 4 gehört nur zu VLAN 20."
+    },
+    {
+      id: "ip-hard-01", topic: "ip", category: "ip", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Host hat 192.168.10.77/27. Welche Netz- und Broadcastadresse gehören dazu und liegt 192.168.10.96 im selben Subnetz?",
+      options: ["Netz .64, Broadcast .95; .96 liegt nicht im selben Subnetz.", "Netz .64, Broadcast .96; .96 ist im selben Subnetz.", "Netz .0, Broadcast .255; .96 ist im selben Subnetz.", "Netz .77, Broadcast .95; .96 liegt nicht im selben Subnetz."],
+      correct: 0, tip: "/27 hat im letzten Oktett eine Blockgröße von 32.",
+      trap: "Die Adresse .96 beginnt bereits den nächsten Block und ist dessen Netzadresse.",
+      explanation: "Die /27-Blöcke beginnen bei .0, .32, .64, .96 usw. Die .77 liegt im Block .64 bis .95; .64 ist die Netzadresse, .95 der Broadcast und .96 das nächste Netz."
+    },
+    {
+      id: "ip-hard-02", topic: "ip", category: "ip", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein /24-Netz soll in vier gleich große Subnetze mit jeweils mindestens 50 nutzbaren IPv4-Hostadressen aufgeteilt werden. Welches Präfix passt?",
+      options: ["/26", "/27", "/25", "/28"],
+      correct: 0, tip: "Vier Subnetze benötigen zwei zusätzliche Netzbits; prüfe danach die Hostzahl.",
+      trap: "/27 bietet nur 30 nutzbare Hostadressen je Subnetz.",
+      explanation: "Zwei ausgeliehene Bits ergeben aus /24 vier /26-Subnetze. Sechs Hostbits liefern jeweils 64 Adressen, davon 62 nutzbare Hosts."
+    },
+    {
+      id: "routing-hard-01", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Router hat passende Routen 10.1.0.0/16 über A, 10.1.2.0/24 über B und 10.1.2.64/26 über C. Welche Route verwendet er für 10.1.2.78?",
+      options: ["Über C: 10.1.2.64/26.", "Über A: 10.1.0.0/16.", "Über B: 10.1.2.0/24.", "Keine Route passt."],
+      correct: 0, tip: "Prüfe zuerst, ob .78 im Bereich .64 bis .127 liegt.",
+      trap: "Nicht die zuerst genannte Route gewinnt, sondern das längste passende Präfix.",
+      explanation: "Alle drei Netze enthalten das Ziel; /26 ist das längste passende Präfix. Sein Bereich im letzten Oktett reicht von .64 bis .127, daher wird Route C gewählt."
+    },
+    {
+      id: "routing-hard-02", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Host 10.1.1.10/24 sendet an 10.2.2.20 über Gateway 10.1.1.1. Welche Zieladressen stehen beim ersten Ethernet-Hop im IP-Paket und im Frame?",
+      options: ["Ziel-IP 10.2.2.20; Ziel-MAC des Gateways.", "Ziel-IP 10.1.1.1; Ziel-MAC des Gateways.", "Ziel-IP 10.2.2.20; Ziel-MAC des entfernten Hosts.", "Ziel-IP 10.1.1.1; Broadcast-MAC für das eigentliche Datenpaket."],
+      correct: 0, tip: "Das IP-Ziel bleibt der entfernte Host; der nächste Ethernet-Hop ist lokal.",
+      trap: "ARP ermittelt für das entfernte Ziel die lokale Gateway-MAC, nicht direkt die MAC des entfernten Hosts.",
+      explanation: "Das Ziel liegt außerhalb von 10.1.1.0/24. Der Host ermittelt daher per ARP die MAC von 10.1.1.1 und adressiert den ersten Frame an das Gateway; die Ziel-IP des Pakets bleibt 10.2.2.20."
     }
   ];
 

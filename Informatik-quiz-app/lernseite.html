@@ -159,6 +159,15 @@
             </tbody>
           </table></div>
           <p>Ein Switch lernt Quell-MAC-Adressen mit dem zugehörigen Eingangsport. Bekannte Ziele werden gezielt weitergeleitet; eine unbekannte Ziel-MAC wird an alle Ports außer dem Eingangsport geflutet. <strong>VLANs</strong> trennen logische Broadcast-Domänen. Trunk-Ports transportieren mehrere VLANs mit Tags; Access-Ports ordnen Endgeräte einem VLAN zu.</p>
+          <div class="learn-callout">
+            <strong>Beispiel: MAC-Adressen lernen</strong>
+            <ol>
+              <li>Im VLAN 10 sendet A über Port 1 einen Frame an B. Der Switch merkt sich A an Port 1. Ist B noch unbekannt, flutet er den Frame an die anderen Ports in VLAN 10.</li>
+              <li>Antwortet B über Port 2, lernt der Switch B an Port 2 und leitet die Antwort gezielt an A über Port 1 weiter.</li>
+              <li>Ein weiterer Frame von A an B kann nun gezielt über Port 2 ausgegeben werden, solange der Eintrag gültig ist.</li>
+            </ol>
+            <p><strong>Typischer Fehler:</strong> Der Switch lernt aus der Quell-MAC, nicht aus der Ziel-MAC. Ein unbekanntes Ziel wird auch nicht in andere VLANs geflutet.</p>
+          </div>
           <p>Store-and-Forward prüft den vollständigen Frame vor dem Weiterleiten. Cut-Through beginnt früher, Fragment-Free prüft mindestens den ersten Frame-Teil.</p>
           <div class="learn-callout"><strong>Weitere Frame- und Zugriffsbegriffe</strong>
             <ul>
@@ -226,6 +235,12 @@
               <tr><th>4</th><td>192.168.10.96</td><td>.97–.126</td><td>.127</td></tr>
             </tbody>
           </table></div>
+          <div class="learn-callout">
+            <strong>Beispiel: Liegen zwei Hosts im selben Netz?</strong>
+            <p>Host A hat <code>192.168.10.70/27</code>. Die Blöcke sind 32 Adressen groß; .70 liegt im Block .64–.95. Dessen Netzadresse ist .64, Broadcast .95 und nutzbarer Hostbereich .65–.94.</p>
+            <p>Host B mit <code>192.168.10.94/27</code> liegt im selben Netz. Host C mit <code>192.168.10.100/27</code> liegt dagegen im nächsten Block .96–.127; A sendet zu C über sein Gateway.</p>
+            <p><strong>Typischer Fehler:</strong> Gleiche erste drei Oktette allein beweisen bei /27 nicht, dass die Hosts im selben Subnetz liegen. Netz- und Broadcastadresse sind hier keine Hostadressen.</p>
+          </div>
           <p>Bei der IP-Zusammenfassung werden gemeinsame führende Bits zusammengefasst. <strong>VLSM</strong> erlaubt unterschiedlich große Subnetze passend zum jeweiligen Hostbedarf.</p>
           <p>IPv6 hat <strong>128 Bit</strong>, dargestellt als acht hexadezimale Blöcke. Führende Nullen je Block dürfen entfallen; eine zusammenhängende Folge von Nullblöcken darf genau einmal durch <code>::</code> ersetzt werden. IPv6 kennt keinen Broadcast, sondern unter anderem Unicast, Multicast und Anycast.</p>
           <div class="formula-card"><strong>IPv6-Kürzung</strong><code>2001:0db8:0000:0000:0000:ff00:0042:8329<br>→ 2001:db8::ff00:42:8329</code><span>Die Kurzform lässt führende Blocknullen und genau eine zusammenhängende Nullblockfolge weg.</span></div>
@@ -252,6 +267,11 @@
             <li>Die Zuordnung wird vorübergehend im ARP-Cache gespeichert und im Frame verwendet.</li>
           </ol>
           <p>Liegt das Ziel in einem anderen Netz, fragt der Host nicht die entfernte Ziel-MAC ab, sondern die MAC seines <strong>Default Gateways</strong>. Der Router bildet anschließend einen neuen Frame für den nächsten Abschnitt.</p>
+          <div class="learn-callout">
+            <strong>Beispiel: Route und nächste MAC wählen</strong>
+            <p>Ein Router kennt <code>10.20.0.0/16</code> über Router R1, <code>10.20.4.0/24</code> über R2 und eine Default-Route über R3. Für das Ziel <code>10.20.4.25</code> passen alle drei Routen; /24 ist das längste passende Präfix, daher wird R2 gewählt. Für <code>10.20.5.25</code> passt /16 am besten, für <code>10.21.5.25</code> nur die Default-Route.</p>
+            <p>Auf einem Ethernet-Abschnitt löst der Router bei Bedarf die IPv4-Adresse des gewählten nächsten Routers per ARP auf. <strong>Typischer Fehler:</strong> Nicht die Reihenfolge der Tabelleneinträge und nicht die längste Adresse als Text entscheiden, sondern die Zahl der passenden Präfixbits.</p>
+          </div>
         </details>
 
         <details id="tcpudp" class="learn-section">
@@ -313,6 +333,15 @@
             </tbody>
           </table></div>
           <p>Sinnvolle Reihenfolge: lokale Konfiguration prüfen → Loopback/Gateway anpingen → Remote-IP testen → Route untersuchen → DNS prüfen → Dienst und Port prüfen. Gateway erreichbar, Remote-IP nicht erreichbar: Route, Firewall oder Netz prüfen. Ein Timeout kann auch daran liegen, dass ICMP gefiltert wird.</p>
+          <div class="learn-callout">
+            <strong>Beispiel: Name funktioniert nicht</strong>
+            <ol>
+              <li>Ein Server ist über seine bekannte IP-Adresse erreichbar, aber sein Name lässt sich nicht auflösen. Das grenzt das Problem auf die Namensauflösung ein, beweist aber noch keine Ursache.</li>
+              <li>Mit <code>ipconfig /all</code> den eingetragenen DNS-Server prüfen und mit <code>nslookup</code> den Namen abfragen. Antwortet der DNS-Server nicht oder liefert er einen falschen Eintrag, dort beziehungsweise bei der Konfiguration weiterprüfen.</li>
+              <li>Liefert DNS die richtige Adresse, aber die Anwendung scheitert weiterhin, den konkreten Dienst und Port untersuchen.</li>
+            </ol>
+            <p><strong>Typischer Fehler:</strong> Ein fehlgeschlagener Ping allein beweist weder einen DNS- noch einen Serverausfall; ICMP kann gefiltert sein.</p>
+          </div>
         </details>
       </article>
     </main>

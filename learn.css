@@ -37,7 +37,8 @@
 .learn-callout li { margin: 4px 0; }
 .formula-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; min-width: 0; }
 .formula-card code { display: block; min-width: 0; padding: 6px 0; overflow-wrap: anywhere; background: transparent; color: var(--ink); font-size: 15px; font-weight: 800; }
-.formula-card span { color: var(--muted); font-size: 11px; line-height: 1.6; }
+.formula-card > .math-formula { display: block; max-width: 100%; padding: 6px 0; overflow-x: auto; color: var(--ink); font-size: 16px; }
+.formula-card > span:not(.math-formula) { color: var(--muted); font-size: 11px; line-height: 1.6; }
 .cycle-calculator { margin: 16px 0; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
 .cycle-calculator h3 { margin: 0 0 7px; }
 .cycle-calculator > p { margin-bottom: 12px; }

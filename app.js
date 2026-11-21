@@ -242,6 +242,12 @@
     return elements.quizMode.value === "flashcards";
   }
 
+  function renderQuizMath(element) {
+    if (activeSubjectId === "mathe" || activeSubjectId === "stochastik") {
+      window.renderMath(element);
+    }
+  }
+
   function emptySubjectProgress() {
     return {
       overall: { attempts: 0, correct: 0 },
@@ -472,11 +478,15 @@
       }
     };
     const challenging = ["challenging", "hardKnobel"].includes(elements.difficultyMode.value);
-    const weightedShuffle = (questions) => shuffle(questions).sort((a, b) => {
-      const aWeight = DIFFICULTY_RANK[a.difficulty] + (a.code ? 1 : 0);
-      const bWeight = DIFFICULTY_RANK[b.difficulty] + (b.code ? 1 : 0);
-      return challenging ? bWeight - aWeight : aWeight - bWeight;
-    });
+    const weightedShuffle = (questions) => {
+      const shuffled = shuffle(questions);
+      if (!challenging) return shuffled;
+      return shuffled.sort((a, b) => {
+        const aWeight = DIFFICULTY_RANK[a.difficulty] + (a.code ? 1 : 0);
+        const bWeight = DIFFICULTY_RANK[b.difficulty] + (b.code ? 1 : 0);
+        return bWeight - aWeight;
+      });
+    };
 
     for (const difficulty of Object.keys(DIFFICULTY_RANK)) {
       const candidate = weightedShuffle(eligible.filter((question) => question.difficulty === difficulty))[0];
@@ -793,6 +803,9 @@
     updateQuestionGrid();
     updateProgress();
     renderInstantFeedback();
+    renderQuizMath(elements.questionPrompt);
+    renderQuizMath(elements.questionContent);
+    renderQuizMath(elements.tipPanel);
   }
 
   function renderFlashcardAnswer(question) {
@@ -959,6 +972,7 @@
     trap.textContent = `Typische Falle: ${question.trap}`;
     elements.instantFeedback.replaceChildren(heading, explanation, trap);
     elements.instantFeedback.hidden = false;
+    renderQuizMath(elements.instantFeedback);
   }
 
   function thresholdsForMaximum(maximum) {
@@ -1222,6 +1236,8 @@
       elements.reviewList.append(card.cloneNode(true));
       if (unsureQuestions.has(question.id)) elements.uncertainReviewList.append(card);
     });
+    renderQuizMath(elements.reviewList);
+    renderQuizMath(elements.uncertainReviewList);
   }
 
   elements.startForm.addEventListener("submit", startQuiz);

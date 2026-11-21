@@ -236,6 +236,17 @@ banksel PORTB         ; komfortabler: passende Bank für PORTB auswählen</code>
             </table>
           </div>
           <p>Registeradressen sind hexadezimal angegeben. Der PIC16F887 besitzt vier Registerbänke; RP1:RP0 wählen die Bank beim direkten Zugriff. Nicht jedes Register liegt nur an einer einzigen Adresse, denn manche SFR sind gespiegelt.</p>
+          <div class="learn-callout">
+            <strong>Beispiel: Port D aufteilen</strong>
+            <p>RD0 bis RD3 sollen Ausgänge, RD4 bis RD7 Eingänge sein. Dafür erhält TRISD das Bitmuster <code>11110000₂ = 0xF0</code>: Die oberen vier Bits sind 1 für Eingänge, die unteren 0 für Ausgänge.</p>
+            <pre class="learn-code"><code>banksel TRISD
+movlw   H'F0'
+movwf   TRISD
+banksel PORTD
+movlw   H'05'
+movwf   PORTD</code></pre>
+            <p>Der letzte Schreibzugriff gibt für die Ausgänge RD0–RD3 das Muster <code>0101</code> vor: RD0 und RD2 sind gesetzt. <strong>Typischer Fehler:</strong> Ein gesetztes TRIS-Bit macht den Pin zum Eingang; es setzt nicht dessen Ausgangspegel. Der Code setzt voraus, dass keine andere Peripheriefunktion die betreffenden Pins übernimmt.</p>
+          </div>
         </details>
 
         <details id="verzweigungen" class="learn-section">
@@ -279,6 +290,12 @@ goto    OUTER_LOOP</code></pre>
             <strong>Gesamtzyklen dieses Musters</strong>
             <code>C = 3MN + 4M + 1</code>
             <span>Für M=2 und N=3: C=27 Zyklen. Sind die zwei Befehle zur OUTER-Initialisierung nicht Teil des betrachteten Ausschnitts, werden 2 Zyklen abgezogen: 25 Zyklen.</span>
+          </div>
+          <div class="learn-callout">
+            <strong>Beispiel: Einzelschleife zeitlich nachvollziehen</strong>
+            <p>Für die oben gezeigte innere Schleife mit N=4 kosten <code>movlw</code> und <code>movwf</code> zusammen 2 Zyklen. Die ersten drei Durchläufe kosten jeweils 1 Zyklus für <code>decfsz</code> und 2 für <code>goto</code>, also 9 Zyklen. Beim vierten Durchlauf kostet der Skip 2 Zyklen; das übersprungene <code>goto</code> wird nicht ausgeführt.</p>
+            <p>Insgesamt sind es <code>2 + 9 + 2 = 13</code> Zyklen. Bei 8 MHz Oszillatortakt dauert ein Zyklus <code>4 / 8 MHz = 0,5 µs</code>; der Ausschnitt benötigt somit <code>13 · 0,5 µs = 6,5 µs</code>, ohne weitere Befehle oder Interrupts.</p>
+            <p><strong>Typischer Fehler:</strong> Im letzten Durchlauf nicht sowohl den Skip als auch das übersprungene <code>goto</code> zählen; außerdem den Oszillatortakt nicht direkt als Befehlszyklustakt verwenden.</p>
           </div>
           <div class="cycle-calculator">
             <h3>Verschachtelter Schleifen-Rechner (2–4 Ebenen)</h3>
@@ -408,6 +425,11 @@ goto    OUTER_LOOP</code></pre>
             </table>
           </div>
           <p>Bei <code>addwf</code> zeigt C den Übertrag aus Bit 7 und DC den Übertrag zwischen den unteren und oberen vier Bits. Das gespeicherte Ergebnis bleibt auf 8 Bit begrenzt; ein Ergebnis von 0 setzt Z.</p>
+          <div class="learn-callout">
+            <strong>Beispiel: Addition und Interpretation der Flags</strong>
+            <p>Ausgangswerte: <code>W = 0x01</code> und <code>SUMME = 0x7F</code>. Nach <code>addwf SUMME,F</code> steht <code>0x80</code> in SUMME; W bleibt <code>0x01</code>. Die unteren vier Bits ergeben <code>0xF + 0x1 = 0x10</code>, also DC=1. Es gibt keinen Übertrag aus Bit 7, daher C=0; das Ergebnis ist nicht null, daher Z=0.</p>
+            <p>Vorzeichenlos entspricht das Ergebnis 128. Als 8-Bit-Zweierkomplement ist <code>0x80</code> dagegen −128: Die Rechnung 127+1 überschreitet den darstellbaren signed-Bereich. <strong>Typischer Fehler:</strong> C=0 schließt diesen signed-Überlauf nicht aus; der PIC16F887 hat kein allgemeines Overflow-Flag.</p>
+          </div>
         </details>
 
         <details id="zahlen" class="learn-section">
