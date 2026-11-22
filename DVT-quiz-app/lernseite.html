@@ -32,6 +32,11 @@
         <p class="intro">Eine strukturierte Wiederholung der Architektur, Assemblerbefehle und Rechenverfahren. Die Beispiele erläutern Konzepte und sind keine Quizaufgaben.</p>
       </header>
 
+      <aside class="learn-callout">
+        <strong>Hinweis zum Lernen</strong>
+        <p>Die Inhalte können Fehler enthalten. Gleiche sie mit deinen Unterrichtsunterlagen und den Angaben deiner Lehrkraft ab.</p>
+      </aside>
+
       <nav class="learn-nav" aria-label="Kapitelübersicht">
         <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
         <a href="#architektur">Architektur & Speicher</a>
@@ -97,6 +102,7 @@
           </div>
           <p>Ein Datenregister ist <strong>8 Bit</strong> breit, ein Programmbefehl des PIC dagegen <strong>14 Bit</strong>. Die Wortbreiten sind verschieden, weil Befehle neben dem Operationscode auch Register-, Bit-, Literal- oder Adressfelder enthalten.</p>
           <p>Die 8192 Programmspeicherplätze sind Befehlswörter und nicht 8192 Bytes. Der Zugriff auf den Daten-EEPROM erfolgt über spezielle Steuerregister und ist ein eigener Vorgang; die Werte bleiben zwar ohne Versorgung erhalten, aber Schreibvorgänge sind nicht unbegrenzt oft möglich. Für Variablen, die sich während jedes Programmlaufs ändern, ist deshalb der SRAM vorgesehen.</p>
+          <p>Stell dir ein Programm vor, das einen Tastendruck zählt und den letzten Zählerstand dauerhaft speichern soll: Die auszuführenden Befehle liegen im Flash-Programmspeicher. Den aktuellen, häufig veränderten Zähler hält ein GPR im SRAM. Soll der Stand nach dem Ausschalten erhalten bleiben, muss das Programm ihn ausdrücklich im EEPROM speichern; der SRAM-Inhalt allein reicht dafür nicht.</p>
         </details>
 
         <details id="cpu" class="learn-section">
@@ -114,12 +120,13 @@
                 <tr><th>4 · TO</th><td>TO=0 nach einem Watchdog-Timeout; TO=1 nach CLRWDT oder Reset.</td></tr>
                 <tr><th>3 · PD</th><td>PD=0 nach SLEEP; PD=1 nach CLRWDT oder Reset.</td></tr>
                 <tr><th>2 · Z</th><td>Zero: wird bei einem unterstützenden ALU-Befehl gesetzt, wenn das Ergebnis 0 ist.</td></tr>
-                <tr><th>1 · DC</th><td>Digit Carry: Übertrag bei Addition bzw. Borrow bei Subtraktion zwischen Bit 3 und Bit 4.</td></tr>
+                <tr><th>1 · DC</th><td>Digit Carry: Übertrag zwischen Bit 3 und Bit 4 bei Addition; bei Subtraktion bedeutet DC=1 kein Borrow aus dem unteren Halbbyte, DC=0 einen Borrow.</td></tr>
                 <tr><th>0 · C</th><td>Carry bei Addition; bei Subtraktion bedeutet C=1 „kein Borrow“ und C=0 „Borrow“.</td></tr>
               </tbody>
             </table>
           </div>
           <p>Die STATUS-Flags sind kein allgemeines Vorzeichen- oder Overflow-System. Insbesondere besitzt der PIC16F887 kein allgemeines signed-Overflow-Flag. Vorzeichenbehaftete Werte werden bei Bedarf durch Interpretation ihrer Zweierkomplementdarstellung erkannt. Nicht jeder Befehl verändert Z, DC oder C: Die Befehlsbeschreibung legt fest, welche Flags aktualisiert werden.</p>
+          <p>Ein Flag ist eine zusätzliche Information über eine Operation und kein eigener Teil des gespeicherten Ergebnisses. Welchen Wert es beschreibt, hängt vom letzten Befehl ab, der genau dieses Flag verändert hat. Wer nach mehreren Instruktionen eine Bedingung untersucht, muss deshalb zurückverfolgen, welche Instruktion das getestete Flag zuletzt gesetzt oder gelöscht hat.</p>
           <div class="table-wrap">
             <table>
               <thead><tr><th>Befehl / Gruppe</th><th>Typische STATUS-Wirkung</th><th>Worauf achten?</th></tr></thead>
@@ -188,6 +195,7 @@
 COUNT
 TEMP
         endc</code></pre>
+          <p>Beim Lesen einer Befehlsfolge hilft es, Quelle und Ziel getrennt zu markieren. Nach <code>movlw D'5'</code> steht 5 in W; <code>movwf COUNT</code> kopiert die 5 nach COUNT, ohne W zu leeren. Anschließend erhöht <code>addwf COUNT,F</code> den Inhalt von COUNT auf 10; mit <code>addwf COUNT,W</code> stünde das Ergebnis stattdessen in W und COUNT bliebe unverändert.</p>
         </details>
 
         <details id="zyklus" class="learn-section">
@@ -209,6 +217,7 @@ TEMP
             <code>T<sub>cy</sub> = 4 / f<sub>osc</sub></code>
             <span>Bei f<sub>osc</sub> = 4 MHz gilt T<sub>cy</sub> = 1 µs. Die meisten Standardbefehle brauchen einen Zyklus; ausgeführte Sprünge und Skip-Fälle typischerweise zwei.</span>
           </div>
+          <p>Die Frequenz gibt Schwingungen pro Sekunde an, die Periodendauer die Zeit für eine Schwingung. Weil ein PIC-Befehlszyklus vier Oszillatorperioden umfasst, dauert er bei 8 MHz nicht 0,125 µs, sondern 0,5 µs. Benötigt ein Ausschnitt 20 Befehlszyklen, ergibt das dort <code>20 · 0,5 µs = 10 µs</code>. Die Zahl der Instruktionen allein reicht nicht aus, wenn Sprünge oder ausgeführte Skips vorkommen.</p>
         </details>
 
         <details id="hardware" class="learn-section">
@@ -223,6 +232,7 @@ bsf     PORTB,0       ; Ausgangspegel setzen</code></pre>
 bsf     STATUS,RP0     ; RP1:RP0 = 01, Bank 1
 banksel PORTB         ; komfortabler: passende Bank für PORTB auswählen</code></pre>
           <p>Bei Pins mit Analogfunktion muss zusätzlich das passende Bit in <code>ANSEL</code> oder <code>ANSELH</code> auf Digitalbetrieb gesetzt werden. Die TRIS-Konfiguration allein schaltet den analogen Eingangspfad nicht ab.</p>
+          <p>Die Bankauswahl lässt sich wie die Auswahl eines Regalfachs verstehen: Derselbe kurze Adressteil kann je nach ausgewählter Bank auf ein anderes Register verweisen. Die Symbole im Quelltext machen den Zugriff lesbarer, wählen bei gewöhnlichen Registerbefehlen aber nicht automatisch die richtige Bank. Deshalb gehört zur Analyse stets auch der aktuelle Zustand der Bankbits.</p>
           <div class="table-wrap">
             <table>
               <thead><tr><th>Register</th><th>Bank 0</th><th>Bank 1</th><th>Aufgabe</th></tr></thead>
@@ -255,10 +265,11 @@ movwf   PORTD</code></pre>
           <pre class="learn-code"><code>        btfss   PORTB,0
         goto    TASTE_NICHT_GEDRUECKT
         ; Dieser Pfad gilt bei gesetztem Bit 0</code></pre>
-          <pre class="learn-code"><code>        btfsc   STATUS,Z
+          <pre class="learn-code"><code>        btfss   STATUS,Z
         goto    UNGLEICH
         ; Z=1: goto wird übersprungen, Gleichheitszweig läuft
         goto    WEITER</code></pre>
+          <p>Im zweiten Beispiel führt <code>Z=0</code> den Sprung zu <code>UNGLEICH</code> aus. Bei <code>Z=1</code> überspringt <code>btfss</code> diesen einen Sprung und die Ausführung geht mit <code>goto WEITER</code> weiter. Die Formulierung „skip if set“ bezieht sich auf das Bit, nicht darauf, ob der anschließende Sprung ausgeführt wird.</p>
           <p>Beim Lesen eines PAPs entspricht die Bedingung im Entscheidungsdiamanten dem getesteten Bit oder Flag. Verfolge beide Ausgänge bis zum nächsten Zusammenführungspunkt; ein Skip überspringt nur eine Instruktion, nicht automatisch einen ganzen Zweig.</p>
           <pre class="learn-code"><code>LOOP:   decfsz  COUNT,F
         goto    LOOP
@@ -355,6 +366,7 @@ goto    OUTER_LOOP</code></pre>
           </div>
           <p>Ohne Ladebefehle benötigt eine Schleife mit N Durchläufen aus <code>decfsz</code> und <code>goto</code> <code>C = 3N − 1</code> Zyklen: Die ersten N−1 Runden kosten je drei Zyklen, der letzte Skip zwei. Bei Startwert 0 gilt N=256, also 767 Zyklen. Für eine Schleife mit nur einem Durchlauf ist C=2.</p>
           <p>Die Doppelschleifenformel setzt exakt den gezeigten Befehlsaufbau voraus. Zusätzliche Instruktionen, Sprünge, Interrupts oder abweichende Schleifenbedingungen ändern die Zyklenzahl. Die Laufzeit in Sekunden folgt aus <code>t = C · T<sub>cy</sub></code>.</p>
+          <p>Für M=2 und N=3 erklärt sich das Ergebnis auch ohne Auswendiglernen: Das äußere Laden kostet 2 Zyklen. Pro äußerem Durchlauf kostet das Laden und vollständige Ausführen der inneren Schleife <code>3·3+1=10</code> Zyklen. Der erste äußere Rücksprung kostet mit Dekrement 3, das abschließende Dekrement mit Skip 2 Zyklen. Zusammen sind das <code>2 + 10 + 3 + 10 + 2 = 27</code> Zyklen.</p>
           <h3>Wachstumsordnungen (Big-O)</h3>
           <div class="table-wrap">
             <table>
@@ -397,6 +409,7 @@ goto    OUTER_LOOP</code></pre>
         goto    KLEINER   ; Borrow: A &lt; B
         goto    GROESSER  ; kein Borrow und Z=0: A &gt; B</code></pre>
           <p>Bei Subtraktionen ist das gespeicherte Ergebnis ein 8-Bit-Wert modulo 256. Beispiel: 0x05−0x09=−4; gespeichert wird 0xFC (11111100₂). Als signed Zweierkomplement ist 0xFC gleich −4, während C=0 unabhängig davon den vorzeichenlosen Borrow anzeigt.</p>
+          <p>Beim Vergleich im Code wird zuerst B nach W kopiert und danach <code>A−B</code> gebildet. Bei A=B ist Z gesetzt und der erste <code>goto</code> wird ausgeführt. Sonst wird C geprüft: Ein gelöschtes C zeigt beim vorzeichenlosen Vergleich A&lt;B an; bleibt C gesetzt, gilt wegen des zuvor ausgeschlossenen Gleichheitsfalls A&gt;B. Dieselbe Auswertung darf ohne weitere Prüfung nicht auf signed-Zahlen übertragen werden.</p>
           <h3>Bitweise Verknüpfungen</h3>
           <div class="table-wrap">
             <table>
@@ -441,6 +454,7 @@ goto    OUTER_LOOP</code></pre>
             <span>173 = 10·16+13; A steht für 10 und D für 13. In vier Bitgruppen: 1010 1101.</span>
           </div>
           <p>Zur Umrechnung von Dezimal nach Hexadezimal wird wiederholt durch 16 geteilt; die Reste werden von unten nach oben gelesen. Von Hex nach Dual wird jede Ziffer durch genau vier Bits ersetzt. Führende Nullen können nötig sein, um ein vollständiges 8-Bit-Byte darzustellen.</p>
+          <p>Für 173 ergibt die Division durch 16 den Quotienten 10 und den Rest 13. Der Quotient 10 ist hexadezimal A, der Rest 13 ist D; zusammen entsteht AD. Jede Stelle kann unabhängig in vier Bits übersetzt werden: A ist 1010 und D ist 1101. Bei der Rückrechnung kontrollierst du das Ergebnis mit <code>10 · 16 + 13 = 173</code>.</p>
           <div class="formula-card">
             <strong>Weitere Umrechnungen</strong>
             <code>45₁₀ = 101101₂ = 2D₁₆</code>
@@ -498,6 +512,7 @@ ENDE:</code></pre>
             </table>
           </div>
           <p>Der entscheidende Punkt ist die Reihenfolge: <code>movf</code> setzt Z anhand des kopierten Werts; <code>xorlw 0</code> lässt den Wert unverändert und setzt Z erneut. Da Z=1 gilt, überspringt <code>btfss</code> nur <code>goto UNGLEICH</code>. Der abschließende W-Wert ist deshalb 0xAA, nicht 0x55.</p>
+          <p>Eine Zustands-Tabelle sollte nur tatsächlich ausgeführte Befehle enthalten: Übersprungene Zeilen können weder Register noch Flags verändern. Bei einer Schleife kannst du die ersten Durchläufe und den letzten getrennt notieren. Gerade der letzte Durchlauf unterscheidet sich, weil dort der Rücksprung übersprungen wird.</p>
           <div class="learn-callout">
             <strong>Typische Fehler vermeiden</strong>
             <ul>

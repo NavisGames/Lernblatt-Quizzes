@@ -30,6 +30,10 @@
         <p class="intro">Von Änderungsraten und Ableitungen über Kurvendiskussion bis zu Zahlenfolgen und Grenzwerten. Wähle ein Kapitel zum Wiederholen.</p>
         <a class="learn-pdf-link" href="../index.html#mathe-vorabhinweise">Abitur 2027: Vorabhinweise für Grund- und Leistungskurs →</a>
       </header>
+      <aside class="learn-callout">
+        <strong>Hinweis zum Lernen</strong>
+        <p>Die Inhalte können Fehler enthalten. Gleiche sie mit deinen Unterrichtsunterlagen und den Angaben deiner Lehrkraft ab.</p>
+      </aside>
       <nav class="learn-nav" aria-label="Kapitelübersicht">
         <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
         <a href="#aenderung">Änderungsraten</a>
@@ -64,6 +68,10 @@
           <h3>Deutung in Sachaufgaben</h3>
           <p>Weg \(s\) in Metern und Zeit \(t\) in Sekunden: \(\frac{s(t_2)-s(t_1)}{t_2-t_1}\) ist die mittlere Geschwindigkeit in \(\mathrm{m/s}\); \(s'(t_0)\) ist die momentane Geschwindigkeit. Für Kosten \(K(x)\) in Euro und Menge \(x\) in Stück beschreibt \(K'(x)\) die lokale Kostenänderung in Euro pro Stück. Temperatur- oder Höhenänderungen werden genauso mit passenden Einheiten interpretiert.</p>
           <p><strong>Tipp:</strong> Schreibe die Einheit immer als Einheit des Funktionswerts pro Einheit der Eingabe. Achte auf das Vorzeichen und auf den betrachteten Zeitraum.</p>
+          <h3>Durchschnitt und Momentaufnahme unterscheiden</h3>
+          <p>Die mittlere Änderungsrate fasst das gesamte Intervall in einer einzigen Zahl zusammen. Sie vergleicht nur Anfangs- und Endwert: Ein zwischendurch erfolgter Anstieg und ein anschließender Rückgang können sich gegenseitig ausgleichen. Eine momentane Änderungsrate beschreibt dagegen, wie sich die Größe direkt an einer bestimmten Stelle verändert. Dafür reicht es nicht, nur zwei weit auseinanderliegende Messwerte zu vergleichen.</p>
+          <p><strong>Temperaturbeispiel:</strong> Steigt die Temperatur von \(12\,^\circ\mathrm C\) um 2 Uhr auf \(18\,^\circ\mathrm C\) um 6 Uhr, beträgt die mittlere Änderungsrate \(\frac{18-12}{6-2}=1{,}5\,^\circ\mathrm C\) pro Stunde. Das bedeutet nicht, dass die Temperatur in jeder einzelnen Stunde genau um \(1{,}5\,^\circ\mathrm C\) gestiegen ist.</p>
+          <p><strong>Kosten deuten:</strong> Ist die mittlere Änderungsrate zwischen 50 und 70 Stück \(3\) Euro pro Stück, steigen die Kosten über diese 20 Stück insgesamt um \(20\cdot3=60\) Euro. Der Wert \(K'(50)\) beschreibt dagegen die lokale Kostenänderung bei 50 Stück; er kann die zusätzlichen Kosten für ein weiteres Stück in der Nähe dieser Menge näherungsweise beschreiben, muss aber nicht exakt \(K(51)-K(50)\) sein.</p>
         </details>
 
         <details id="funktionen" class="learn-section">
@@ -82,6 +90,9 @@
           <p><strong>\(a\):</strong> vertikale Streckung/Stauchung mit \(|a|\), bei \(a&lt;0\) Spiegelung an der \(x\)-Achse. <strong>\(b\):</strong> horizontaler Faktor \(1/|b|\), bei \(b&lt;0\) zusätzlich Spiegelung in der horizontalen Richtung. <strong>\(c\):</strong> Verschiebung um \(c\) nach rechts; <strong>\(d\):</strong> um \(d\) nach oben. Der verschobene Ursprung \((c\mid d)\) dient als Hilfskoordinatensystem.</p>
           <p><strong>Musterlösung:</strong> \(g(x)=x^2\), \(f(x)=-2\bigl(3(x-1)\bigr)^2+4\). Der Scheitel \((0\mid0)\) wird zunächst um \(1\) nach rechts und \(4\) nach oben verschoben, also nach \((1\mid4)\). Der Faktor \(-2\) spiegelt die \(y\)-Werte an der \(x\)-Achse und verdoppelt sie; der innere Faktor \(3\) staucht den Graphen horizontal auf ein Drittel.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Im Argument wirkt der Faktor \(b\) reziprok: \(g(2x)\) ist horizontal gestaucht, nicht gestreckt. Die Definitionsmenge muss nach einer Transformation erneut geprüft werden.</p></div>
+          <h3>Einen Punkt durch die Transformation verfolgen</h3>
+          <p>Ein Punkt auf dem ursprünglichen Graphen hilft, die Wirkungen nicht nur auswendig zu lernen. Liegt \((2\mid4)\) auf \(g\) und ist \(f(x)=-2g(3(x-1))+4\), muss zunächst das neue Argument wieder \(2\) ergeben: Aus \(3(x-1)=2\) folgt \(x=\frac53\). Den alten y-Wert \(4\) verändern wir mit dem äußeren Faktor und der Verschiebung zu \(-2\cdot4+4=-4\). Der zugehörige Punkt ist also \(\left(\frac53\mid-4\right)\).</p>
+          <p>Das Hilfskoordinatensystem verschiebt den Bezugspunkt nach \((c\mid d)\). Für die eigentlichen Koordinaten im ursprünglichen System müssen die Verschiebungen trotzdem wieder berücksichtigt werden. Einsetzen des gefundenen Punktes in die Funktionsgleichung ist eine gute Kontrolle.</p>
         </details>
 
         <details id="ableitung" class="learn-section">
@@ -101,6 +112,10 @@
           <h3>Musterlösungen</h3>
           <p><strong>Kettenregel:</strong> Setze \(u=3x+1\), dann ist \(f(x)=u^4\). Außenableitung: \(4u^3\); Innenableitung: \(u'=3\). Multiplizieren ergibt \(f'(x)=4(3x+1)^3\cdot3=12(3x+1)^3\).</p>
           <p><strong>Produktregel:</strong> Für \(f(x)=xe^x\) wählen wir \(u=x\), \(v=e^x\). Dann \(u'=1\), \(v'=e^x\) und \(f'=u'v+uv'=e^x+xe^x=(1+x)e^x\). Für \(f(x)=x^4\) ergibt das schrittweise \(f'(x)=4x^3\), \(f''(x)=12x^2\) und \(f'''(x)=24x\).</p>
+          <h3>Welche Regel nehme ich zuerst?</h3>
+          <p>Schau auf die äußerste Rechenoperation: Bei einer Summe leitest du die Summanden einzeln ab; bei einem Produkt zweier veränderlicher Faktoren verwendest du die Produktregel. Steckt eine Funktion in einer anderen, brauchst du die Kettenregel. Mehrere Regeln können gleichzeitig nötig sein: Bei \(x^2e^{3x}\) wird das Produkt abgeleitet und beim Faktor \(e^{3x}\) zusätzlich die innere Ableitung \(3\) berücksichtigt.</p>
+          <p><strong>Bruch aus dem Lernblatt:</strong> Für \(f(x)=\frac{3x^2+5}{x}\) mit \(x\ne0\) ist Umformen besonders hilfreich: \(f(x)=3x+5x^{-1}\). Daraus folgt \(f'(x)=3-5x^{-2}=3-\frac5{x^2}\). Noch einmal ableiten ergibt \(f''(x)=10x^{-3}=\frac{10}{x^3}\). Die Einschränkung \(x\ne0\) bleibt auch nach dem Umformen bestehen.</p>
+          <p><strong>Binomische Formeln verstehen:</strong> Beim Ausmultiplizieren entstehen auch gemischte Produkte: \((a+b)^2=a^2+2ab+b^2\) und \((a-b)^2=a^2-2ab+b^2\). Bei \((2+h)^2\) ist der mittlere Term also \(4h\), nicht nur \(h\) oder null. Ausmultiplizieren kann die Rechnung erleichtern; bei einer zusammengesetzten Potenz ist die Kettenregel oft kürzer.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Bei Produkt und Quotient nicht einfach beide Faktoren getrennt ableiten und multiplizieren bzw. dividieren. Bei verketteten Funktionen die innere Ableitung nicht vergessen.</p></div>
         </details>
 
@@ -118,6 +133,8 @@
           </table></div>
           <p><strong>Monotonieschema:</strong> Kritische Stellen auf dem Zahlenstrahl markieren und in jedem Intervall das Vorzeichen von \(f'\) prüfen. Wechsel \(+\to-\): Hochpunkt; \(-\to+\): Tiefpunkt. Randstellen und nicht differenzierbare Stellen gegebenenfalls gesondert untersuchen.</p>
           <p><strong>Musterlösung in Schritten:</strong> Für \(f(x)=x^3-3x\) gilt zunächst \(f'(x)=3x^2-3=3(x-1)(x+1)\). Die kritischen Stellen sind daher \(x=-1\) und \(x=1\). Das Vorzeichen von \(f'\) ist auf \((-\infty,-1)\), \((-1,1)\), \((1,\infty)\) der Reihe nach \(+\), \(-\), \(+\). Somit liegt bei \(x=-1\) ein Hochpunkt und bei \(x=1\) ein Tiefpunkt. Einsetzen in \(f\) liefert \(H(-1\mid2)\) und \(T(1\mid-2)\). Schließlich ist \(f''(x)=6x\); der Vorzeichenwechsel bei \(x=0\) zeigt den Wendepunkt \(W(0\mid0)\).</p>
+          <p><strong>Warum helfen Testwerte?</strong> Zwischen zwei benachbarten kritischen Stellen prüfen wir das Vorzeichen von \(f'\) an einer leicht einsetzbaren Stelle, zum Beispiel bei \(x=0\) zwischen \(-1\) und \(1\). Dort ist \(f'(0)=-3\), also fällt der Graph in diesem Intervall. Bei diesem Polynom kann das Vorzeichen innerhalb des Intervalls nicht wechseln, ohne dass \(f'\) dort eine weitere Nullstelle hätte. Bei anderen Funktionen müssen auch Definitionslücken und nicht differenzierbare Stellen beachtet werden.</p>
+          <p>Die erste und die zweite Ableitung beantworten verschiedene Fragen: \(f'\) beschreibt die Steigung des Graphen; \(f''\) beschreibt, wie sich diese Steigung verändert. Eine negative zweite Ableitung bedeutet deshalb nicht automatisch, dass die Funktion fällt: Sie kann noch steigen, während ihre positive Steigung kleiner wird.</p>
           <div class="formula-card"><strong>Tangente und Normale in \(P(x_0\mid f(x_0))\)</strong><span class="math-formula">\(t(x)=f'(x_0)(x-x_0)+f(x_0)\)</span><span class="math-formula">\(m_n=-\frac1{f'(x_0)},\quad n(x)=m_n(x-x_0)+f(x_0)\)</span><span>Die Normalenformel gilt nur für \(f'(x_0)\ne0\). Bei waagerechter Tangente ist die Normale die vertikale Gerade \(x=x_0\).</span></div>
           <p><strong>Beispiel:</strong> \(f(x)=x^2\) bei \(x_0=1\): \(P(1\mid1)\), \(m_t=f'(1)=2\). Die Tangente ist \(t(x)=2(x-1)+1=2x-1\). Die Normalensteigung beträgt \(m_n=-\frac12\), also \(n(x)=-\frac12(x-1)+1\).</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>\(f''(x_0)=0\) allein beweist keinen Wendepunkt: Bei \(f(x)=x^4\) wechselt \(f''(x)=12x^2\) an \(x=0\) nicht das Vorzeichen.</p></div>
@@ -134,6 +151,7 @@
             <li><strong>Geschlossene Dose:</strong> \(V=\pi r^2h\) und Oberfläche \(O=2\pi r^2+2\pi rh\). Für festes \(V\) ist \(h=\frac{V}{\pi r^2}\), \(r>0\); diese Nebenbedingung in \(O\) einsetzen.</li>
             <li><strong>Rechteck unter einer Kurve:</strong> Bei \(y=4-x^2\), einer Grundseite auf der \(x\)-Achse und symmetrischen oberen Ecken \((\pm x\mid4-x^2)\) ist \(A(x)=2x(4-x^2)\) für \(0\le x\le2\).</li>
           </ul>
+          <p><strong>Kiste vollständig lösen:</strong> Für \(V(x)=x(10-2x)^2\) im Bereich \(0&lt;x&lt;5\) liefert die Produktregel \(V'(x)=(10-2x)(10-6x)\). Der Faktor \(10-6x\) wird bei \(x=\frac53\) null; \(x=5\) liegt am Rand und ergibt keinen Boden. Vor \(\frac53\) ist \(V'\) positiv, danach bis \(5\) negativ. Die Kiste hat deshalb bei \(x=\frac53\) ihr größtes Volumen, nämlich \(V\!\left(\frac53\right)=\frac{2000}{27}\) Kubikeinheiten.</p>
           <h3>Ortskurven</h3>
           <p>Bei einer Funktionenschar \(f_t\) werden beispielsweise die Extrempunkte \(E(t)=(x(t)\mid y(t))\) ermittelt. Löse \(x(t)\) nach \(t\) auf und setze das Ergebnis in \(y(t)\) ein. Beachte Einschränkungen des Parameters und der erhaltenen \(x\)-Werte.</p>
           <p><strong>Beispiel:</strong> \(f_t(x)=(x-t)^2+t\) hat wegen \(f'_t(x)=2(x-t)=0\) bei \(x=t\) einen Tiefpunkt. Einsetzen ergibt \(E(t)=(t\mid t)\). Aus der ersten Koordinate folgt \(t=x\); eingesetzt in die zweite erhält man als Ortskurve \(y=x\).</p>
@@ -145,10 +163,13 @@
           <p>Eine Folge ordnet jedem natürlichen Index n einen Wert a<sub>n</sub> zu. Eine <strong>explizite</strong> Vorschrift berechnet a<sub>n</sub> direkt; eine <strong>rekursive</strong> verwendet vorherige Glieder und benötigt ausreichende Anfangswerte.</p>
           <div class="formula-card"><strong>Ab Index 1</strong><span class="math-formula">\(\text{Arithmetisch: }a_n=a_1+(n-1)d,\quad a_{n+1}=a_n+d\)</span><span class="math-formula">\(\text{Geometrisch: }a_n=a_1q^{n-1},\quad a_{n+1}=q\,a_n\)</span></div>
           <p><strong>Beispiele:</strong> Bei einer arithmetischen Folge mit \(a_1=2\) und \(d=3\) liegen zwischen dem ersten und fünften Glied vier Schritte: \(a_5=2+(5-1)\cdot3=14\). Bei \(a_1=3\), \(q=2\) wird \(a_4=3\cdot2^{4-1}=24\).</p>
+          <p>Bei einer arithmetischen Folge ist die Differenz benachbarter Glieder immer gleich; bei einer geometrischen Folge wird jeweils mit demselben Faktor multipliziert. Beispielsweise entstehen aus dem Startwert \(2\) und der Differenz \(3\) die Glieder \(2,5,8,11,\ldots\). Der Index zählt die Position, nicht die Anzahl der bereits ausgeführten Schritte: Vom ersten zum vierten Glied sind es drei Schritte.</p>
           <h3>Monotonie und Beschränktheit</h3>
           <p>\(a_{n+1}-a_n>0\) für alle \(n\) bedeutet streng steigend, \(a_{n+1}-a_n&lt;0\) streng fallend. Der Quotient \(\frac{a_{n+1}}{a_n}\) kann bei positiven Gliedern entsprechend mit \(1\) verglichen werden; bei null oder negativen Gliedern ist Vorsicht nötig. Eine obere Schranke \(S\) erfüllt \(a_n\le S\) für alle \(n\); eine untere Schranke \(s\) erfüllt \(a_n\ge s\).</p>
+          <p><strong>Beispiel aus dem Lernblatt:</strong> Für \(a_n=\frac{n+1}{n+2}\) mit \(n\ge1\) ist \(a_{n+1}=\frac{n+2}{n+3}\). Auf einen gemeinsamen Nenner gebracht ergibt die Differenz \(a_{n+1}-a_n=\frac1{(n+2)(n+3)}>0\). Die Folge steigt also streng. In der Form \(a_n=1-\frac1{n+2}\) sieht man außerdem: Alle Glieder liegen unter \(1\), und sie nähern sich \(1\) an.</p>
           <h3>Konvergenz und ε-Umgebung</h3>
           <p>\(a_n\) konvergiert gegen \(L\), wenn zu jedem \(\varepsilon>0\) ein \(N\) existiert, sodass für alle \(n\ge N\) gilt: \(|a_n-L|&lt;\varepsilon\). Ab \(N\) liegen also alle Glieder in \((L-\varepsilon,L+\varepsilon)\). Zum Beispiel gilt \(\frac1n\to0\). Die Folge \((-1)^n\) divergiert trotz Beschränktheit: Die geraden Glieder sind \(1\), die ungeraden \(-1\). Für \(|q|&lt;1\) gilt \(a_1q^{n-1}\to0\).</p>
+          <p>Die ε-Umgebung ist ein beliebig schmaler Bereich um den vermuteten Grenzwert. Bei \(\frac1n\) und \(\varepsilon=0{,}1\) liegen beispielsweise ab \(n=11\) alle weiteren Glieder weniger als \(0{,}1\) von null entfernt. Für eine kleinere Umgebung kann ein größerer Startindex nötig sein. Der Grenzwert muss dabei kein tatsächlich auftretendes Folgenglied sein.</p>
           <h3>Grenzwertsätze und rationale Folgen</h3>
           <p>Konvergente Folgen dürfen gliedweise addiert und multipliziert werden. Für Quotienten muss der Nennergrenzwert ungleich null sein. Bei rationalen Ausdrücken mit \(n\) durch die höchste auftretende Potenz teilen.</p>
           <p><strong>Musterlösung:</strong> Für \(\frac{2n^2+3}{n^2-1}\) teilen wir Zähler und Nenner durch \(n^2\): \(\frac{2n^2+3}{n^2-1}=\frac{2+\frac3{n^2}}{1-\frac1{n^2}}\). Für \(n\to\infty\) gehen beide Brüche \(\frac3{n^2}\) und \(\frac1{n^2}\) gegen null. Daher ist der Grenzwert \(\frac{2+0}{1-0}=2\). Einzelne nicht definierte Indizes müssen ausgeschlossen werden; für den Grenzwert zählt das Verhalten für große \(n\).</p>

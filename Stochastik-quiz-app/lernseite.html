@@ -30,6 +30,10 @@
         <p class="intro">Von Baumdiagrammen und Zählverfahren über Verteilungen bis zum statistischen Test: Modelle auswählen, rechnen und Ergebnisse im Zusammenhang deuten.</p>
         <a class="learn-pdf-link" href="../index.html#mathe-vorabhinweise">Abitur 2027: Vorabhinweise für Grund- und Leistungskurs →</a>
       </header>
+      <aside class="learn-callout">
+        <strong>Hinweis zum Lernen</strong>
+        <p>Die Inhalte können Fehler enthalten. Gleiche sie mit deinen Unterrichtsunterlagen und den Angaben deiner Lehrkraft ab.</p>
+      </aside>
       <nav class="learn-nav" aria-label="Kapitelübersicht">
         <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
         <a href="#zufall">Zufall &amp; Pfade</a>
@@ -63,6 +67,8 @@
           <p>In einer Urne liegen drei rote und zwei blaue Kugeln. Für Rot, dann Blau rechnest du zuerst \(P(R_1\cap B_2)=\frac{3}{5}\cdot\frac{2}{4}=\frac{3}{10}\). In umgekehrter Reihenfolge gilt \(P(B_1\cap R_2)=\frac{2}{5}\cdot\frac{3}{4}=\frac{3}{10}\). Genau eine rote Kugel kann auf diesen beiden disjunkten Pfaden auftreten, daher addierst du sie: \(\frac{3}{10}+\frac{3}{10}=\frac{3}{5}\).</p>
           <p><strong>Mindestens einmal:</strong> Bei drei unabhängigen Versuchen mit Trefferwahrscheinlichkeit \(p=0{,}2\) ist das Gegenereignis „kein Treffer“ besonders einfach: \(P(\text{mindestens ein Treffer})=1-P(\text{kein Treffer})=1-0{,}8^3=0{,}488\).</p>
           <p><strong>Schrittweise vorgehen:</strong> (1) Beschreibe das gesuchte Ereignis. (2) Zerlege es in Pfade oder nutze das Gegenereignis. (3) Multipliziere entlang jedes Pfades und addiere nur disjunkte passende Pfade.</p>
+          <p>Der Ergebnisraum hängt davon ab, was beim Experiment beobachtet wird: Bei zwei Münzwürfen können die Ergebnisse \(\Omega=\{KK,KZ,ZK,ZZ\}\) sein. Das Ereignis „genau einmal Kopf“ enthält dann zwei Ergebnisse, nämlich \(\{KZ,ZK\}\). Bei einer fairen Münze haben alle vier Ergebnisse dieselbe Wahrscheinlichkeit; das Ereignis hat deshalb Wahrscheinlichkeit \(\frac24=\frac12\). Das Gegenereignis ist hier „keinmal oder zweimal Kopf“, nicht einfach „einmal Zahl“.</p>
+          <p>Im Baumdiagramm beschreibt jeder vollständige Pfad eine mögliche Abfolge. Die zweite Wahrscheinlichkeit wird unter der Voraussetzung gelesen, dass der erste Zweig bereits eingetreten ist. Ohne Zurücklegen verändert sich dadurch der Inhalt der Urne; mit Zurücklegen ist der Ausgangszustand vor der nächsten Ziehung wiederhergestellt.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Ohne Zurücklegen ändern sich die Zweigwahrscheinlichkeiten. „Oder“ meint in der Mathematik normalerweise auch „beides“; Überschneidungen werden beim Addieren einmal abgezogen.</p></div>
         </details>
 
@@ -76,6 +82,7 @@
           <p>Die Fakultät ist \(n!=n\cdot(n-1)\cdot\ldots\cdot1\), und \(0!=1\). Eine Anordnung aller \(n\) verschiedenen Objekte heißt Permutation und hat \(n!\) Möglichkeiten. Bei gleichen Objekten mit Häufigkeiten \(n_1,n_2,\ldots\) teilt man durch \(n_1!\cdot n_2!\cdot\ldots\).</p>
           <p><strong>Schrittweise auswählen:</strong> Drei verschiedene Ämter aus fünf Personen besetzen: Die Ämter sind unterscheidbar, deshalb zählt die Reihenfolge; \(5\cdot4\cdot3=60\). Ein Dreierteam aus fünf Personen wählen: Die Reihenfolge zählt nicht, also \(\binom{5}{3}=\frac{5!}{3!\,2!}=10\). Zwei Eissorten aus drei Sorten mit Wiederholung und ohne Reihenfolge: \(\binom{3+2-1}{2}=\binom{4}{2}=6\).</p>
           <p><strong>Urne und Lotto:</strong> Bei sechs Ziehungen ohne Zurücklegen aus 49 nummerierten Kugeln sind ohne Beachtung der Reihenfolge \(\binom{49}{6}=13\,983\,816\) Auswahlen möglich. Bei fairer Ziehung hat eine bestimmte Sechserauswahl daher die Wahrscheinlichkeit \(\frac{1}{\binom{49}{6}}=\frac{1}{13\,983\,816}\).</p>
+          <p>Die Division durch \(3!\) beim Dreierteam erklärt, woher der Binomialkoeffizient kommt: Zunächst zählt \(5\cdot4\cdot3=60\) dieselbe Gruppe in sechs Reihenfolgen, etwa ABC, ACB und BAC. Da alle sechs dieselbe Auswahl beschreiben, bleiben \(60:6=10\) Teams. Sind die Plätze dagegen verschiedene Ämter, beschreiben diese Reihenfolgen unterschiedliche Besetzungen und dürfen nicht zusammengefasst werden.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Das Team {A, B, C} ist nicht sechsmal verschieden. Zählformeln zählen Möglichkeiten; zur Wahrscheinlichkeit wird erst bei gleich wahrscheinlichen Ergebnissen durch die Gesamtzahl geteilt.</p></div>
         </details>
 
@@ -88,6 +95,8 @@
             <span>Für größere Grenzen wird die Addition bis \(P(X=k)\) fortgesetzt. Bei der kumulierten Verteilungsfunktion \(F(k)=P(X\le k)\) gilt \(P(X\ge k)=1-F(k-1)\) und \(P(a\le X\le b)=F(b)-F(a-1)\).</span>
           </div>
           <p><strong>Beispiel Schritt für Schritt:</strong> Bei vier unabhängigen Versuchen mit \(p=0{,}5\) und genau zwei Treffern sind \(\binom{4}{2}=6\) Reihenfolgen möglich. Jede hat die Wahrscheinlichkeit \(0{,}5^2\cdot0{,}5^2\). Somit \(P(X=2)=\binom{4}{2}\cdot0{,}5^2\cdot0{,}5^2=\frac{6}{16}=0{,}375\). Für „mehr als zwei“ gehören nur \(X=3\) und \(X=4\) dazu; über das Gegenereignis erhältst du \(P(X>2)=1-P(X\le2)=\frac{5}{16}\).</p>
+          <p>Die Formel verbindet also zwei Ideen: \(p^k(1-p)^{n-k}\) beschreibt die Wahrscheinlichkeit einer bestimmten Trefferfolge; der Binomialkoeffizient zählt, an welchen Stellen die \(k\) Treffer stehen können. Prüfe vor dem Einsetzen nicht nur die zwei möglichen Ausgänge, sondern auch, ob die Versuche unabhängig sind und \(p\) gleich bleibt.</p>
+          <p>Übersetze die Grenze vor dem Rechnen in Werte: „mindestens 3“ bedeutet \(X\ge3\), das Gegenereignis ist \(X\le2\). „Mehr als 3“ beginnt erst bei 4 und hat \(X\le3\) als Gegenereignis. Diese eine Stelle Unterschied ist bei ganzzahligen Zufallsgrößen entscheidend.</p>
           <h3>Poissonmodell</h3>
           <p>Für zufällige Anzahlen unabhängiger Ereignisse in einem festen Intervall bei konstanter mittlerer Rate \(\lambda>0\) kann \(X\sim\operatorname{Pois}(\lambda)\) geeignet sein. Für \(k=0,1,2,\ldots\) gilt \(P(X=k)=\frac{e^{-\lambda}\lambda^k}{k!}\). Erwartungswert und Varianz sind beide \(\lambda\). Bei doppelter Intervalllänge verdoppelt sich \(\lambda\), wenn die Rate konstant bleibt.</p>
           <p><strong>Beispiel Schritt für Schritt:</strong> Bei \(\lambda=2\) ist \(P(X=0)=\frac{e^{-2}2^0}{0!}=e^{-2}\approx0{,}1353\). Für mindestens ein Ereignis nutzt du das Gegenereignis: \(P(X\ge1)=1-P(X=0)=1-e^{-2}\approx0{,}8647\). Eine Binomialverteilung mit großem \(n\) und kleinem \(p\) kann durch \(\operatorname{Pois}(np)\) approximiert werden; Modellannahmen und Genauigkeit müssen zum Kontext passen.</p>
@@ -110,6 +119,8 @@
           <p>Das arithmetische Mittel \(\bar{x}\) beschreibt die tatsächlich beobachteten Werte einer Stichprobe; \(E(X)\) ist dagegen ein mit Wahrscheinlichkeiten gewichteter Modellwert. Für die Beobachtungen \(2,3,7\) ist \(\bar{x}=\frac{2+3+7}{3}=4\).</p>
           <p><strong>Beispiel Schritt für Schritt:</strong> Eine Auszahlung \(X\) beträgt mit Wahrscheinlichkeit \(0{,}25\) vier Euro und sonst null. Gewichte jeden möglichen Wert mit seiner Wahrscheinlichkeit: \(E(X)=4\cdot0{,}25+0\cdot0{,}75=1\,€\). Ziehe für den Nettogewinn anschließend den Einsatz ab: Bei \(1\,€\) Einsatz ist \(1-1=0\,€\), das Spiel also im Erwartungswert fair; bei \(1{,}50\,€\) Einsatz ist \(1-1{,}50=-0{,}50\,€\).</p>
           <p>Bei einem fairen Würfel gilt \(E(X)=\frac{1+2+3+4+5+6}{6}=3{,}5\) und \(\operatorname{Var}(X)=\frac{35}{12}\). Der Erwartungswert \(3{,}5\) muss nicht als Augenzahl auftreten.</p>
+          <p><strong>Streuung verstehen:</strong> Vergleiche ein Spiel, das immer 2 € auszahlt, mit einem Spiel, das gleich wahrscheinlich 0 € oder 4 € auszahlt. Beide haben den Erwartungswert 2 €. Im ersten Spiel gibt es keine Abweichung und die Varianz ist 0; im zweiten sind die Abweichungen \(-2\) und \(2\). Ihre gewichteten Quadrate ergeben \(\operatorname{Var}(X)=4\) und \(\sigma=2\,€\). Die Standardabweichung ist nicht der durchschnittliche absolute Abstand, sondern die Wurzel aus der mittleren quadratischen Abweichung.</p>
+          <p><strong>Fairer Einsatz aus einer Auszahlung:</strong> Werden mit Wahrscheinlichkeit \(0{,}25\) genau 12 € ausgezahlt und sonst nichts, beträgt die erwartete Auszahlung \(0{,}25\cdot12=3\,€\). Wird der Einsatz \(e\) auch bei einem Gewinn bezahlt, ist der erwartete Nettogewinn \(0{,}25(12-e)+0{,}75(-e)=3-e\). Das Spiel ist also bei \(e=3\,€\) fair. Die im Lernblatt an dieser Stelle angegebene Umformung zu \(e=\frac{pG}{1-p}\) berücksichtigt den Einsatz im Gewinnfall nicht richtig, wenn \(G\) die Auszahlung bezeichnet.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Auszahlung und Nettogewinn unterscheiden: Einsatz abziehen. Ein faires Spiel garantiert weder Gewinn noch Ausgleich in einer kurzen Serie; Varianz und Standardabweichung nicht verwechseln.</p></div>
         </details>
 
@@ -133,6 +144,7 @@
             </tbody>
           </table></div>
           <p>Hier gilt \(P(\text{betroffen}\cap\text{positiv})=0{,}08\), aber \(P(\text{betroffen})P(\text{positiv})=0{,}1\cdot0{,}17=0{,}017\); also sind die Ereignisse nicht unabhängig.</p>
+          <p>Die Bedingung hinter dem Strich legt die neue Bezugsgruppe fest: Bei „betroffen unter den positiv Getesteten“ zählen nur die 170 positiven Tests als mögliche Fälle. Dass die Tabelle mit absoluten Häufigkeiten arbeitet, erleichtert das Erkennen dieser Bezugsgruppe. Für Unabhängigkeit müsste die Information „positiv“ die Wahrscheinlichkeit für „betroffen“ unverändert lassen; hier ist das nicht der Fall.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>Beim Bedingen durch die Größe der gegebenen Gruppe teilen. Unabhängig ist nicht dasselbe wie unvereinbar: Zwei disjunkte Ereignisse mit positiver Wahrscheinlichkeit sind abhängig.</p></div>
         </details>
 
@@ -145,6 +157,7 @@
             <span>\(\Phi(-z)=1-\Phi(z)\); etwa \(68{,}3\,\%\) liegen innerhalb einer und \(95{,}4\,\%\) innerhalb zweier Standardabweichungen.</span>
           </div>
           <p><strong>Beispiel Schritt für Schritt:</strong> Für \(Y\sim N(100;15^2)\) und die Grenze \(115\) standardisierst du zuerst: \(z=\frac{115-100}{15}=1\). Dann liest du \(\Phi(1)\approx0{,}8413\) ab, also \(P(Y\le115)\approx0{,}8413\). Für die rechte Seite nimmst du das Gegenereignis: \(P(Y>115)\approx1-0{,}8413=0{,}1587\). Bei stetigen Größen spielt das Gleichheitszeichen an einer einzelnen Grenze keine Rolle.</p>
+          <p>Ein z-Wert gibt an, wie viele Standardabweichungen eine Grenze über oder unter dem Mittelwert liegt. Ein negativer z-Wert bedeutet eine Grenze unterhalb von \(\mu\), nicht eine negative Wahrscheinlichkeit. Durch Standardisieren lassen sich unterschiedliche normalverteilte Größen mit derselben Tabelle der Standardnormalverteilung behandeln.</p>
           <h3>Diskrete Binomialverteilung annähern</h3>
           <p>Wenn die Normalnäherung für \(X\sim B(n;p)\) hinreichend gut ist (häufige Faustregel: \(np\) und \(n(1-p)\) jeweils mindestens \(5\); Genauigkeit prüfen), setze \(\mu=np\) und \(\sigma=\sqrt{np(1-p)}\). Weil \(X\) ganzzahlig ist, verschiebst du die Grenzen um \(0{,}5\): Ein Randwert, der noch dazugehören soll, wird jeweils bis zur Mitte zwischen den ganzen Zahlen eingeschlossen.</p>
           <div class="formula-card"><strong>Kontinuitätskorrektur</strong>
@@ -171,6 +184,7 @@
             <span class="math-formula">\(\text{Teststärke bei }p\in H_1:\quad 1-\beta(p)=P_p(\text{verwerfen})\)</span>
           </div>
           <p>Im Beispiel ist bei \(p=0{,}8\) der Fehler 2. Art \(\beta(0{,}8)=P_{0{,}8}(X\le8)\approx0{,}6242\); die Teststärke beträgt \(1-0{,}6242=0{,}3758\). \(\beta\) hängt vom konkreten alternativen Parameter ab. Das tatsächliche Niveau kann wegen diskreter Werte kleiner als \(\alpha\) sein.</p>
+          <p>Die Entscheidung verwendet eine Annahme als Ausgangspunkt: Zuerst wird berechnet, wie ungewöhnlich ein Ergebnis wäre, <em>falls</em> \(H_0\) gilt. Ist es im vorher festgelegten Ablehnungsbereich, spricht das Ergebnis gegen \(H_0\). Liegt es außerhalb, reichen die Daten für diesen Test nicht aus; auch eine tatsächlich falsche Nullhypothese kann dann bestehen bleiben. Genau das beschreibt der Fehler 2. Art.</p>
           <p>Der <strong>p-Wert</strong> ist unter \(H_0\) die Wahrscheinlichkeit für ein mindestens so extremes Ergebnis wie das beobachtete, entsprechend der festgelegten Testrichtung. Ist er höchstens \(\alpha\), wird \(H_0\) verworfen. Ein zweiseitiger Test verteilt den Ablehnungsbereich auf beide Seiten; die genaue Definition muss zum gewählten Verfahren passen.</p>
           <p><strong>Zweiseitiges Beispiel:</strong> Prüfe \(H_0:p=0{,}5\) gegen \(H_1:p\ne0{,}5\) mit \(n=10\) und \(\alpha=5\,\%\). Symmetrische Randbereiche \(X\le1\) oder \(X\ge9\) ergeben unter \(H_0\) die Fehlerwahrscheinlichkeit \(\frac{22}{1024}\approx2{,}15\,\%\). Die nächstgrößeren Ränder \(X\le2\) oder \(X\ge8\) ergeben \(\frac{112}{1024}\approx10{,}94\,\%\) und überschreiten \(\alpha\). Bei \(X=1\) wird \(H_0\) verworfen.</p>
           <div class="learn-callout"><strong>Typische Falle</strong><p>„Nicht verwerfen“ beweist \(H_0\) nicht. \(\alpha\) ist weder die Wahrscheinlichkeit, dass \(H_0\) wahr ist, noch \(\beta\). Vor einer Beobachtung Test und Grenzen festlegen; \(\beta\) ohne konkrete Alternative ist keine einzelne Zahl.</p></div>

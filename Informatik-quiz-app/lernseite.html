@@ -25,10 +25,16 @@
 
     <main class="learn-layout">
       <header class="learn-hero">
-        <p class="eyebrow">Berufliche Informatik · Klausurstoff 13-1</p>
+        <p class="eyebrow">Berufliche Informatik · 13. Klasse · 1. Semester</p>
         <h1>Netzwerke verstehen und <span>Fehler finden.</span></h1>
-        <p class="intro">Kompakter Lernüberblick zu den Themen der Klausur: Grundlagen, OSI, Medien, Ethernet, IP-Adressierung, Routing und Netzwerkdienste. Kapitel zum Wiederholen aufklappen.</p>
+        <p class="intro">Lernüberblick zu Grundlagen, OSI, Medien, Ethernet, IP-Adressierung, Routing und Netzwerkdiensten. Kapitel zum Wiederholen aufklappen.</p>
       </header>
+
+      <aside class="learn-callout">
+        <strong>Hinweis zum Lernen</strong>
+        <p>Die Inhalte können Fehler enthalten. Gleiche sie mit deinen Unterrichtsunterlagen und den Angaben deiner Lehrkraft ab.</p>
+        <p><strong>Vorläufiger Hinweis zur Informatikklausur:</strong> Einige Inhalte stammen noch aus dem Stoff der 12. Klasse und kommen in der bevorstehenden Klausur wahrscheinlich nicht vor. Welche Themen tatsächlich geprüft werden, ist hier nicht verbindlich; maßgeblich sind die Angaben der Lehrkraft.</p>
+      </aside>
 
       <nav class="learn-nav" aria-label="Kapitelübersicht">
         <button id="toggleAllChapters" class="learn-nav-toggle" type="button">Alle öffnen</button>
@@ -78,6 +84,8 @@
           </table></div>
           <p>Im <strong>Peer-to-Peer</strong>-Netz sind Teilnehmer gleichberechtigt. Im <strong>Client-Server</strong>-Modell stellen spezialisierte Server Dienste bereit und ermöglichen zentrale Verwaltung, Rechtevergabe und Sicherung.</p>
           <p>Ein Kommunikationsprotokoll legt Syntax, Bedeutung, Reihenfolge und Ablauf von Nachrichten fest. Übertragungsarten: <strong>Unicast</strong> (ein Empfänger), <strong>Broadcast</strong> (alle im Netzsegment), <strong>Multicast</strong> (Empfängergruppe) und <strong>Anycast</strong> (geeignete bzw. nächste Instanz einer Gruppe).</p>
+          <p>Ein Gerät kann je nach Aufgabe Client und Server sein: Beim Abruf einer Webseite fordert es Daten als Client an; stellt es zugleich eine Datei bereit, übernimmt es für diese Verbindung die Serverrolle. Die Topologie beschreibt dagegen, wie Geräte verbunden sind, nicht welche Rolle ihre Anwendungen spielen.</p>
+          <p>Ein Sternnetz ist übersichtlich, weil sich eine einzelne Leitung leicht einem Endgerät zuordnen lässt. Fällt diese Leitung aus, ist normalerweise nur dieses Gerät betroffen; fällt der zentrale Switch aus, verlieren dagegen alle daran angeschlossenen Geräte ihre Verbindung über diesen Switch.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Zugriffsverfahren</th><th>Prinzip</th></tr></thead>
             <tbody>
@@ -103,6 +111,8 @@
             </tbody>
           </table></div>
           <p>Beim Senden werden Nutzdaten von oben nach unten schichtweise um Header (teilweise auch Trailer) ergänzt: <strong>Kapselung</strong>. Beim Empfangen werden diese Informationen von unten nach oben ausgewertet und entfernt. Für die Klausur besonders wichtig: Layer 1 = Signal/Medium, Layer 2 = Frame/MAC, Layer 3 = Paket/IP, Layer 4 = Ende-zu-Ende-Transport.</p>
+          <p>Beim Aufruf einer Webseite erzeugt die Anwendung zunächst eine Anfrage. Die Transportschicht ergänzt unter anderem Portinformationen, IP ergänzt Quell- und Zieladresse, und Ethernet verpackt das IP-Paket für den lokalen Abschnitt in einen Frame. Das Medium überträgt anschließend die zugehörigen Signale. Beim Empfänger werden die Hüllen in umgekehrter Reihenfolge ausgewertet; die Anwendung erhält wieder die für sie bestimmten Daten.</p>
+          <p>Die Aufteilung vereinfacht auch die Fehlersuche: Eine beschädigte Leitung betrifft zunächst die Übertragung auf Schicht 1. Eine falsche IP-Konfiguration betrifft die Vermittlung auf Schicht 3. Dass eine untere Schicht funktioniert, garantiert aber noch nicht, dass auch ein Dienst auf einer höheren Schicht erreichbar ist.</p>
           <div class="learn-callout"><strong>Eselsbrücke für Schicht 1 bis 7</strong>
             <p>Von unten nach oben: Physikalisch, Sicherung, Vermittlung, Transport, Sitzung, Darstellung, Anwendung (PSVTSDA).</p>
           </div>
@@ -133,6 +143,7 @@
             </tbody>
           </table></div>
           <p>In Glasfasern wird Licht durch Totalreflexion im Kern geführt. Glasfaser bietet hohe Bandbreite, große Reichweite und Unempfindlichkeit gegenüber elektromagnetischen Störungen.</p>
+          <p>Bei Twisted Pair werden zwei zusammengehörige Adern verdrillt, damit äußere Störungen beide möglichst ähnlich beeinflussen und am Empfänger besser unterdrückt werden können. Eine zusätzliche Schirmung schützt gegen weitere Störeinflüsse, ersetzt aber keine fachgerechte Installation. Bei Glasfaser wird statt eines elektrischen Signals Licht übertragen; die Leitung verbindet die Geräte daher nicht als elektrischer Leiter.</p>
         </details>
 
         <details id="ethernet" class="learn-section">
@@ -149,6 +160,11 @@
             </tbody>
           </table></div>
           <p>Ein Standardframe ist <strong>64 bis 1518 Byte</strong> groß (ohne Präambel und SFD). Ein 802.1Q-Tag ergänzt 4 Byte; Tagged Frames können 1522 Byte erreichen. Das Tag enthält unter anderem eine 12-Bit-VLAN-ID.</p>
+          <h3>Was sind 802.1Q-Tags und Tagged Frames?</h3>
+          <p>Ein <strong>VLAN</strong> teilt ein physisches Netzwerk in getrennte logische Netze. Ein Switch kann so Geräte nach VLAN zuordnen, auch wenn sie am selben Switch angeschlossen sind. Jedes VLAN bildet eine eigene Broadcast-Domäne: Ein Broadcast aus VLAN 10 wird nicht einfach in VLAN 20 weitergeleitet.</p>
+          <p>Ein <strong>802.1Q-Tag</strong> ist eine vier Byte große Zusatzinformation im Ethernet-Frame. Es steht zwischen Quell-MAC-Adresse und dem ursprünglichen Typ-/Längenfeld. Der Tag enthält eine Kennzeichnung als VLAN-Tag sowie unter anderem die <strong>VLAN-ID</strong>, die angibt, zu welchem VLAN der Frame gehört. Ein Frame mit dieser Zusatzinformation heißt <strong>tagged</strong>; ohne sie heißt er <strong>untagged</strong>. Die MAC-Adressen bleiben für die lokale Zustellung wichtig: Die VLAN-ID ersetzt sie nicht.</p>
+          <p><strong>Beispiel mit zwei Switches:</strong> Ein PC sendet an einem Access-Port von Switch A üblicherweise einen untagged Frame. Der Port ist VLAN 10 zugeordnet, sodass der Switch den Frame diesem VLAN zuordnet. Über eine Verbindung zwischen den Switches, die mehrere VLANs transportiert, sendet A den Frame mit VLAN-10-Tag. Switch B erkennt daran die Zuordnung und gibt ihn an einem Access-Port für VLAN 10 üblicherweise wieder ohne Tag an den Ziel-PC aus. VLAN 20 kann dieselbe Verbindung nutzen, bleibt aber logisch getrennt.</p>
+          <p>Eine solche Verbindung heißt <strong>Trunk</strong>. Dort werden Frames für mehrere VLANs normalerweise mit Tags übertragen; je nach Konfiguration kann ein natives VLAN auch untagged übertragen werden. Ob und wie ein Port taggt, hängt also von seiner Konfiguration ab.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Gerät</th><th>Wirkung / Domäne</th></tr></thead>
             <tbody>
@@ -158,7 +174,7 @@
               <tr><th>Layer-3-Switch</th><td>Kombiniert Switching und Routing, z. B. zwischen VLANs.</td></tr>
             </tbody>
           </table></div>
-          <p>Ein Switch lernt Quell-MAC-Adressen mit dem zugehörigen Eingangsport. Bekannte Ziele werden gezielt weitergeleitet; eine unbekannte Ziel-MAC wird an alle Ports außer dem Eingangsport geflutet. <strong>VLANs</strong> trennen logische Broadcast-Domänen. Trunk-Ports transportieren mehrere VLANs mit Tags; Access-Ports ordnen Endgeräte einem VLAN zu.</p>
+          <p>Ein Switch lernt Quell-MAC-Adressen mit dem zugehörigen Eingangsport. Bekannte Ziele werden gezielt weitergeleitet; eine unbekannte Ziel-MAC wird an alle Ports außer dem Eingangsport geflutet. <strong>VLANs</strong> trennen logische Broadcast-Domänen. Trunk-Ports transportieren mehrere VLANs üblicherweise mit Tags; Access-Ports ordnen Endgeräte einem VLAN zu.</p>
           <div class="learn-callout">
             <strong>Beispiel: MAC-Adressen lernen</strong>
             <ol>
@@ -169,6 +185,7 @@
             <p><strong>Typischer Fehler:</strong> Der Switch lernt aus der Quell-MAC, nicht aus der Ziel-MAC. Ein unbekanntes Ziel wird auch nicht in andere VLANs geflutet.</p>
           </div>
           <p>Store-and-Forward prüft den vollständigen Frame vor dem Weiterleiten. Cut-Through beginnt früher, Fragment-Free prüft mindestens den ersten Frame-Teil.</p>
+          <p>Eine MAC-Adresse dient auf Ethernet zur lokalen Zustellung eines Frames. Anhand der FCS kann ein Empfänger Übertragungsfehler erkennen; sie korrigiert den Inhalt aber nicht selbst. Ein Switch ersetzt außerdem keinen Router: VLANs trennen lokale Netze, und für die Kommunikation zwischen ihnen ist eine Routingfunktion nötig.</p>
           <div class="learn-callout"><strong>Weitere Frame- und Zugriffsbegriffe</strong>
             <ul>
               <li>HDLC ist ein serielles WAN-Frameformat für Punkt-zu-Punkt-Verbindungen; es ist kein Ethernet-MAC-Frame.</li>
@@ -241,6 +258,8 @@
             <p>Host B mit <code>192.168.10.94/27</code> liegt im selben Netz. Host C mit <code>192.168.10.100/27</code> liegt dagegen im nächsten Block .96–.127; A sendet zu C über sein Gateway.</p>
             <p><strong>Typischer Fehler:</strong> Gleiche erste drei Oktette allein beweisen bei /27 nicht, dass die Hosts im selben Subnetz liegen. Netz- und Broadcastadresse sind hier keine Hostadressen.</p>
           </div>
+          <p><strong>Von der Adresse zum Netz:</strong> Bei <code>192.168.10.70/27</code> ist das letzte Maskenoktett <code>11100000</code>; das letzte Adressoktett 70 ist <code>01000110</code>. Bitweises AND ergibt <code>01000000</code>, also 64. Setzt du die fünf Hostbits auf 1, entsteht <code>01011111</code>, also 95 als Broadcast. Dazwischen liegen die nutzbaren Hostadressen .65 bis .94.</p>
+          <p>Mit der Maske entscheidet ein Host, ob er das Ziel direkt im eigenen Netz erreichen will oder an sein Gateway übergibt. Die Regel <code>2ᴴ − 2</code> gilt für die üblichen hier gezeigten Subnetze; spezielle Präfixe wie /31 und /32 werden anders verwendet und nicht mit dieser allgemeinen Hostzählung geplant.</p>
           <p>Bei der IP-Zusammenfassung werden gemeinsame führende Bits zusammengefasst. <strong>VLSM</strong> erlaubt unterschiedlich große Subnetze passend zum jeweiligen Hostbedarf.</p>
           <p>IPv6 hat <strong>128 Bit</strong>, dargestellt als acht hexadezimale Blöcke. Führende Nullen je Block dürfen entfallen; eine zusammenhängende Folge von Nullblöcken darf genau einmal durch <code>::</code> ersetzt werden. IPv6 kennt keinen Broadcast, sondern unter anderem Unicast, Multicast und Anycast.</p>
           <div class="formula-card"><strong>IPv6-Kürzung</strong><code>2001:0db8:0000:0000:0000:ff00:0042:8329<br>→ 2001:db8::ff00:42:8329</code><span>Die Kurzform lässt führende Blocknullen und genau eine zusammenhängende Nullblockfolge weg.</span></div>
@@ -267,6 +286,7 @@
             <li>Die Zuordnung wird vorübergehend im ARP-Cache gespeichert und im Frame verwendet.</li>
           </ol>
           <p>Liegt das Ziel in einem anderen Netz, fragt der Host nicht die entfernte Ziel-MAC ab, sondern die MAC seines <strong>Default Gateways</strong>. Der Router bildet anschließend einen neuen Frame für den nächsten Abschnitt.</p>
+          <p><strong>Ein Paket auf dem Weg:</strong> Ein Rechner mit <code>192.168.10.70/27</code> sendet an <code>192.168.10.100</code> im benachbarten Subnetz. Die Ziel-IP im Paket ist weiterhin .100; für den ersten Ethernet-Frame braucht der Rechner aber die MAC-Adresse seines Gateways. Der Switch liefert diesen Frame lokal an den Router. Der Router wählt die Route und verpackt das Paket für den nächsten Abschnitt neu. ARP-Broadcasts bleiben dabei im jeweiligen lokalen Netz.</p>
           <div class="learn-callout">
             <strong>Beispiel: Route und nächste MAC wählen</strong>
             <p>Ein Router kennt <code>10.20.0.0/16</code> über Router R1, <code>10.20.4.0/24</code> über R2 und eine Default-Route über R3. Für das Ziel <code>10.20.4.25</code> passen alle drei Routen; /24 ist das längste passende Präfix, daher wird R2 gewählt. Für <code>10.20.5.25</code> passt /16 am besten, für <code>10.21.5.25</code> nur die Default-Route.</p>
@@ -286,6 +306,8 @@
             </tbody>
           </table></div>
           <p>TCP und UDP nutzen Portnummern, um Anwendungen auf einem Host anzusprechen. DNS verwendet meist UDP, kann für bestimmte Antworten und Zonentransfers aber auch TCP verwenden.</p>
+          <p>Beim TCP-Verbindungsaufbau signalisiert der Client mit SYN seinen Wunsch nach einer Verbindung. Der Server antwortet mit SYN+ACK, und der Client bestätigt mit ACK. Danach können Daten in beide Richtungen übertragen werden. Bestätigungen und erneute Übertragungen helfen TCP, Verluste auszugleichen; sie bedeuten nicht, dass eine Verbindung bei einem dauerhaften Netzausfall erfolgreich bleibt.</p>
+          <p>UDP sendet Datagramme ohne diesen Aufbau und ohne eigene Zustellbestätigung. Das spart Protokollaufwand, überlässt eine eventuell benötigte Fehlerbehandlung aber der Anwendung. Die Wahl hängt also davon ab, ob Vollständigkeit und Reihenfolge oder geringer Aufwand und zeitnahe Verarbeitung im konkreten Dienst wichtig sind.</p>
         </details>
 
         <details id="dienste" class="learn-section">
@@ -318,6 +340,7 @@
             </tbody>
           </table></div>
           <p>Eine URI bezeichnet eine Ressource; eine URL lokalisiert sie beispielsweise mit Schema, Host, Port und Pfad. Ein Port ist eine Konvention und beweist allein nicht, welcher Dienst tatsächlich läuft.</p>
+          <p>Die IP-Adresse bestimmt den Zielhost, der Zielport den angesprochenen Dienst auf diesem Host. Beim Webseitenabruf wählt der Client zusätzlich einen eigenen Quellport, damit die Antwort der richtigen Verbindung zugeordnet werden kann. So können mehrere Anwendungen gleichzeitig mit demselben Server kommunizieren, ohne dass ihre Verbindungen allein durch die Server-IP unterschieden werden müssen.</p>
         </details>
 
         <details id="diagnose" class="learn-section">
@@ -333,6 +356,7 @@
             </tbody>
           </table></div>
           <p>Sinnvolle Reihenfolge: lokale Konfiguration prüfen → Loopback/Gateway anpingen → Remote-IP testen → Route untersuchen → DNS prüfen → Dienst und Port prüfen. Gateway erreichbar, Remote-IP nicht erreichbar: Route, Firewall oder Netz prüfen. Ein Timeout kann auch daran liegen, dass ICMP gefiltert wird.</p>
+          <p>Jeder Prüfschritt grenzt die mögliche Fehlerstelle ein, liefert aber selten allein einen vollständigen Beweis. Funktioniert beispielsweise die Verbindung zu einem Dienst über seine IP-Adresse, aber nicht über seinen Namen, lohnt sich eine DNS-Prüfung. Liefert DNS die richtige Adresse und scheitert nur ein bestimmter Dienst, können dessen Port, Konfiguration oder eine Firewall die Ursache sein.</p>
           <div class="learn-callout">
             <strong>Beispiel: Name funktioniert nicht</strong>
             <ol>
