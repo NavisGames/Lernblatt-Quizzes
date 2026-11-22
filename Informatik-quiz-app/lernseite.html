@@ -446,7 +446,46 @@
             <p>In einer üblichen ARP-Anfrage ist die gesuchte Ziel-MAC im <em>ARP-Inhalt</em> noch unbekannt und steht dort als <code>0000.0000.0000</code>. Die Ziel-MAC des umgebenden <em>Ethernet-Frames</em> ist dagegen der Broadcast <code>FFFF.FFFF.FFFF</code>. Die Sender- und Ziel-IP in der ARP-Nachricht beschreiben die Zuordnung; ARP selbst ist kein IPv4-Paket mit einem IP-Header.</p>
           </div>
 
-          <h3>7. Unterrichtsbeispiel: ARP und ICMP über einen Router</h3>
+          <h3 id="icmp">7. ICMP: Rückmeldungen und Diagnose im IP-Netz</h3>
+          <p><strong>ICMP</strong> steht für <em>Internet Control Message Protocol</em>. Geräte verwenden es, um Kontroll- und Fehlermeldungen im Zusammenhang mit IP zu senden. Damit kann beispielsweise ein Router mitteilen, dass er ein Paket nicht weiterleiten konnte. ICMP repariert den Fehler aber nicht selbst und garantiert weder die Zustellung der ursprünglichen Nachricht noch eine Antwort.</p>
+          <p>Hier geht es um <strong>ICMP für IPv4</strong>. Seine Nachrichten werden in IPv4-Paketen transportiert: Im Protokollfeld des IPv4-Headers steht dafür die Nummer <code>1</code>. ICMP gehört zur Vermittlungs- beziehungsweise Internetschicht; es verwendet weder TCP noch UDP und hat deshalb keine TCP- oder UDP-Portnummer. ICMPv6 für IPv6 ist eine eigene Variante mit anderen Nachrichtentypen.</p>
+          <div class="learn-callout">
+            <strong>IP, ICMP und Ethernet auseinanderhalten</strong>
+            <p>Beim Ping steckt eine ICMP-Nachricht in einem IP-Paket. Auf einem Ethernet-Abschnitt wird dieses IP-Paket wiederum in einem Ethernet-Frame transportiert:</p>
+            <p><code>Ethernet-Frame [ IP-Paket [ ICMP-Nachricht ] ]</code></p>
+            <p>Der IP-Header enthält Quell- und Ziel-IP sowie die TTL. Der Ethernet-Frame enthält die MAC-Adressen für den aktuellen Abschnitt. ARP kann zuvor die dafür benötigte lokale MAC ermitteln; ARP selbst ist keine ICMP-Nachricht und kein IPv4-Paket.</p>
+          </div>
+          <p>Eine ICMP-Nachricht enthält unter anderem einen <strong>Typ</strong>, der die Art der Nachricht bezeichnet, einen <strong>Code</strong> für nähere Angaben und eine <strong>Prüfsumme</strong>, mit der Fehler in der ICMP-Nachricht erkannt werden können. Weitere Felder hängen vom Typ ab. Bei Echo Request und Echo Reply helfen Kennung und Sequenznummer, Antworten den Anfragen zuzuordnen; die Antwort gibt auch die mitgesendeten Daten zurück.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ICMPv4-Nachricht</th><th>Typ / Code</th><th>Bedeutung</th></tr></thead>
+            <tbody>
+              <tr><th>Echo Request</th><td><code>8 / 0</code></td><td>Ein Gerät fragt ein Ziel, ob es mit einem Echo Reply antwortet. Das nutzt <code>ping</code>.</td></tr>
+              <tr><th>Echo Reply</th><td><code>0 / 0</code></td><td>Das Ziel antwortet auf die Echo-Anfrage. Request und Reply sind getrennte IP-Pakete.</td></tr>
+              <tr><th>Destination Unreachable</th><td><code>3</code>, z. B. Code <code>0</code>, <code>1</code> oder <code>3</code></td><td>Meldet je nach Code ein unerreichbares Netz, einen unerreichbaren Host oder einen unerreichbaren Port. Ein Router oder Zielgerät kann eine solche Meldung senden.</td></tr>
+              <tr><th>Time Exceeded</th><td><code>11 / 0</code></td><td>Ein Router verwirft ein Paket, dessen TTL bei der Weiterleitung abläuft, und kann dies dem Absender mitteilen.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Ein Code für „Port unreachable“ macht ICMP nicht selbst zu einem Portprotokoll: Die Meldung kann sich beispielsweise auf ein zuvor an einen nicht erreichbaren UDP-Port gesendetes Paket beziehen. Bei Fehlermeldungen wird ein Teil des auslösenden IP-Pakets mitgeschickt, damit der Absender die Meldung zuordnen kann.</p>
+
+          <h4>Ping: Anfrage, Antwort und Laufzeit</h4>
+          <ol>
+            <li>Host 1 sendet einen ICMP Echo Request in einem IPv4-Paket an Host 2. Ist Host 2 in einem anderen Netz, geht der erste Ethernet-Frame an das Gateway; die Ziel-IP bleibt Host 2.</li>
+            <li>Router leiten das IP-Paket anhand der Ziel-IP weiter. Host 2 kann beim Empfang einen neuen Echo Reply erzeugen, dessen Quell-IP Host 2 und dessen Ziel-IP Host 1 ist.</li>
+            <li>Der Reply benötigt einen funktionierenden Rückweg. Trifft er ein, zeigt <code>ping</code> unter anderem die <strong>Round-Trip Time (RTT)</strong> an: die gemessene Zeit für Anfrage und Antwort zusammen, nicht nur für eine Richtung.</li>
+          </ol>
+          <div class="learn-callout">
+            <strong>Beispiel mit den Adressen aus dem Unterricht</strong>
+            <p><code>ping 172.16.0.10</code> auf Host 1 (<code>10.0.0.10</code>) sendet einen Request an Host 2. Auf dem linken Ethernet-Abschnitt ist die Ziel-MAC die des Gateways <code>000C.859D.BB01</code>; nach der Weiterleitung auf dem rechten Abschnitt ist sie die MAC von Host 2 <code>00D0.BCC2.437B</code>. Die Ziel-IP bleibt beim Request <code>172.16.0.10</code>.</p>
+            <p>Antwortet Host 2, lautet die IP-Richtung beim Reply <code>172.16.0.10 → 10.0.0.10</code>. Eine angezeigte RTT von zum Beispiel <code>8 ms</code> beschreibt die gesamte gemessene Hin- und Rückzeit. Die vollständigen Frame- und IP-Adressen stehen im folgenden Unterrichtsbeispiel.</p>
+          </div>
+          <p>Ein erfolgreicher Ping zeigt, dass diese Echo-Anfrage und ihre Antwort zu diesem Zeitpunkt durchgekommen sind. Er beweist nicht, dass etwa eine Webseite, ein bestimmter TCP-Port oder DNS funktioniert. Umgekehrt bedeutet eine Zeitüberschreitung nur, dass rechtzeitig keine Antwort angekommen ist: Mögliche Ursachen sind unter anderem fehlende Hin- oder Rückroute, ein ausgeschaltetes Ziel, Paketverlust oder eine Firewall, die ICMP filtert. Ein Teil der Anfragen kann auch verloren gehen.</p>
+
+          <h4>Tracert: Router über die TTL sichtbar machen</h4>
+          <p>Unter Windows sendet <code>tracert</code> üblicherweise ICMP-Echo-Anfragen mit zunächst kleiner und dann steigender TTL. Jeder Router verringert die TTL beim Weiterleiten. Läuft sie bei einem Router ab, kann er eine ICMP-Nachricht „Time Exceeded“ zurücksenden. So lässt sich schrittweise erkennen, welcher Router auf einer bestimmten Hop-Stufe geantwortet hat.</p>
+          <p>Beispiel für einen Weg über zwei Router: Bei TTL <code>1</code> kann R1 die Zeitüberschreitung melden; bei TTL <code>2</code> kann R2 sie melden. Mit TTL <code>3</code> kann die Anfrage das Ziel erreichen, das gegebenenfalls mit Echo Reply antwortet. Ein Sternchen oder eine fehlende Antwort bei <code>tracert</code> beweist keinen Ausfall dieses Routers: Meldungen können gefiltert werden oder ausbleiben, während spätere Hops trotzdem erreichbar sind. Angezeigte Antwortzeiten sind jeweils Messwerte für Anfrage und Rückmeldung, keine reine Zeit zwischen zwei benachbarten Routern.</p>
+          <p><strong>Typische Falle:</strong> TTL ist keine TCP-Portnummer und die bei einem Echo Reply angezeigte TTL ist nicht unmittelbar die Zahl der Router auf dem Hinweg. Der Reply ist ein eigenes IP-Paket mit eigener TTL.</p>
+
+          <h3>8. Unterrichtsbeispiel: ARP und ICMP über einen Router</h3>
           <p>Host 1 pingt Host 2. Die Caches seien anfangs leer, die Schnittstellen aktiv und NAT nicht eingerichtet. Ein Ping verwendet <strong>ICMP Echo Request</strong> für die Anfrage und <strong>ICMP Echo Reply</strong> für die Antwort. In der folgenden Übersicht werden die MAC-Adressen in der Schreibweise des Unterrichts angegeben; Punkte trennen Gruppen derselben 48-Bit-Adresse.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Gerät / Schnittstelle</th><th>IPv4 und Netz</th><th>MAC und Gateway</th></tr></thead>
@@ -479,7 +518,7 @@
           </table></div>
           <p>Beim Request bleibt die IP-Richtung von Host 1 zu Host 2 erhalten, obwohl R den Ethernet-Frame neu erstellt. Beim Reply vertauschen sich die IP-Endpunkte, weil Host 2 nun antwortet; auch diese Antwort erhält auf jedem Ethernet-Abschnitt die passenden lokalen MAC-Adressen. Für die gezeigte Folge nehmen wir an, dass R und Host 2 die Absenderzuordnungen aus den empfangenen ARP-Anfragen gelernt haben und behalten. Andernfalls kann auf dem Rückweg eine zusätzliche ARP-Auflösung nötig sein.</p>
 
-          <h3>8. Rückweg und Fehlersuche</h3>
+          <h3>9. Rückweg und Fehlersuche</h3>
           <p>Eine funktionierende Route zum Ziel garantiert noch keine funktionierende Antwort. Bei mehreren Routern muss auch jeder Router auf dem Rückweg eine passende Route zum Netz des ursprünglichen Absenders besitzen. Fehlt auf dem Router beim Ziel eine solche Route und auch eine Default-Route, kann der Request angekommen sein, während der Reply verworfen wird. Eine passende statische Rückroute zum Absendernetz über den nächsten Router kann den Fehler beheben.</p>
           <p>Zum Eingrenzen prüfst du zuerst IP-Adresse, Maske und Gateway, danach die Erreichbarkeit des lokalen Gateways und des entfernten Ziels. Mit <code>tracert</code> lassen sich Router-Hops untersuchen; weitere Befehle stehen im Abschnitt <a href="#diagnose">Diagnose</a>. Ein erfolgloser Ping beweist allerdings nicht allein, dass eine Route fehlt: ICMP kann beispielsweise auch gefiltert werden oder das Ziel nicht antworten.</p>
         </details>
