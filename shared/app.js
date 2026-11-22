@@ -86,7 +86,7 @@
       categories: window.MATHE_CATEGORIES,
       topics: window.MATHE_QUESTION_TOPICS,
       questionPool: window.MATHE_QUESTION_POOL,
-      learnPage: "Mathematik-quiz-app/lernseite.html",
+      learnPage: "Mathematik-12-1/lernseite.html",
       categoryLearnAnchors: {
         aenderung: "aenderung",
         funktionen: "funktionen",
@@ -102,7 +102,7 @@
       categories: window.STOCHASTIK_CATEGORIES,
       topics: window.STOCHASTIK_QUESTION_TOPICS,
       questionPool: window.STOCHASTIK_QUESTION_POOL,
-      learnPage: "Stochastik-quiz-app/lernseite.html",
+      learnPage: "Mathematik-12-2/lernseite.html",
       categoryLearnAnchors: Object.fromEntries(
         window.STOCHASTIK_CATEGORIES.map((category) => [category.id, category.id])
       )
@@ -113,7 +113,7 @@
       categories: window.INFORMATIK_CATEGORIES,
       topics: window.INFORMATIK_QUESTION_TOPICS,
       questionPool: window.INFORMATIK_QUESTION_POOL,
-      learnPage: "Informatik-quiz-app/lernseite.html",
+      learnPage: "Informatik-13-1/lernseite.html",
       categoryLearnAnchors
     },
     dvt: {
@@ -122,7 +122,7 @@
       categories: window.DVT_CATEGORIES,
       topics: window.DVT_QUESTION_TOPICS,
       questionPool: window.DVT_QUESTION_POOL,
-      learnPage: "DVT-quiz-app/lernseite.html",
+      learnPage: "DVT-13-1/lernseite.html",
       categoryLearnAnchors: {
         architecture: "architektur",
         memory: "architektur",
