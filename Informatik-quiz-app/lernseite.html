@@ -364,31 +364,124 @@
 
         <details id="routing" class="learn-section">
           <summary><span class="eyebrow">06 · Routing</span><span class="learn-section-title">Routingtabellen, ARP und Weiterleitung</span></summary>
-          <p>Ein Router verbindet IP-Netze. Er entfernt den eingehenden Layer-2-Frame, prüft die Ziel-IP und wählt anhand der Routingtabelle die passendste Route (längstes passendes Präfix). Gibt es keine spezifischere Route, kann die Default-Route <code>0.0.0.0/0</code> greifen.</p>
-          <p>Beim Weiterleiten bleiben Quell- und Ziel-IP des Pakets grundsätzlich gleich; die Quell- und Ziel-MAC-Adressen werden auf jedem Layer-2-Abschnitt neu gesetzt. Die TTL wird pro Router-Hop verringert.</p>
+          <p>Dieser Abschnitt orientiert sich am Kapitel „Routing, Routingprotokolle und ARP“ des eingebundenen Lernblatts. Er erklärt zuerst die Entscheidungen von Host und Router und verfolgt danach das Unterrichtsbeispiel mit ARP und Ping. Die Abläufe kannst du anschließend im <a href="#netzwerktrainer">Netzwerktrainer</a> selbst üben. Auf schmalen Bildschirmen lassen sich die Tabellen seitlich scrollen.</p>
+
+          <h3>1. Was macht ein Router?</h3>
+          <p>Ein <strong>Router verbindet unterschiedliche IP-Netze</strong> und entscheidet anhand der Ziel-IP, über welche Schnittstelle und gegebenenfalls an welchen nächsten Router ein Paket weitergeleitet wird. Ein Router hat dafür mehrere Schnittstellen; jede beteiligte Schnittstelle besitzt eine zum jeweiligen Netz passende IP-Adresse und bei Ethernet eine eigene MAC-Adresse. Eine Schnittstelle kann zum Beispiel im Netz <code>10.0.0.0/8</code> liegen, eine andere in <code>172.16.0.0/16</code>.</p>
+          <p>Ein Switch arbeitet dagegen hauptsächlich auf Schicht 2: Er vermittelt Ethernet-Frames innerhalb eines lokalen Netzes anhand von MAC-Adressen. Ein Router arbeitet bei der Weiterleitung auf Schicht 3 und verbindet Netze. Ein einfacher Switch ersetzt deshalb nicht die Routingentscheidung zwischen zwei verschiedenen IP-Netzen. Ein Router leitet einen lokalen Ethernet-Broadcast auch nicht einfach in das nächste Netz weiter.</p>
+          <p>Das <strong>Default Gateway</strong> eines PCs ist normalerweise die IP-Adresse der Router-Schnittstelle in seinem eigenen Netz. Sie ist nicht die Adresse des entfernten Zielgeräts. Damit der PC das Gateway erreichen kann, muss dessen Adresse zum lokalen Subnetz passen und die Schnittstelle erreichbar sein. Eine passende Adresse allein garantiert noch nicht, dass die Verbindung funktioniert.</p>
+
+          <h3>2. Direkt zustellen oder Gateway benutzen?</h3>
+          <p>Bevor ein PC sendet, vergleicht er bei gewöhnlicher IPv4-Konfiguration das eigene Netz und das Zielnetz anhand seiner Subnetzmaske. Liegt das Ziel im selben Subnetz, ermittelt er dessen MAC-Adresse und sendet direkt über das lokale Ethernet. Liegt es außerhalb, verwendet er eine passende Route; wenn keine speziellere Hostroute vorhanden ist, meist die Default-Route über das Gateway. Das IP-Paket bleibt dabei an den eigentlichen Empfänger adressiert.</p>
+          <div class="learn-callout">
+            <strong>Rechenbeispiel: zwei Ziele bei /27</strong>
+            <p>PC A hat <code>192.168.10.70/27</code>, die Maske <code>255.255.255.224</code> und das Gateway <code>192.168.10.65</code>. Die Blockgröße im letzten Oktett ist <code>256 − 224 = 32</code>. As Netz reicht von <code>192.168.10.64</code> bis <code>192.168.10.95</code>; nutzbare Hostadressen sind <code>.65–.94</code>. Das Gateway <code>.65</code> liegt also im selben Netz.</p>
+            <p>Ein Ziel <code>192.168.10.94</code> liegt ebenfalls in diesem Block: A fragt bei leerem Cache direkt nach dessen MAC. Das Ziel <code>192.168.10.100</code> liegt dagegen im nächsten Block <code>.96–.127</code>. A fragt nach der MAC seines Gateways <code>.65</code> und sendet den ersten Frame dorthin. Im IP-Paket bleibt <code>192.168.10.100</code> das Ziel.</p>
+            <p><strong>Typische Falle:</strong> Dass die ersten drei Oktette gleich aussehen, bedeutet bei <code>/27</code> nicht automatisch, dass zwei Hosts im selben Subnetz liegen. Mehr zum Rechenweg steht bei <a href="#ip">IP &amp; Subnetting</a>.</p>
+          </div>
+
+          <h3>3. Wie verarbeitet ein Router ein Paket?</h3>
+          <ol>
+            <li><strong>Empfangen:</strong> Der eingehende Ethernet-Frame ist an die MAC-Adresse der empfangenden Router-Schnittstelle adressiert. Der Router entnimmt ihm das IP-Paket.</li>
+            <li><strong>Route suchen:</strong> Er prüft die Ziel-IP gegen seine Routingtabelle. Der passendste Eintrag nennt eine Ausgangsschnittstelle und bei einer Route über einen anderen Router einen nächsten Hop.</li>
+            <li><strong>TTL prüfen:</strong> Die IPv4-TTL wird bei der Weiterleitung um eins vermindert. Läuft sie ab, wird das Paket verworfen; üblicherweise kann der Router eine ICMP-Zeitüberschreitung an den Absender melden. Die TTL verhindert, dass ein Paket bei einer Routingschleife unbegrenzt kreist.</li>
+            <li><strong>Lokal zustellen:</strong> Auf einem Ethernet-Ausgang benötigt der Router die MAC des nächsten Hops. Ist das Zielnetz direkt angeschlossen, ist der Zielhost der nächste Empfänger; bei einer Route über einen Router ist es dessen erreichbare IP-Adresse. Falls nötig, wird diese lokale Adresse per ARP aufgelöst.</li>
+            <li><strong>Neu verpacken:</strong> Der Router erstellt für den Ausgang einen neuen Ethernet-Frame: Quell-MAC ist die MAC seiner Ausgangsschnittstelle, Ziel-MAC die des nächsten lokalen Empfängers. Der nächste Router wiederholt diese Entscheidung.</li>
+          </ol>
+          <p>Ohne besondere Änderungen wie NAT bleiben Quell- und Ziel-IP des weitergeleiteten Pakets grundsätzlich gleich. Der IP-Header bleibt aber nicht vollständig unverändert: Insbesondere sinkt die TTL. Die Ethernet-MAC-Adressen gelten nur für den jeweiligen Abschnitt und werden beim Übergang zum nächsten Ethernet-Abschnitt neu gesetzt.</p>
+          <div class="learn-callout"><strong>Wenn keine Route passt</strong>
+            <p>Existiert weder eine passende Route noch eine Default-Route, kann der Router das Paket nicht weiterleiten und verwirft es. Eine ICMP-Meldung über die Nichterreichbarkeit kann den Absender informieren, ist aber nicht in jedem Fall garantiert. Eine Route allein genügt zudem nicht: Der nächste Hop und die Ausgangsschnittstelle müssen tatsächlich erreichbar sein.</p>
+          </div>
+
+          <h3>4. Eine Routingtabelle lesen</h3>
+          <p>Ein Eintrag beschreibt ein <strong>Zielnetz mit Präfix</strong> und wie dieses erreicht wird: direkt über eine Ausgangsschnittstelle oder über die IP-Adresse eines <strong>Next Hops</strong> (nächsten Routers). Bei einem direkt angeschlossenen Netz wird das Ziel selbst lokal zugestellt. Eine <strong>Default-Route</strong> <code>0.0.0.0/0</code> ist der Auffangeintrag für Ziele, für die keine spezifischere Route passt; sie macht ein Ziel nicht automatisch erreichbar.</p>
+          <div class="learn-callout"><strong>Beispiel: längstes passendes Präfix</strong>
+            <p>Ein Router ist über <code>192.0.2.1/24</code> mit den nächsten Routern verbunden. Seine Tabelle enthält die folgenden Einträge. Die Next Hops <code>192.0.2.2–.4</code> liegen auf dem direkt angeschlossenen Ethernet.</p>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Zielnetz</th><th>Weiterleitung</th></tr></thead>
+              <tbody>
+                <tr><td><code>192.0.2.0/24</code></td><td>Direkt angeschlossen</td></tr>
+                <tr><td><code>10.0.0.0/8</code></td><td>Über <code>192.0.2.2</code> (Router A)</td></tr>
+                <tr><td><code>10.20.30.0/24</code></td><td>Über <code>192.0.2.3</code> (Router B)</td></tr>
+                <tr><td><code>0.0.0.0/0</code></td><td>Über <code>192.0.2.4</code> (Router C)</td></tr>
+              </tbody>
+            </table></div>
+            <ul>
+              <li><code>10.20.30.77</code> passt zu <code>10.0.0.0/8</code> und <code>10.20.30.0/24</code>. <code>/24</code> ist spezifischer: Router B ist der nächste Hop; bei leerem Cache wird <code>192.0.2.3</code> per ARP aufgelöst.</li>
+              <li><code>10.20.31.77</code> gehört nicht zu <code>10.20.30.0/24</code>, aber zu <code>10.0.0.0/8</code>. Der Router wählt A und löst bei Bedarf <code>192.0.2.2</code> auf.</li>
+              <li><code>8.8.8.8</code> passt zu keinem der spezielleren Einträge. Deshalb wird die Default-Route über C verwendet.</li>
+              <li><code>192.0.2.50</code> liegt im direkt angeschlossenen Netz. Hier sucht der Router bei Bedarf die MAC von <code>192.0.2.50</code> selbst, nicht die eines weiteren Routers.</li>
+            </ul>
+            <p><strong>Typische Falle:</strong> Entscheidend ist die Anzahl der passenden Präfixbits, nicht die Reihenfolge der Zeilen oder die längste Adresse als Text. Alle Adressen passen zur Default-Route; sie gewinnt nur, wenn keine längere passende Route vorhanden ist.</p>
+          </div>
+          <p>Eine Routingtabelle kann außerdem Angaben zur Herkunft einer Route, zur administrativen Distanz und zu einer Metrik enthalten. Wenn mehrere Quellen Routen zum <em>gleichen Präfix</em> anbieten, helfen je nach Gerät und Routingverfahren unter anderem administrative Distanz und Metrik bei der Auswahl der zu verwendenden Route. Das ist von der Suche nach dem längsten passenden Präfix für ein konkretes Ziel zu unterscheiden.</p>
+
+          <h3>5. Statisches und dynamisches Routing</h3>
           <div class="table-wrap"><table>
             <thead><tr><th>Routingart</th><th>Prinzip</th><th>Beispiele</th></tr></thead>
             <tbody>
-              <tr><th>Statisch</th><td>Routen werden manuell konfiguriert; einfach und vorhersehbar, aber ohne automatische Anpassung.</td><td>Manuelle Route</td></tr>
-              <tr><th>Distance Vector</th><td>Nachbarn tauschen Entfernungen aus; RIP verwendet Hop Count (maximal 15, 16 = unerreichbar).</td><td>RIP / RIPv2</td></tr>
-              <tr><th>Link State</th><td>Router tauschen Linkzustände aus und berechnen den kürzesten Pfad.</td><td>OSPF, IS-IS</td></tr>
-              <tr><th>Inter-AS</th><td>Routen zwischen autonomen Systemen; berücksichtigt Richtlinien und Pfadinformation.</td><td>BGP</td></tr>
+              <tr><th>Statisch</th><td>Eine Route wird manuell eingetragen. Sie ist gut nachvollziehbar und erzeugt keinen Austausch durch ein Routingprotokoll, muss aber bei Änderungen gepflegt werden.</td><td>Manuelle Route zu einem entfernten Netz</td></tr>
+              <tr><th>Dynamisch</th><td>Router tauschen Routinginformationen aus und können Routen bei Änderungen neu berechnen. Dafür entstehen zusätzlicher Verkehr und Konfigurationsaufwand.</td><td>RIP, OSPF oder BGP</td></tr>
             </tbody>
           </table></div>
-          <p>Ein <strong>Routed Protocol</strong> (z. B. IPv4/IPv6) transportiert adressierte Nutzdaten. Ein <strong>Routingprotokoll</strong> tauscht Informationen zum Ermitteln von Routen aus. Eine Metrik kann Hop Count, Bandbreite, Verzögerung oder Kosten berücksichtigen.</p>
-          <h3>ARP: lokale IPv4-Adresse zur MAC-Adresse</h3>
+          <p>Ein <strong>Routed Protocol</strong> wie IPv4 oder IPv6 stellt die Adressierung für weitergeleitete Pakete bereit. Ein <strong>Routingprotokoll</strong> wie RIP oder OSPF hilft Routern dagegen, Informationen über Wege auszutauschen und Routen zu ermitteln. Eine <strong>Metrik</strong> bewertet Wege, beispielsweise anhand von Hop-Anzahl, Kosten oder einer Kombination von Eigenschaften; welche Metrik gilt, hängt vom Protokoll ab.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Verfahren</th><th>Wie wird ein Weg ermittelt?</th><th>Beispiele</th></tr></thead>
+            <tbody>
+              <tr><th>Distance Vector</th><td>Nachbarn tauschen Informationen über erreichbare Netze und deren Entfernung aus. RIP zählt Router-Hops: maximal 15; 16 bedeutet unerreichbar.</td><td>RIP / RIPv2</td></tr>
+              <tr><th>Link State</th><td>Router tauschen Informationen über Verbindungen aus. Aus der Netzsicht wird ein kürzester Pfad nach den verwendeten Kosten berechnet.</td><td>OSPF, IS-IS</td></tr>
+              <tr><th>Inter-AS</th><td>Zwischen autonomen Systemen entscheiden auch Richtlinien und Pfadinformationen; nicht nur die kürzeste Entfernung.</td><td>BGP</td></tr>
+            </tbody>
+          </table></div>
+
+          <h3>6. ARP: Wie wird aus einer lokalen IPv4-Adresse eine MAC-Adresse?</h3>
+          <p>Für einen Ethernet-Frame benötigt der Absender eine Ziel-MAC. <strong>ARP</strong> (Address Resolution Protocol) ermittelt zu einer bereits bekannten IPv4-Adresse die zugehörige MAC-Adresse im lokalen Ethernet. Es bestimmt nicht den Weg durch entfernte Netze; die Entscheidung für Zielhost oder nächsten Hop trifft vorher die IP-Routingentscheidung.</p>
           <ol>
-            <li>Der Host sendet eine ARP-Request als Broadcast.</li>
-            <li>Der Host mit der gesuchten IPv4-Adresse antwortet mit seiner MAC-Adresse.</li>
-            <li>Die Zuordnung wird vorübergehend im ARP-Cache gespeichert und im Frame verwendet.</li>
+            <li>Der Sender prüft seinen ARP-Cache. Ist eine gültige Zuordnung vorhanden, kann er sie verwenden; sonst sendet er eine <strong>ARP Request</strong> als Ethernet-Broadcast: „Wer hat diese IPv4-Adresse?“</li>
+            <li>Der Switch verteilt den Broadcast im lokalen Netz beziehungsweise VLAN. Das Gerät mit der gesuchten Adresse antwortet normalerweise per Unicast mit einer <strong>ARP Reply</strong>, die seine MAC nennt.</li>
+            <li>Der Sender speichert die Zuordnung IP → MAC vorübergehend im ARP-Cache und verwendet die MAC als Zieladresse des anschließenden Datenframes. Einträge können ablaufen und müssen dann erneut ermittelt werden.</li>
           </ol>
-          <p>Liegt das Ziel in einem anderen Netz, fragt der Host nicht die entfernte Ziel-MAC ab, sondern die MAC seines <strong>Default Gateways</strong>. Der Router bildet anschließend einen neuen Frame für den nächsten Abschnitt.</p>
-          <p><strong>Ein Paket auf dem Weg:</strong> Ein Rechner mit <code>192.168.10.70/27</code> sendet an <code>192.168.10.100</code> im benachbarten Subnetz. Die Ziel-IP im Paket ist weiterhin .100; für den ersten Ethernet-Frame braucht der Rechner aber die MAC-Adresse seines Gateways. Der Switch liefert diesen Frame lokal an den Router. Der Router wählt die Route und verpackt das Paket für den nächsten Abschnitt neu. ARP-Broadcasts bleiben dabei im jeweiligen lokalen Netz.</p>
-          <div class="learn-callout">
-            <strong>Beispiel: Route und nächste MAC wählen</strong>
-            <p>Ein Router kennt <code>10.20.0.0/16</code> über Router R1, <code>10.20.4.0/24</code> über R2 und eine Default-Route über R3. Für das Ziel <code>10.20.4.25</code> passen alle drei Routen; /24 ist das längste passende Präfix, daher wird R2 gewählt. Für <code>10.20.5.25</code> passt /16 am besten, für <code>10.21.5.25</code> nur die Default-Route.</p>
-            <p>Auf einem Ethernet-Abschnitt löst der Router bei Bedarf die IPv4-Adresse des gewählten nächsten Routers per ARP auf. <strong>Typischer Fehler:</strong> Nicht die Reihenfolge der Tabelleneinträge und nicht die längste Adresse als Text entscheiden, sondern die Zahl der passenden Präfixbits.</p>
+          <p>Für ein entferntes Ziel fragt der PC also nach der MAC seines lokalen Gateways, nicht nach der MAC des entfernten PCs. Jeder Router kann auf seinem eigenen Ethernet-Ausgang erneut ARP benötigen. Ein ARP-Broadcast wird dabei nicht über den Router ins andere Netz weitergeleitet.</p>
+          <div class="learn-callout"><strong>ARP-Felder und Ethernet-Frame nicht verwechseln</strong>
+            <p>In einer üblichen ARP-Anfrage ist die gesuchte Ziel-MAC im <em>ARP-Inhalt</em> noch unbekannt und steht dort als <code>0000.0000.0000</code>. Die Ziel-MAC des umgebenden <em>Ethernet-Frames</em> ist dagegen der Broadcast <code>FFFF.FFFF.FFFF</code>. Die Sender- und Ziel-IP in der ARP-Nachricht beschreiben die Zuordnung; ARP selbst ist kein IPv4-Paket mit einem IP-Header.</p>
           </div>
+
+          <h3>7. Unterrichtsbeispiel: ARP und ICMP über einen Router</h3>
+          <p>Host 1 pingt Host 2. Die Caches seien anfangs leer, die Schnittstellen aktiv und NAT nicht eingerichtet. Ein Ping verwendet <strong>ICMP Echo Request</strong> für die Anfrage und <strong>ICMP Echo Reply</strong> für die Antwort. In der folgenden Übersicht werden die MAC-Adressen in der Schreibweise des Unterrichts angegeben; Punkte trennen Gruppen derselben 48-Bit-Adresse.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Gerät / Schnittstelle</th><th>IPv4 und Netz</th><th>MAC und Gateway</th></tr></thead>
+            <tbody>
+              <tr><th>Host 1</th><td><code>10.0.0.10/8</code> im Netz <code>10.0.0.0/8</code></td><td>MAC <code>0060.3EEA.6529</code>; Gateway <code>10.0.0.1</code></td></tr>
+              <tr><th>Router R links</th><td><code>10.0.0.1/8</code></td><td>MAC <code>000C.859D.BB01</code></td></tr>
+              <tr><th>Router R rechts</th><td><code>172.16.0.1/16</code></td><td>MAC <code>000C.859D.BB02</code></td></tr>
+              <tr><th>Host 2</th><td><code>172.16.0.10/16</code> im Netz <code>172.16.0.0/16</code></td><td>MAC <code>00D0.BCC2.437B</code>; Gateway <code>172.16.0.1</code></td></tr>
+            </tbody>
+          </table></div>
+          <p>Host 2 liegt aus Sicht von Host 1 außerhalb von <code>10.0.0.0/8</code>. Host 1 braucht daher zuerst die MAC seines Gateways <code>10.0.0.1</code>. R kennt das Zielnetz <code>172.16.0.0/16</code> als direkt angeschlossen und braucht dort die MAC von Host 2.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Vorlagen-Nr.</th><th>ARP-Ablauf</th><th>Wichtige Adressen</th></tr></thead>
+            <tbody>
+              <tr><th>1</th><td>Host 1 fragt im linken Netz nach dem Gateway.</td><td>Ethernet: <code>0060.3EEA.6529 → FFFF.FFFF.FFFF</code>; ARP: <code>10.0.0.10</code> fragt nach <code>10.0.0.1</code>, gesuchte MAC <code>0000.0000.0000</code>.</td></tr>
+              <tr><th>2</th><td>R antwortet an Host 1.</td><td>Ethernet: <code>000C.859D.BB01 → 0060.3EEA.6529</code>; ARP: Sender-IP <code>10.0.0.1</code> mit MAC <code>000C.859D.BB01</code>, Ziel-IP <code>10.0.0.10</code>.</td></tr>
+              <tr><th>4</th><td>R fragt im rechten Netz nach Host 2.</td><td>Ethernet: <code>000C.859D.BB02 → FFFF.FFFF.FFFF</code>; ARP: <code>172.16.0.1</code> fragt nach <code>172.16.0.10</code>, gesuchte MAC <code>0000.0000.0000</code>.</td></tr>
+              <tr><th>5</th><td>Host 2 antwortet an R.</td><td>Ethernet: <code>00D0.BCC2.437B → 000C.859D.BB02</code>; ARP: Sender-IP <code>172.16.0.10</code> mit MAC <code>00D0.BCC2.437B</code>, Ziel-IP <code>172.16.0.1</code>.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Die folgende Tabelle zeigt getrennt die <strong>physikalische Adressierung</strong> des Ethernet-Frames und die <strong>logische Adressierung</strong> des darin enthaltenen IP-Pakets. Die Nummer <code>3/6</code> übernimmt die Bezeichnung aus der Unterrichtsvorlage für den linken Abschnitt; während R die Ziel-MAC auflöst, kann das Paket zwischengespeichert werden.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Nr. und Abschnitt</th><th>Ethernet: Quell-MAC → Ziel-MAC</th><th>IP: Quelle → Ziel</th></tr></thead>
+            <tbody>
+              <tr><th>3/6 · Request: Host 1 → R</th><td><code>0060.3EEA.6529 → 000C.859D.BB01</code></td><td><code>10.0.0.10 → 172.16.0.10</code></td></tr>
+              <tr><th>7 · Request: R → Host 2</th><td><code>000C.859D.BB02 → 00D0.BCC2.437B</code></td><td><code>10.0.0.10 → 172.16.0.10</code></td></tr>
+              <tr><th>8 · Reply: Host 2 → R</th><td><code>00D0.BCC2.437B → 000C.859D.BB02</code></td><td><code>172.16.0.10 → 10.0.0.10</code></td></tr>
+              <tr><th>9 · Reply: R → Host 1</th><td><code>000C.859D.BB01 → 0060.3EEA.6529</code></td><td><code>172.16.0.10 → 10.0.0.10</code></td></tr>
+            </tbody>
+          </table></div>
+          <p>Beim Request bleibt die IP-Richtung von Host 1 zu Host 2 erhalten, obwohl R den Ethernet-Frame neu erstellt. Beim Reply vertauschen sich die IP-Endpunkte, weil Host 2 nun antwortet; auch diese Antwort erhält auf jedem Ethernet-Abschnitt die passenden lokalen MAC-Adressen. Für die gezeigte Folge nehmen wir an, dass R und Host 2 die Absenderzuordnungen aus den empfangenen ARP-Anfragen gelernt haben und behalten. Andernfalls kann auf dem Rückweg eine zusätzliche ARP-Auflösung nötig sein.</p>
+
+          <h3>8. Rückweg und Fehlersuche</h3>
+          <p>Eine funktionierende Route zum Ziel garantiert noch keine funktionierende Antwort. Bei mehreren Routern muss auch jeder Router auf dem Rückweg eine passende Route zum Netz des ursprünglichen Absenders besitzen. Fehlt auf dem Router beim Ziel eine solche Route und auch eine Default-Route, kann der Request angekommen sein, während der Reply verworfen wird. Eine passende statische Rückroute zum Absendernetz über den nächsten Router kann den Fehler beheben.</p>
+          <p>Zum Eingrenzen prüfst du zuerst IP-Adresse, Maske und Gateway, danach die Erreichbarkeit des lokalen Gateways und des entfernten Ziels. Mit <code>tracert</code> lassen sich Router-Hops untersuchen; weitere Befehle stehen im Abschnitt <a href="#diagnose">Diagnose</a>. Ein erfolgloser Ping beweist allerdings nicht allein, dass eine Route fehlt: ICMP kann beispielsweise auch gefiltert werden oder das Ziel nicht antworten.</p>
         </details>
 
         <details id="netzwerktrainer" class="learn-section">
