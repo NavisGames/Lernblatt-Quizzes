@@ -175,6 +175,7 @@
     questionDifficulty: document.querySelector("#questionDifficulty"),
     questionPoints: document.querySelector("#questionPoints"),
     questionPrompt: document.querySelector("#questionPrompt"),
+    questionNetwork: document.querySelector("#questionNetwork"),
     questionCode: document.querySelector("#questionCode"),
     questionTools: document.querySelector("#questionTools"),
     questionContent: document.querySelector("#questionContent"),
@@ -612,6 +613,7 @@
     elements.questionPrompt.textContent = question.type === "cloze"
       ? flashcardMode ? question.prompt.replace(/{{\d+}}/g, "_____") : "Ergänze die Lücken."
       : question.prompt;
+    renderQuestionNetwork(question);
     elements.questionContent.replaceChildren();
     elements.tipPanel.textContent = question.tip;
     elements.tipPanel.hidden = true;
@@ -637,6 +639,41 @@
     elements.flashcardRating.hidden = !revealed;
     for (const button of elements.flashcardRating.querySelectorAll("[data-flashcard-rating]")) {
       button.setAttribute("aria-pressed", String(flashcardRatings.get(question.id) === button.dataset.flashcardRating));
+    }
+
+    function renderQuestionNetwork(question) {
+      const container = elements.questionNetwork;
+      container.replaceChildren();
+      container.hidden = !question.networkScenario;
+      if (!question.networkScenario) return;
+      const scenario = window.NETWORK_SCENARIOS.find((item) => item.id === question.networkScenario);
+      if (!scenario) throw new Error(`Unbekanntes Netzwerkszenario: ${question.networkScenario}`);
+      const heading = document.createElement("strong");
+      heading.textContent = scenario.title;
+      const hint = document.createElement("p");
+      hint.textContent = "Geräte anklicken für IP, Maske, Gateway und Routen. Große Abbildungen seitlich scrollen.";
+      const topology = document.createElement("div");
+      topology.className = "network-topology";
+      topology.setAttribute("role", "region");
+      topology.tabIndex = 0;
+      topology.setAttribute("aria-label", "Netzwerktopologie zur Aufgabe");
+      const info = document.createElement("div");
+      info.className = "network-device-info";
+      info.setAttribute("aria-live", "polite");
+      info.textContent = "Wähle ein Gerät aus.";
+      window.renderNetworkTopology(topology, scenario, [], (index) => {
+        const device = scenario.devices[index];
+        info.replaceChildren();
+        const name = document.createElement("strong");
+        name.textContent = device.name;
+        const details = document.createElement("p");
+        details.textContent = device.info;
+        info.append(name, details);
+        topology.querySelectorAll("button").forEach((button, buttonIndex) => {
+          button.setAttribute("aria-pressed", String(buttonIndex === index));
+        });
+      });
+      container.append(heading, hint, topology, info);
     }
 
     if (question.code) {

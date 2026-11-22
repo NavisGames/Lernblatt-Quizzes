@@ -10,6 +10,7 @@
   <script src="../theme.js" defer></script>
   <script src="../learn-page.js" defer></script>
   <script src="subnet-calculator.js" defer></script>
+  <script src="network-trainer.js" defer></script>
 </head>
 <body class="theme-informatik">
   <div class="page-shell">
@@ -45,6 +46,7 @@
         <a href="#ethernet">Ethernet &amp; Switches</a>
         <a href="#ip">IP &amp; Subnetting</a>
         <a href="#routing">Routing &amp; ARP</a>
+        <a href="#netzwerktrainer">Netzwerktrainer</a>
         <a href="#tcpudp">TCP &amp; UDP</a>
         <a href="#dienste">Dienste &amp; Ports</a>
         <a href="#diagnose">Diagnose</a>
@@ -387,6 +389,37 @@
             <p>Ein Router kennt <code>10.20.0.0/16</code> über Router R1, <code>10.20.4.0/24</code> über R2 und eine Default-Route über R3. Für das Ziel <code>10.20.4.25</code> passen alle drei Routen; /24 ist das längste passende Präfix, daher wird R2 gewählt. Für <code>10.20.5.25</code> passt /16 am besten, für <code>10.21.5.25</code> nur die Default-Route.</p>
             <p>Auf einem Ethernet-Abschnitt löst der Router bei Bedarf die IPv4-Adresse des gewählten nächsten Routers per ARP auf. <strong>Typischer Fehler:</strong> Nicht die Reihenfolge der Tabelleneinträge und nicht die längste Adresse als Text entscheiden, sondern die Zahl der passenden Präfixbits.</p>
           </div>
+        </details>
+
+        <details id="netzwerktrainer" class="learn-section">
+          <summary><span class="eyebrow">Üben · Netzwerke</span><span class="learn-section-title">Netzwerktrainer: Pakete Schritt für Schritt</span></summary>
+          <p>Wähle ein vorbereitetes Netzwerk und klicke auf ein Gerät, um seine Konfiguration und gegebenenfalls seine Routen anzusehen. Beantworte zu jedem Schritt die Frage und decke die Erklärung auf. Bei schmalen Ansichten kannst du die Abbildung gegebenenfalls seitlich scrollen. Die farbige Markierung zeigt den gerade betrachteten Bereich, keine tatsächliche Paketanimation; die Abbildung ist ein vereinfachtes Modell und kein frei konfigurierbarer Simulator.</p>
+          <p>In allen Beispielen sind die angegebenen Schnittstellen aktiv, es gibt kein NAT und die ARP-Caches sind anfangs leer. Die dargestellten Adressen sind Beispiele; <code>/8</code> bedeutet <code>255.0.0.0</code>, <code>/16</code> bedeutet <code>255.255.0.0</code>, <code>/24</code> bedeutet <code>255.255.255.0</code> und <code>/30</code> bedeutet <code>255.255.255.252</code>.</p>
+          <p>Das Unterrichtsbeispiel verfolgt ARP und anschließend ICMP Echo Request und Echo Reply mit den Paketnummern aus der Vorlage. Ein Ping sendet einen Echo Request und erwartet einen Echo Reply. Die IP-Adressen bezeichnen die beiden Endpunkte; die MAC-Adressen gelten jeweils nur für den aktuellen Ethernet-Abschnitt. Wichtig: Die unbekannte Ziel-MAC <code>0000.0000.0000</code> steht im ARP-Inhalt; der Ethernet-Frame der Anfrage verwendet die Broadcast-Adresse <code>FFFF.FFFF.FFFF</code>.</p>
+          <div class="network-trainer" id="networkTrainer">
+            <label for="networkScenario">Szenario auswählen</label>
+            <select id="networkScenario" class="select-control"></select>
+            <p id="networkDescription"></p>
+            <div class="network-topology" id="networkTopology" role="region" tabindex="0" aria-label="Netzwerktopologie"></div>
+            <div class="network-device-info" id="networkDeviceInfo" aria-live="polite"></div>
+            <div class="network-step" aria-live="polite">
+              <p class="network-step-count" id="networkStepCount"></p>
+              <h3 id="networkStepTitle"></h3>
+              <p id="networkQuestion"></p>
+              <fieldset class="network-options" id="networkOptions">
+                <legend>Antwort auswählen</legend>
+              </fieldset>
+              <button id="networkCheck" class="button button-primary" type="button">Antwort prüfen</button>
+              <p id="networkFeedback" role="status"></p>
+              <div id="networkExplanation" class="learn-callout" hidden></div>
+              <div id="networkArp" class="network-device-info" hidden></div>
+              <div class="network-controls">
+                <button id="networkPrevious" class="button button-secondary" type="button">← Zurück</button>
+                <button id="networkNext" class="button button-secondary" type="button">Weiter →</button>
+              </div>
+            </div>
+          </div>
+          <noscript><p>Für den interaktiven Netzwerktrainer muss JavaScript aktiviert sein.</p></noscript>
         </details>
 
         <details id="tcpudp" class="learn-section">

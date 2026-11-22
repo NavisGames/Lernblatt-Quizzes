@@ -736,6 +736,102 @@
       correct: 0, tip: "Das IP-Ziel bleibt der entfernte Host; der nächste Ethernet-Hop ist lokal.",
       trap: "ARP ermittelt für das entfernte Ziel die lokale Gateway-MAC, nicht direkt die MAC des entfernten Hosts.",
       explanation: "Das Ziel liegt außerhalb von 10.1.1.0/24. Der Host ermittelt daher per ARP die MAC von 10.1.1.1 und adressiert den ersten Frame an das Gateway; die Ziel-IP des Pakets bleibt 10.2.2.20."
+    },
+    {
+      id: "routing-trainer-01", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single", networkScenario: "same-lan",
+      prompt: "Im Netzwerktrainer sendet PC A (192.168.1.10/24) an PC B (192.168.1.20/24). Der ARP-Cache ist leer. Welche IPv4-Adresse fragt A per ARP ab?",
+      options: ["192.168.1.20, die Adresse von B.", "192.168.1.1, das Gateway.", "Die Adresse des Switches.", "255.255.255.255 als gesuchte Zieladresse."],
+      correct: 0, tip: "Prüfe zuerst, ob B im selben Subnetz liegt.",
+      trap: "Ein lokales Ziel wird nicht über das Gateway adressiert.",
+      explanation: "Beide PCs liegen im selben /24-Netz. A sucht daher per ARP die MAC von B; die Anfrage selbst wird als lokaler Broadcast verschickt."
+    },
+    {
+      id: "routing-trainer-02", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "one-router",
+      prompt: "PC A (192.168.1.10/24) sendet über Gateway 192.168.1.1 an PC B (192.168.2.20/24). Welche Zieladressen trägt der erste Datenframe?",
+      options: ["Ziel-IP 192.168.2.20 und Ziel-MAC des Gateways.", "Ziel-IP 192.168.1.1 und Ziel-MAC des Gateways.", "Ziel-IP 192.168.2.20 und Ziel-MAC von B.", "Ziel-IP 192.168.1.1 und Broadcast-MAC."],
+      correct: 0, tip: "Die IP bezeichnet das endgültige Ziel, die Ethernet-MAC den nächsten lokalen Hop.",
+      trap: "Die ARP-Anfrage ist ein Broadcast; der anschließende Datenframe geht an die ermittelte Gateway-MAC.",
+      explanation: "B liegt in einem anderen Netz. Der erste Frame geht an die lokale MAC des Gateways, während das IP-Paket weiterhin an 192.168.2.20 adressiert ist."
+    },
+    {
+      id: "routing-trainer-03", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "two-routers",
+      prompt: "R1 hat die Route 192.168.2.0/24 über R2 (10.0.0.2) im direkt verbundenen Transitnetz 10.0.0.0/30. Der ARP-Cache ist leer. Welche IP löst R1 für ein Paket an 192.168.2.20 auf?",
+      options: ["10.0.0.2.", "192.168.2.20.", "192.168.1.10.", "10.0.0.0."],
+      correct: 0, tip: "Die Route nennt den nächsten Hop im lokalen Transitnetz.",
+      trap: "Die entfernte Ziel-IP bleibt im Paket, wird aber nicht im Transitnetz per ARP gesucht.",
+      explanation: "R1 sucht per ARP die MAC des nächsten Hops 10.0.0.2. R2 löst anschließend die Zieladresse im direkt angeschlossenen Zielnetz auf."
+    },
+    {
+      id: "routing-trainer-04", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single", networkScenario: "missing-route",
+      prompt: "A erreicht B über R1 und R2. R2 hat weder eine Route noch eine Default-Route zu As Netz 192.168.1.0/24. Was passiert mit Bs Antwort an A?",
+      options: ["R2 verwirft die Antwort, weil keine passende Route vorhanden ist.", "Die Antwort kommt an, weil der Hinweg funktioniert.", "R2 ermittelt As MAC per ARP durch R1 hindurch.", "Der Switch ersetzt automatisch die fehlende Route."],
+      correct: 0, tip: "Hin- und Rückweg benötigen jeweils passende Weiterleitungsinformationen.",
+      trap: "Eine funktionierende Route zum Ziel garantiert keine Route für die Antwort.",
+      explanation: "B sendet die Antwort an sein Gateway R2. Ohne passende Route kann R2 sie nicht weiterleiten; eine Route zu 192.168.1.0/24 über R1 behebt den fehlenden Rückweg."
+    },
+    {
+      id: "routing-icmp-01", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "icmp-lesson",
+      prompt: "Host 1 pingt Host 2. Sein ARP-Cache ist leer. Welche Ethernet-Ziel-MAC und welches ARP-Ziel-IP-Feld enthält die erste ARP-Anfrage?",
+      options: ["FFFF.FFFF.FFFF und 10.0.0.1.", "0000.0000.0000 und 172.16.0.10.", "000C.859D.BB01 und 172.16.0.10.", "FFFF.FFFF.FFFF und 172.16.0.10."],
+      correct: 0, tip: "Host 2 liegt außerhalb des lokalen /8-Netzes.",
+      trap: "Die unbekannte Ziel-MAC 0000.0000.0000 steht im ARP-Inhalt, nicht als Ethernet-Zieladresse.",
+      explanation: "Host 1 fragt per Ethernet-Broadcast nach der MAC seines Gateways 10.0.0.1. Das ARP-Feld für die noch unbekannte Ziel-MAC ist null."
+    },
+    {
+      id: "routing-icmp-02", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "icmp-lesson",
+      prompt: "Welche Zieladressen trägt der ICMP Echo Request von Host 1 auf dem linken Ethernet-Abschnitt?",
+      options: ["IP 172.16.0.10 und MAC 000C.859D.BB01.", "IP 10.0.0.1 und MAC 000C.859D.BB01.", "IP 172.16.0.10 und MAC 00D0.BCC2.437B.", "IP 10.0.0.1 und MAC FFFF.FFFF.FFFF."],
+      correct: 0, tip: "IP-Endziel und nächster lokaler Ethernet-Empfänger sind nicht dasselbe.",
+      trap: "Das Gateway ist nicht die Ziel-IP des Echo Requests.",
+      explanation: "Die Ziel-IP bleibt Host 2; der erste Frame ist an die linke MAC des Gateways adressiert."
+    },
+    {
+      id: "routing-icmp-03", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single", networkScenario: "icmp-lesson",
+      prompt: "Welche Adressierung hat der weitergeleitete ICMP Echo Request auf dem rechten Abschnitt?",
+      options: ["MAC 000C.859D.BB02 → 00D0.BCC2.437B; IP 10.0.0.10 → 172.16.0.10.", "MAC 0060.3EEA.6529 → 00D0.BCC2.437B; IP 10.0.0.10 → 172.16.0.10.", "MAC 000C.859D.BB02 → 00D0.BCC2.437B; IP 172.16.0.1 → 172.16.0.10.", "MAC 00D0.BCC2.437B → 000C.859D.BB02; IP 172.16.0.10 → 10.0.0.10."],
+      correct: 0, tip: "R erstellt für das rechte Netz einen neuen Ethernet-Frame.",
+      trap: "Ohne NAT ersetzt R weder die Quell- noch die Ziel-IP durch seine Schnittstellenadresse.",
+      explanation: "Der Router verwendet rechts seine eigene MAC als Quelle und die MAC von Host 2 als Ziel. Die IP-Endadressen bleiben erhalten."
+    },
+    {
+      id: "routing-icmp-04", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single", networkScenario: "icmp-lesson",
+      prompt: "Welche Adressen hat der ICMP Echo Reply auf dem linken Abschnitt zwischen R und Host 1?",
+      options: ["MAC 000C.859D.BB01 → 0060.3EEA.6529; IP 172.16.0.10 → 10.0.0.10.", "MAC 00D0.BCC2.437B → 0060.3EEA.6529; IP 172.16.0.10 → 10.0.0.10.", "MAC 000C.859D.BB02 → 0060.3EEA.6529; IP 10.0.0.10 → 172.16.0.10.", "MAC 0060.3EEA.6529 → 000C.859D.BB01; IP 172.16.0.10 → 10.0.0.10."],
+      correct: 0, tip: "Der Echo Reply kehrt die IP-Richtung um; R sendet links mit seiner linken MAC.",
+      trap: "Host 2s MAC wird nicht über den Router hinweg weiterverwendet.",
+      explanation: "Die Antwort kommt von Host 2 und geht an Host 1. Auf dem letzten Ethernet-Abschnitt sendet R mit seiner linken Schnittstellen-MAC an Host 1."
+    },
+    {
+      id: "routing-large-01", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "three-router-lans",
+      prompt: "PC A sendet an PC B. Welche Adresse löst R1 im ersten Transitnetz per ARP auf?",
+      options: ["10.1.0.2.", "10.1.0.6.", "192.168.20.20.", "192.168.10.11."],
+      correct: 0, tip: "Sieh dir R1s Route zum Zielnetz und den nächsten Hop an.",
+      trap: "Die Ziel-IP des Pakets ist nicht die per ARP gesuchte Adresse, wenn der nächste Hop ein Router ist.",
+      explanation: "R1s Route zu 192.168.20.0/24 führt über R2 unter 10.1.0.2. Diese Adresse wird im direkt verbundenen Transitnetz aufgelöst."
+    },
+    {
+      id: "routing-large-02", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single", networkScenario: "three-router-lans",
+      prompt: "B antwortet A. Welcher nächste Hop muss in R2s Route zum Netz 192.168.10.0/24 stehen?",
+      options: ["10.1.0.1.", "10.1.0.6.", "192.168.10.10.", "192.168.20.1."],
+      correct: 0, tip: "Der Rückweg führt von R3 über R2 zu R1.",
+      trap: "10.1.0.6 ist R3 und liegt in der falschen Richtung.",
+      explanation: "R2 erreicht R1 über dessen Transitadresse 10.1.0.1. R1 hat As LAN direkt angeschlossen."
+    },
+    {
+      id: "routing-large-03", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single", networkScenario: "three-router-lans",
+      prompt: "PC A sendet an PC C. Welcher Weg wird im dargestellten Netzwerk verwendet?",
+      options: ["A löst Cs MAC lokal per ARP auf und sendet über S1 direkt an C.", "A sendet zuerst an R1 und dann über alle drei Router.", "A fragt per ARP nach R3.", "S1 routet das IP-Paket zu R2."],
+      correct: 0, tip: "Vergleiche Adressen und /24-Maske der beiden PCs.",
+      trap: "Ein konfiguriertes Gateway wird für Ziele im eigenen Subnetz nicht benötigt.",
+      explanation: "A und C gehören zu 192.168.10.0/24. Der Switch verbindet sie im selben LAN; ein Router ist für diesen Weg nicht nötig."
+    },
+    {
+      id: "routing-large-04", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single", networkScenario: "two-router-lans",
+      prompt: "PC C sendet an PC D. Welche IP löst C zuerst per ARP auf?",
+      options: ["192.168.10.1.", "192.168.20.21.", "10.1.0.2.", "192.168.20.1."],
+      correct: 0, tip: "D liegt in einem anderen /24-Netz.",
+      trap: "ARP-Anfragen bleiben lokal; C sucht daher nicht direkt Ds MAC.",
+      explanation: "C verwendet sein Gateway 192.168.10.1 als ersten Hop und fragt dessen MAC im eigenen LAN ab."
     }
   ];
 

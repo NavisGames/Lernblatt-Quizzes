@@ -61,6 +61,17 @@
 .cycle-results span, .cycle-results output { display: block; }
 .calculator-message { min-height: 1em; margin: 8px 0 0 !important; color: var(--red) !important; font-size: 11px !important; }
 .cycle-inputs input[aria-invalid="true"] { border-color: var(--red); }
+.network-trainer { margin: 16px 0; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.network-trainer > label { display: block; margin-bottom: 6px; color: var(--ink); font-size: 12px; font-weight: 750; }
+.network-step { margin-top: 16px; padding: 16px; border-radius: 10px; background: var(--blue-soft); }
+.network-step h3 { margin: 3px 0 8px; }
+.network-step-count { margin: 0; color: var(--blue-dark) !important; font-weight: 750; }
+.network-options { display: grid; gap: 8px; margin: 12px 0; padding: 0; border: 0; }
+.network-options legend { margin-bottom: 8px; color: var(--ink); font-size: 12px; font-weight: 750; }
+.network-options label { display: flex; align-items: flex-start; gap: 8px; color: var(--ink); font-size: 13px; line-height: 1.5; cursor: pointer; }
+.network-options input { flex: 0 0 auto; margin-top: 3px; accent-color: var(--blue); }
+.network-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.network-step .learn-callout { background: var(--surface); line-height: 1.7; font-size: 13px; }
 :root[data-theme="dark"] .learn-nav { background: color-mix(in srgb, var(--surface) 92%, transparent); }
 :root[data-theme="dark"] .learn-callout, :root[data-theme="dark"] .formula-card { border-color: #344a76; }
 @media (max-width: 600px) {
@@ -72,6 +83,7 @@
   .learn-section > summary::after { position: absolute; right: 28px; }
   .learn-section { position: relative; }
   .cycle-inputs, .cycle-counts, .cycle-results { grid-template-columns: 1fr; }
+  .network-trainer { padding: 12px; }
   .learn-section table { min-width: 480px; }
   .learn-code { font-size: 11px; }
 }
