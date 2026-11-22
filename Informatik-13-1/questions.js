@@ -832,6 +832,356 @@
       correct: 0, tip: "D liegt in einem anderen /24-Netz.",
       trap: "ARP-Anfragen bleiben lokal; C sucht daher nicht direkt Ds MAC.",
       explanation: "C verwendet sein Gateway 192.168.10.1 als ersten Hop und fragt dessen MAC im eigenen LAN ab."
+    },
+    {
+      id: "net-extra-01", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Ein Unternehmen stellt ausgewählten externen Partnern kontrollierten Zugang zu internen Informationen bereit. Wie heißt dieser Bereich?",
+      options: ["Extranet.", "Loopback.", "Broadcast-Domäne.", "Ethernet-Frame."],
+      correct: 0, tip: "Gesucht ist ein Zugang für ausgewählte Externe.",
+      trap: "Ein Intranet richtet sich grundsätzlich an interne Nutzer; ein Extranet erweitert den Zugriff kontrolliert.",
+      explanation: "Ein Extranet ermöglicht ausgewählten externen Partnern kontrollierten Zugriff auf bestimmte interne Dienste oder Informationen."
+    },
+    {
+      id: "net-extra-02", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Was bedeutet Simplex bei einer Verbindung?",
+      options: ["Daten werden nur in eine Richtung übertragen.", "Beide Seiten senden und empfangen gleichzeitig.", "Beide Seiten senden abwechselnd.", "Ein Router wählt automatisch eine Route."],
+      correct: 0, tip: "Denke an einen Rundfunksender und seine Empfänger.",
+      trap: "Abwechselnde Übertragung in beide Richtungen heißt Halbduplex.",
+      explanation: "Bei Simplex sendet eine Seite und die andere empfängt; eine Rückrichtung ist dabei nicht vorgesehen."
+    },
+    {
+      id: "net-extra-03", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "single",
+      prompt: "In einem Sternnetz fällt nur das Kabel zwischen PC A und dem ansonsten funktionierenden zentralen Switch aus. Welche Folge ist am ehesten zu erwarten?",
+      options: ["PC A verliert die Verbindung über dieses Kabel; die anderen Switch-Verbindungen können weiter funktionieren.", "Alle PCs verlieren zwingend ihre Verbindung.", "Der Switch wird dadurch automatisch zum Router.", "Alle IP-Adressen ändern sich."],
+      correct: 0, tip: "Jeder PC hat eine eigene Verbindung zum zentralen Gerät.",
+      trap: "Der Ausfall einer einzelnen Leitung ist nicht der Ausfall des zentralen Switches.",
+      explanation: "Bei einem Stern betrifft eine einzelne defekte Teilnehmerleitung normalerweise nur den daran angeschlossenen Teilnehmer."
+    },
+    {
+      id: "net-extra-04", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche Nachricht sendet ein TCP-Client normalerweise zu Beginn des Three-Way-Handshakes?",
+      options: ["SYN.", "SYN+ACK.", "ACK als abschließende Bestätigung.", "ICMP Echo Reply."],
+      correct: 0, tip: "Die Folge beginnt mit dem Verbindungswunsch des Clients.",
+      trap: "SYN+ACK ist normalerweise die Antwort des Servers auf das erste SYN.",
+      explanation: "Der Client beginnt mit SYN; der Server antwortet mit SYN+ACK, danach bestätigt der Client mit ACK."
+    },
+    {
+      id: "net-extra-05", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Eine UDP-Anwendung benötigt trotz möglichem Paketverlust eine eigene Bestätigung. Wer muss diese Bestätigung bereitstellen?",
+      options: ["Die Anwendung beziehungsweise ihr Anwendungsprotokoll.", "UDP garantiert sie automatisch.", "Die Ethernet-FCS sendet sie automatisch.", "Die Subnetzmaske."],
+      correct: 0, tip: "UDP selbst garantiert keine Zustellung.",
+      trap: "Die FCS dient der Fehlererkennung in einem Ethernet-Frame und ist keine Anwendungsbestätigung.",
+      explanation: "UDP liefert keine eigene Zustellbestätigung. Falls eine Anwendung diese braucht, muss sie eine geeignete eigene Regel verwenden."
+    },
+    {
+      id: "net-extra-06", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welches Protokoll eignet sich laut Lernseite für verschlüsselten Fernzugriff statt des typischerweise unverschlüsselten Telnet?",
+      options: ["SSH, normalerweise TCP 22.", "TFTP, normalerweise UDP 69.", "HTTP, normalerweise TCP 80.", "ARP ohne Verschlüsselung."],
+      correct: 0, tip: "Gesucht ist der sichere Kommandozeilen-Fernzugriff.",
+      trap: "Telnet und SSH sind nicht gleichwertig hinsichtlich Verschlüsselung.",
+      explanation: "SSH ermöglicht verschlüsselten Fernzugriff und verwendet standardmäßig TCP 22. Telnet ist typischerweise unverschlüsselt."
+    },
+    {
+      id: "net-extra-07", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Zwei TCP-Clients kontaktieren denselben Webserver auf derselben Ziel-IP und TCP-Port 443. Wie lassen sich ihre Verbindungen unterscheiden?",
+      options: ["Durch die Kombination von Quell- und Ziel-IP sowie Quell- und Zielport.", "Allein durch den gemeinsamen Zielport 443.", "Allein durch die MAC-Adresse des Routers.", "Durch die Größe der Subnetzmaske."],
+      correct: 0, tip: "Vergleiche die beiden Endpunkte und die vom Client gewählten Quellports.",
+      trap: "Der Zielport kann für viele gleichzeitig bestehende Verbindungen gleich sein.",
+      explanation: "Eine TCP-Verbindung wird durch Quell- und Zieladresse sowie Quell- und Zielport unterschieden; die Clients können denselben Serverport nutzen."
+    },
+    {
+      id: "net-extra-08", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "multiple",
+      prompt: "Welche Aussagen zu DNS und DHCP passen zur Lernseite?",
+      options: ["DNS löst Namen in IP-Adressen auf.", "DHCP kann IP-Adresse, Maske und Gateway bereitstellen.", "DNS weist Ethernet-Frames ihre FCS zu.", "DHCP ersetzt die Routingtabelle aller Router im Internet."],
+      correct: [0, 1], tip: "Ein Dienst übersetzt Namen; der andere verteilt Netzkonfiguration.",
+      trap: "Namensauflösung und automatische Hostkonfiguration sind unterschiedliche Aufgaben.",
+      explanation: "DNS dient der Namensauflösung. DHCP kann Clients Netzwerkparameter zuweisen, darunter IP-Adresse, Maske und Gateway."
+    },
+    {
+      id: "net-extra-09", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Die Leitung funktioniert und eine IP-Verbindung zum Server ist möglich. Der angefragte Dienst antwortet trotzdem nicht. Was folgt daraus?",
+      options: ["Funktionierende untere Schichten garantieren nicht, dass der Dienst läuft oder sein Port erreichbar ist.", "Damit sind alle Anwendungsschichtprobleme ausgeschlossen.", "Der Fehler muss zwingend das Netzwerkkabel sein.", "Eine funktionierende IP-Verbindung beweist eine erfolgreiche DNS-Abfrage."],
+      correct: 0, tip: "Ein Dienst benötigt mehr als nur einen funktionierenden Übertragungsweg.",
+      trap: "IP-Erreichbarkeit und Verfügbarkeit eines konkreten Dienstes sind unterschiedliche Prüfungen.",
+      explanation: "Dienstkonfiguration, Zielport oder Firewall können Probleme verursachen, auch wenn die unteren Schichten und der IP-Weg funktionieren."
+    },
+    {
+      id: "media-extra-01", topic: "media", category: "media", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Was bezeichnet EV bei der strukturierten Verkabelung?",
+      options: ["Etagenverteiler.", "Ethernet-Verschlüsselung.", "Externes VLAN.", "Empfangsverzögerung."],
+      correct: 0, tip: "Der Verteiler erschließt Anschlüsse einer Etage.",
+      trap: "GV steht für Gebäudeverteiler, nicht für Etagenverteiler.",
+      explanation: "EV steht für Etagenverteiler. Er verbindet unter anderem die feste Verkabelung zu den Anschlüssen auf der Etage."
+    },
+    {
+      id: "media-extra-02", topic: "media", category: "media", difficulty: "mittel", points: 2, type: "cloze",
+      prompt: "Die Verbindung vom Standortverteiler zum Gebäudeverteiler gehört zum {{0}}, die Verbindung vom Gebäudeverteiler zum Etagenverteiler zum {{1}}.",
+      blanks: [
+        { options: ["Primärbereich", "Sekundärbereich", "Tertiärbereich"], correct: "Primärbereich" },
+        { options: ["Sekundärbereich", "Primärbereich", "Tertiärbereich"], correct: "Sekundärbereich" }
+      ],
+      tip: "Gehe vom Standort ins Gebäude und danach zu den Etagen.",
+      trap: "Der arbeitsplatznahe Anschluss gehört erst zum Tertiärbereich.",
+      explanation: "SV → GV gehört zum Primärbereich, GV → EV zum Sekundärbereich."
+    },
+    {
+      id: "media-extra-03", topic: "media", category: "media", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Zu welchem Bereich gehört die feste Leitung vom Etagenverteiler zur Netzwerkdose im Klassenraum?",
+      options: ["Zum Tertiärbereich.", "Zum Primärbereich.", "Zum Sekundärbereich zwischen Gebäudeverteilern.", "Zum Routingbereich des Internets."],
+      correct: 0, tip: "Die Leitung führt auf der Etage bis nahe an den Arbeitsplatz.",
+      trap: "Zwischen Gebäudeverteiler und Etagenverteiler liegt der Sekundärbereich.",
+      explanation: "Die feste Leitung vom EV zur Telekommunikationsanschlusseinheit gehört zur Etagen- beziehungsweise Tertiärverkabelung."
+    },
+    {
+      id: "media-extra-04", topic: "media", category: "media", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Eine feste Twisted-Pair-Strecke ist 88 m lang. Dazu kommen Patch- und Anschlusskabel von zusammen 9 m. Erfüllt sie allein hinsichtlich Länge die im Lernblatt genannten Grenzen für Permanent Link und Channel?",
+      options: ["Ja: 88 m fester Link und 97 m Channel liegen unter 90 m beziehungsweise 100 m.", "Nein: Der Permanent Link ist 97 m lang.", "Nein: Ein Channel darf höchstens 90 m lang sein.", "Ja, aber nur weil Patchkabel nie mitzählen."],
+      correct: 0, tip: "Zum Channel zählen die feste Strecke und die Anschlusskabel.",
+      trap: "Die Rechnung prüft nur die Länge, nicht die Qualität oder andere Installationsanforderungen.",
+      explanation: "88 m sind höchstens 90 m für die feste Strecke; 88 + 9 = 97 m sind höchstens 100 m für den Channel. Weitere Anforderungen sind gesondert zu prüfen."
+    },
+    {
+      id: "media-extra-05", topic: "media", category: "media", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Eine feste Twisted-Pair-Strecke ist 92 m lang; die Patchkabel zusammen sind 4 m lang. Wie ist sie nach den üblichen Lernblattgrenzen zu beurteilen?",
+      options: ["Der 96-m-Channel liegt unter 100 m, aber der 92-m-Permanent-Link überschreitet 90 m.", "Beide Grenzen sind eingehalten, weil 96 m kleiner als 100 m sind.", "Der Permanent Link ist nur 4 m lang.", "Die Strecke ist nur wegen des VLAN-Tags zu lang."],
+      correct: 0, tip: "Prüfe feste Strecke und gesamte Channel-Länge getrennt.",
+      trap: "Die 100-m-Grenze ersetzt nicht die separate 90-m-Grenze für die feste Strecke.",
+      explanation: "92 + 4 = 96 m für den Channel. Die feste Strecke allein überschreitet jedoch die genannte Grenze von 90 m."
+    },
+    {
+      id: "media-extra-06", topic: "media", category: "media", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche Kabelkategorie nennt die Lernseite für 10 Gbit/s auf einer geeigneten Strecke bis 100 m?",
+      options: ["CAT6a.", "CAT5e als allgemeine Garantie für 10 Gbit/s auf 100 m.", "Eine beliebige Stromleitung.", "Keine Kupferkategorie ist für Ethernet geeignet."],
+      correct: 0, tip: "Vergleiche die Kategorien in der Tabelle zu Kupferverkabelung.",
+      trap: "Eine Kategorie allein ersetzt nicht die Prüfung der kompletten Installation.",
+      explanation: "Die Lernseite nennt CAT6a für 10 Gbit/s bis 100 m; die Eignung der gesamten Strecke und Installation muss stimmen."
+    },
+    {
+      id: "media-extra-08", topic: "media", category: "media", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Eine Ethernet-Verbindung zwischen PC und Switch arbeitet auf beiden Seiten korrekt im Vollduplex. Welche Aussage zu CSMA/CD gilt auf dieser Verbindung?",
+      options: ["Es wird dort nicht zur Kollisionserkennung benötigt.", "Es vergibt die IP-Adresse des PCs.", "Es ist nur für die ARP-Antwort zuständig.", "Es ist zwingend für jeden Vollduplex-Frame erforderlich."],
+      correct: 0, tip: "Bei Vollduplex können beide Seiten gleichzeitig senden und empfangen.",
+      trap: "CSMA/CD gehört zum klassischen kollisionsfähigen Shared- beziehungsweise Halbduplex-Ethernet.",
+      explanation: "Auf einer korrekt ausgehandelten Vollduplex-Verbindung treten keine Ethernet-Kollisionen auf; CSMA/CD wird dort nicht benötigt."
+    },
+    {
+      id: "media-extra-09", topic: "media", category: "media", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Aussage über den Primär- und Sekundärbereich sowie die verwendeten Medien ist richtig?",
+      options: ["Die Einordnung richtet sich nach der verbundenen Infrastruktur, nicht allein danach, ob Glasfaser oder Kupfer verwendet wird.", "Glasfaser gehört unabhängig vom Einsatzort immer zum Primärbereich.", "Jedes Kupferkabel gehört automatisch zum Tertiärbereich.", "Sekundärverkabelung verbindet ausschließlich PCs mit Netzwerkdosen."],
+      correct: 0, tip: "Bereiche beschreiben den Ort und die Funktion der Verbindung.",
+      trap: "Ein häufig verwendetes Medium ist nicht dasselbe wie eine zwingende Definition des Bereichs.",
+      explanation: "Die Bereiche werden nach der Funktion der Verkabelung zwischen Standort, Gebäude, Etage und Anschluss gegliedert; die Medienwahl hängt von der Planung ab."
+    },
+    {
+      id: "eth-extra-01", topic: "ethernet", category: "ethernet", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Was lernt ein Switch aus der Quell-MAC eines eingehenden Frames?",
+      options: ["Über welchen Eingangsport diese MAC im betreffenden VLAN erreichbar ist.", "Die IP-Adresse des DNS-Servers.", "Die Route ins Internet.", "Die Portnummer der Anwendung."],
+      correct: 0, tip: "Der Switch merkt sich, woher der Frame gekommen ist.",
+      trap: "Der Switch lernt den Eingangsport aus der Quell-MAC, nicht aus der Ziel-MAC.",
+      explanation: "Ein Switch ordnet die Quell-MAC dem Eingangsport im entsprechenden VLAN zu und kann spätere Frames gezielter weiterleiten."
+    },
+    {
+      id: "eth-extra-03", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Zwei PCs sind an demselben Switch, aber in getrennten VLANs. Was ist für IP-Kommunikation zwischen ihnen zusätzlich nötig?",
+      options: ["Eine passend konfigurierte Routingfunktion zwischen den VLANs.", "Nur die gleiche Ethernet-MAC auf beiden PCs.", "Ein Broadcast, der automatisch jedes VLAN erreicht.", "Das Entfernen aller IP-Adressen."],
+      correct: 0, tip: "Ein VLAN bildet eine eigene Broadcast-Domäne.",
+      trap: "Der gemeinsame physische Switch allein verbindet getrennte VLANs nicht auf IP-Ebene.",
+      explanation: "Für Kommunikation zwischen VLANs ist eine Routingfunktion nötig, etwa ein Router oder ein passend konfigurierter Layer-3-Switch."
+    },
+    {
+      id: "eth-extra-04", topic: "ethernet", category: "ethernet", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Wozu dient die VLAN-ID in einem 802.1Q-Tag?",
+      options: ["Sie kennzeichnet die VLAN-Zugehörigkeit des Frames.", "Sie ersetzt die Quell- und Ziel-MAC.", "Sie ist die IP-Adresse des Gateways.", "Sie berechnet die Prüfsumme des IP-Headers."],
+      correct: 0, tip: "Ein Trunk kann Frames für verschiedene logische Netze transportieren.",
+      trap: "Auch ein getaggter Ethernet-Frame besitzt Quell- und Ziel-MAC.",
+      explanation: "Die VLAN-ID kennzeichnet die VLAN-Zugehörigkeit eines getaggten Frames. MAC-Adressen bleiben für die lokale Zustellung relevant."
+    },
+    {
+      id: "eth-extra-05", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein Ethernet-II-Frame enthält ohne VLAN-Tag 1500 Byte Daten. Ziel- und Quell-MAC umfassen je 6 Byte, EtherType 2 Byte und FCS 4 Byte. Wie groß ist der Frame ohne Präambel und SFD?",
+      options: ["1518 Byte.", "1500 Byte.", "1514 Byte.", "1522 Byte."],
+      correct: 0, tip: "Addiere 6 + 6 + 2 + 1500 + 4.",
+      trap: "Präambel und SFD werden bei der hier gefragten Framegröße nicht mitgezählt.",
+      explanation: "6 + 6 + 2 + 1500 + 4 = 1518 Byte. Ein zusätzliches 802.1Q-Tag würde 4 Byte ergänzen."
+    },
+    {
+      id: "eth-extra-06", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Warum enthält ein sehr kurzer Ethernet-Datenbereich gegebenenfalls Padding?",
+      options: ["Damit der Frame die erforderliche Mindestlänge erreicht.", "Damit das Ziel eine neue IP-Adresse bekommt.", "Damit alle Frames zu VLAN 1 gehören.", "Damit die FCS nicht mehr nötig ist."],
+      correct: 0, tip: "Ein klassischer Ethernet-Frame besitzt eine Mindestgröße.",
+      trap: "Padding ergänzt den Datenbereich; es ersetzt keine Fehlerprüfung.",
+      explanation: "Ein zu kurzer Datenbereich wird aufgefüllt, damit der klassische Frame die Mindestlänge von 64 Byte ohne Präambel und SFD erreicht."
+    },
+    {
+      id: "eth-extra-07", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein einzelner Switch hat sechs aktive PC-Ports im selben VLAN; jeder PC ist direkt angeschlossen. Wie viele Kollisions- und Broadcast-Domänen entstehen in diesem vereinfachten Aufbau?",
+      options: ["Sechs Kollisionsdomänen und eine Broadcast-Domäne.", "Eine Kollisionsdomäne und sechs Broadcast-Domänen.", "Sechs Kollisionsdomänen und sechs Broadcast-Domänen.", "Eine Kollisionsdomäne und keine Broadcast-Domäne."],
+      correct: 0, tip: "Switchports trennen Kollisionsdomänen; das VLAN grenzt die Broadcast-Domäne ab.",
+      trap: "Ein Port ist nicht automatisch ein eigenes VLAN.",
+      explanation: "Jeder Switchport bildet einen eigenen Kollisionsbereich; alle sechs Ports im selben VLAN gehören zu einer Broadcast-Domäne."
+    },
+    {
+      id: "eth-extra-08", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Was unterscheidet Store-and-Forward von Cut-Through beim Switching?",
+      options: ["Store-and-Forward empfängt den vollständigen Frame vor dem Weiterleiten; Cut-Through beginnt früher.", "Cut-Through wartet stets auf den vollständigen Frame und die FCS-Prüfung.", "Store-and-Forward übersetzt IP-Adressen in Namen.", "Beide Verfahren ändern automatisch die VLAN-ID aller Frames."],
+      correct: 0, tip: "Vergleiche, wann die Weiterleitung beginnt.",
+      trap: "Ein früher Weiterleitungsbeginn bedeutet nicht, dass der komplette Frame zuvor geprüft wurde.",
+      explanation: "Store-and-Forward prüft den vollständigen Frame vor dem Weiterleiten; Cut-Through kann bereits früher beginnen."
+    },
+    {
+      id: "eth-extra-09", topic: "ethernet", category: "ethernet", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Switch S kennt A an Port 1 und B noch nicht. A sendet an B über Port 1; B antwortet über Port 2. Was kann S danach bei einem weiteren Frame von A an B tun?",
+      options: ["B anhand der beim Antworten gelernten Quell-MAC gezielt über Port 2 erreichen.", "B nur über Port 1 erreichen, weil dort zuerst ein Frame ankam.", "Die IP-Adresse von B aus der FCS ablesen.", "Den Frame automatisch in jedes andere VLAN routen."],
+      correct: 0, tip: "Beim ersten Frame lernt S A; bei Bs Antwort lernt S die Quell-MAC B.",
+      trap: "Der Switch lernt B erst aus einem eingehenden Frame mit B als Quelle, nicht allein aus dem Ziel des ersten Frames.",
+      explanation: "S lernt A an Port 1 und bei der Antwort B an Port 2. Ein späterer Frame an B kann bei gültigem Eintrag gezielt über Port 2 ausgegeben werden."
+    },
+    {
+      id: "ip-extra-01", topic: "ip", category: "ip", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche Binärdarstellung entspricht dem IPv4-Oktett 70?",
+      options: ["01000110.", "01110000.", "01000100.", "10000110."],
+      correct: 0, tip: "70 = 64 + 4 + 2; ein Oktett hat acht Bits.",
+      trap: "Führende Nullen gehören zur vollständigen Acht-Bit-Darstellung.",
+      explanation: "Die Bits für 64, 4 und 2 sind gesetzt: 01000110₂ = 70."
+    },
+    {
+      id: "ip-extra-02", topic: "ip", category: "ip", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Warum ist 192.168.10.256 keine gültige IPv4-Adresse in Dezimalschreibweise?",
+      options: ["Ein Oktett kann nur Werte von 0 bis 255 annehmen.", "IPv4-Adressen benötigen acht Oktette.", "192 ist in IPv4 grundsätzlich verboten.", "Die Zahl 256 bezeichnet eine MAC-Adresse."],
+      correct: 0, tip: "Ein Oktett hat acht Bits.",
+      trap: "Die Gültigkeit hängt hier vom Wertebereich des letzten Oktetts ab, nicht vom privaten Adressbereich.",
+      explanation: "Acht Bits ermöglichen Werte von 0 bis 255. Der Wert 256 passt daher nicht in ein IPv4-Oktett."
+    },
+    {
+      id: "ip-extra-03", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Adresse liegt außerhalb des privaten IPv4-Bereichs 172.16.0.0/12?",
+      options: ["172.32.5.8.", "172.16.5.8.", "172.20.5.8.", "172.31.5.8."],
+      correct: 0, tip: "Der private 172er-Bereich umfasst das zweite Oktett 16 bis 31.",
+      trap: "Nicht jede Adresse mit dem ersten Oktett 172 ist privat.",
+      explanation: "172.16.0.0/12 reicht von 172.16.0.0 bis 172.31.255.255. 172.32.5.8 liegt außerhalb."
+    },
+    {
+      id: "ip-extra-04", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Aussage gilt für IPv4 /31 auf einer passend konfigurierten Punkt-zu-Punkt-Verbindung?",
+      options: ["Beide Adressen können als Endpunkte verwendet werden; ein gerichteter Broadcast entfällt.", "Eine Adresse muss zwingend Netzadresse und die andere Broadcast sein.", "Es stehen 30 gewöhnliche Hostadressen bereit.", "Das Präfix bezeichnet eine 128-Bit-Adresse."],
+      correct: 0, tip: "Die Lernseite nennt /31 als Sonderfall für Punkt-zu-Punkt.",
+      trap: "Die übliche Formel 2ᴴ − 2 wird auf diesen Sonderfall nicht angewendet.",
+      explanation: "Bei IPv4 /31 können auf entsprechend konfigurierten Punkt-zu-Punkt-Verbindungen beide Adressen als Endpunkte genutzt werden."
+    },
+    {
+      id: "ip-extra-05", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Welche Kurzform ist für 2001:0db8:0000:0000:0000:ff00:0042:8329 gültig?",
+      options: ["2001:db8::ff00:42:8329.", "2001::db8::ff00:42:8329.", "2001:db8:ff00:42:8329.", "2001:db8::ff00::8329."],
+      correct: 0, tip: "Führende Nullen je Block können entfallen; :: darf einmal eine zusammenhängende Nullfolge ersetzen.",
+      trap: "Zwei getrennte :: in einer IPv6-Adresse sind nicht erlaubt.",
+      explanation: "Die drei aufeinanderfolgenden Nullblöcke werden einmal durch :: ersetzt; führende Nullen in db8 und 42 entfallen."
+    },
+    {
+      id: "ip-extra-06", topic: "ip", category: "ip", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein Host hat 192.168.5.130/25. Welche Angaben beschreiben sein gewöhnliches Subnetz?",
+      options: ["Netz .128, nutzbare Hosts .129–.254, Broadcast .255.", "Netz .0, nutzbare Hosts .1–.254, Broadcast .255.", "Netz .128, nutzbare Hosts .128–.255, kein Broadcast.", "Netz .130, nutzbare Hosts .131–.255, Broadcast .256."],
+      correct: 0, tip: "/25 teilt das letzte Oktett in Blöcke von je 128 Adressen.",
+      trap: "Die Netz- und die Broadcastadresse werden nicht als gewöhnliche Hostadressen verwendet.",
+      explanation: "Die .130 liegt im Block .128–.255. Netz ist .128, Broadcast .255 und der Hostbereich .129–.254."
+    },
+    {
+      id: "ip-extra-07", topic: "ip", category: "ip", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Wie lauten Netz- und Broadcastadresse für 192.145.96.201/28?",
+      options: ["192.145.96.192 und 192.145.96.207.", "192.145.96.200 und 192.145.96.215.", "192.145.96.192 und 192.145.96.223.", "192.145.96.201 und 192.145.96.207."],
+      correct: 0, tip: "/28 erzeugt Blöcke von 16 Adressen im letzten Oktett.",
+      trap: "Die Blockgrenzen sind Vielfache von 16; .200 ist keine Netzadresse bei /28.",
+      explanation: ".201 liegt im Block .192–.207. Die erste Adresse ist das Netz, die letzte der Broadcast."
+    },
+    {
+      id: "ip-extra-08", topic: "ip", category: "ip", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein gewöhnliches IPv4-Subnetz muss mindestens 100 nutzbare Hosts aufnehmen. Welches der folgenden Präfixe ist dafür das längste passende?",
+      options: ["/25.", "/26.", "/27.", "/28."],
+      correct: 0, tip: "Prüfe die Hostbits und ziehe Netz- und Broadcastadresse ab.",
+      trap: "/26 bietet nur 62 nutzbare Hosts.",
+      explanation: "/25 lässt 7 Hostbits und damit 2⁷ − 2 = 126 nutzbare Adressen. Die längeren angebotenen Präfixe reichen für 100 Hosts nicht aus."
+    },
+    {
+      id: "ip-extra-09", topic: "ip", category: "ip", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein gewöhnliches Netz 192.168.8.0/24 soll mit VLSM ein Subnetz für mindestens 100 und eines für mindestens 50 Hosts erhalten. Welche nicht überlappende Aufteilung passt?",
+      options: ["192.168.8.0/25 und 192.168.8.128/26.", "192.168.8.0/26 und 192.168.8.64/26.", "192.168.8.0/25 und 192.168.8.64/26.", "192.168.8.0/27 und 192.168.8.32/27."],
+      correct: 0, tip: "100 Hosts benötigen /25, 50 Hosts /26; prüfe, ob die Bereiche getrennt sind.",
+      trap: "192.168.8.64/26 liegt bereits innerhalb von 192.168.8.0/25.",
+      explanation: "Das /25 umfasst .0–.127 und bietet 126 Hosts; das /26 umfasst .128–.191 und bietet 62 Hosts. Beide Bereiche überschneiden sich nicht."
+    },
+    {
+      id: "routing-extra-01", topic: "routing", category: "routing", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Wofür wird ICMP im Zusammenhang mit IP unter anderem eingesetzt?",
+      options: ["Für Kontroll- und Fehlermeldungen sowie Diagnose.", "Als Ersatz für jede IP-Adresse.", "Zur automatischen Verschlüsselung aller Ethernet-Frames.", "Zum Speichern von Webseiten."],
+      correct: 0, tip: "Denke an Ping und Fehlermeldungen eines Routers.",
+      trap: "ICMP meldet Zustände und Fehler; es behebt sie nicht automatisch.",
+      explanation: "ICMP übermittelt unter anderem Kontroll- und Fehlermeldungen und wird für Diagnoseverfahren wie Ping verwendet."
+    },
+    {
+      id: "routing-extra-02", topic: "routing", category: "routing", difficulty: "leicht", points: 1, type: "cloze",
+      prompt: "Bei ICMPv4 verwendet die Ping-Anfrage Echo Request Typ {{0}} und die Echo-Antwort Typ {{1}}.",
+      blanks: [
+        { options: ["8", "0", "11"], correct: "8" },
+        { options: ["0", "8", "3"], correct: "0" }
+      ],
+      tip: "Die Anfrage und die Antwort besitzen unterschiedliche ICMP-Typen.",
+      trap: "Die Typen sind keine TCP- oder UDP-Portnummern.",
+      explanation: "ICMPv4 Echo Request hat Typ 8, Echo Reply Typ 0; bei beiden ist der Code normalerweise 0."
+    },
+    {
+      id: "routing-extra-03", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Wie wird eine ICMPv4-Nachricht auf einem Ethernet-Abschnitt transportiert?",
+      options: ["Als ICMP-Nachricht in einem IPv4-Paket innerhalb eines Ethernet-Frames.", "Als TCP-Portnummer ohne IP-Paket.", "Als ARP-Antwort ohne Ethernet-Frame.", "Als Ersatz für die MAC-Adresse des Absenders."],
+      correct: 0, tip: "Unterscheide die Hüllen von Ethernet und IP vom Inhalt ICMP.",
+      trap: "ICMP verwendet keine TCP- oder UDP-Portnummer.",
+      explanation: "ICMPv4 wird in IPv4 transportiert; auf Ethernet wird das IPv4-Paket wiederum in einen Ethernet-Frame gekapselt."
+    },
+    {
+      id: "routing-extra-04", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Eine Ping-Ausgabe zeigt eine Round-Trip Time von 8 ms. Was wird damit gemessen?",
+      options: ["Die Zeit für die Anfrage und die zurückkommende Antwort zusammen.", "Ausschließlich die Zeit vom Client zum Ziel.", "Die fest eingestellte Lebensdauer des ARP-Cache.", "Die Anzahl der Router-Hops."],
+      correct: 0, tip: "Round trip bedeutet Hin- und Rückweg.",
+      trap: "Ohne weitere Messung lässt sich die Zeit nicht einfach einer Richtung zuordnen.",
+      explanation: "Die RTT beschreibt die gemessene Zeit zwischen dem Senden der Anfrage und dem Eintreffen der Antwort."
+    },
+    {
+      id: "routing-extra-05", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein IPv4-Paket erreicht einen weiterleitenden Router mit TTL 1. Was geschieht normalerweise?",
+      options: ["Die TTL läuft beim Weiterleiten ab; der Router verwirft das Paket und kann ICMP Time Exceeded zurücksenden.", "Der Router erhöht die TTL auf 255.", "Das Paket wird unabhängig vom Ziel garantiert zugestellt.", "Die TTL wird zur TCP-Portnummer."],
+      correct: 0, tip: "Jeder Router vermindert die TTL beim Weiterleiten.",
+      trap: "Die ICMP-Rückmeldung kann ausbleiben oder gefiltert werden.",
+      explanation: "Bei der Weiterleitung sinkt die TTL von 1 auf 0. Der Router verwirft das Paket und kann den Absender mit ICMP Time Exceeded informieren."
+    },
+    {
+      id: "routing-extra-06", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Windows-tracert zeigt bei einem Zwischenhop ein Sternchen, aber ein späterer Hop antwortet. Was lässt sich daraus folgern?",
+      options: ["Der Zwischenhop hat nicht rechtzeitig geantwortet; das Sternchen allein beweist keinen Ausfall dieses Routers.", "Der Zwischenrouter ist zwingend ausgefallen.", "Der spätere Hop kann nur ohne Router erreicht worden sein.", "DNS hat garantiert eine falsche IP-Adresse geliefert."],
+      correct: 0, tip: "Router können Diagnoseantworten unterdrücken und trotzdem Pakete weiterleiten.",
+      trap: "Eine fehlende ICMP-Antwort ist nicht automatisch ein fehlender Weiterleitungsweg.",
+      explanation: "Eine Zeitüberschreitung für einen Hop kann durch Filterung oder fehlende Antwort entstehen; die Antwort eines späteren Hops widerlegt keinen solchen Fall."
+    },
+    {
+      id: "routing-extra-07", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single",
+      prompt: "Ein Ping an 127.0.0.1 funktioniert. Was wurde damit hauptsächlich geprüft?",
+      options: ["Der lokale IP-Stack über die Loopback-Schnittstelle.", "Das Netzwerkkabel und der Switchport.", "Die Internetverbindung.", "Der Webdienst eines entfernten Servers."],
+      correct: 0, tip: "127.0.0.1 bezeichnet den eigenen Rechner.",
+      trap: "Ein erfolgreicher Loopback-Ping prüft nicht die physische Verbindung nach außen.",
+      explanation: "Die Loopback-Adresse prüft den lokalen IP-Stack; Kabel, Gateway und Internet müssen getrennt getestet werden."
+    },
+    {
+      id: "routing-extra-08", topic: "routing", category: "routing", difficulty: "schwer", points: 3, type: "single",
+      prompt: "Ein Ethernet-Router hat das Zielnetz direkt angeschlossen. Für ein Paket an einen Host in diesem Netz ist kein ARP-Eintrag vorhanden. Welche Adresse löst er auf?",
+      options: ["Die IPv4-Adresse des Zielhosts im direkt angeschlossenen Netz.", "Stets die IPv4-Adresse des ursprünglichen Absenders.", "Immer die Adresse 0.0.0.0.", "Die Ziel-IP über einen Broadcast durch alle Router hinweg."],
+      correct: 0, tip: "Bei einer direkt angeschlossenen Route ist der Zielhost der nächste lokale Empfänger.",
+      trap: "Bei einer Route über einen anderen Router wird dagegen dessen Next-Hop-IP lokal aufgelöst.",
+      explanation: "Der Router stellt im direkt angeschlossenen Zielnetz lokal zu und ermittelt bei Bedarf per ARP die MAC des Zielhosts."
+    },
+    {
+      id: "routing-extra-09", topic: "routing", category: "routing", difficulty: "knobel", points: 4, type: "single",
+      prompt: "Ein Ping auf eine entfernte IP läuft ab. Das lokale Gateway antwortet auf Ping. Welche Schlussfolgerung ist am besten?",
+      options: ["Den weiteren Hin- und Rückweg, das Ziel und mögliche ICMP-Filter prüfen; die Ursache ist noch nicht eindeutig.", "Das Gateway beweist, dass der entfernte Host ausgeschaltet ist.", "Ein DNS-Fehler ist bewiesen, obwohl eine IP direkt angepingt wurde.", "Der Rückweg ist garantiert funktionsfähig."],
+      correct: 0, tip: "Ein erfolgreicher Teiltest prüft nicht den gesamten Weg und die Antwort des Ziels.",
+      trap: "Auch eine Firewall oder eine fehlende Rückroute kann eine Echo-Antwort verhindern.",
+      explanation: "Das erreichbare Gateway grenzt den Fehler ein, beweist aber weder den Zustand des Ziels noch einen bestimmten Fehler auf dem weiteren Hin- oder Rückweg."
     }
   ];
 
