@@ -87,6 +87,17 @@
           <p>Ein Kommunikationsprotokoll legt Syntax, Bedeutung, Reihenfolge und Ablauf von Nachrichten fest. Übertragungsarten: <strong>Unicast</strong> (ein Empfänger), <strong>Broadcast</strong> (alle im Netzsegment), <strong>Multicast</strong> (Empfängergruppe) und <strong>Anycast</strong> (geeignete bzw. nächste Instanz einer Gruppe).</p>
           <p>Ein Gerät kann je nach Aufgabe Client und Server sein: Beim Abruf einer Webseite fordert es Daten als Client an; stellt es zugleich eine Datei bereit, übernimmt es für diese Verbindung die Serverrolle. Die Topologie beschreibt dagegen, wie Geräte verbunden sind, nicht welche Rolle ihre Anwendungen spielen.</p>
           <p>Ein Sternnetz ist übersichtlich, weil sich eine einzelne Leitung leicht einem Endgerät zuordnen lässt. Fällt diese Leitung aus, ist normalerweise nur dieses Gerät betroffen; fällt der zentrale Switch aus, verlieren dagegen alle daran angeschlossenen Geräte ihre Verbindung über diesen Switch.</p>
+          <h3>Simplex, Halbduplex und Vollduplex</h3>
+          <p>Diese Begriffe beschreiben, in welche Richtung Daten über eine Verbindung übertragen werden können und ob beide Seiten gleichzeitig senden dürfen. <strong>Duplex</strong> ist der Oberbegriff für Kommunikation in beide Richtungen; manchmal wird damit umgangssprachlich auch Vollduplex gemeint. Deshalb ist es wichtig, zwischen Halb- und Vollduplex zu unterscheiden.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Übertragungsart</th><th>Richtung und Zeitpunkt</th><th>Beispiel</th></tr></thead>
+            <tbody>
+              <tr><th>Simplex</th><td>Nur eine Seite sendet, die andere empfängt.</td><td>Ein Radiosender sendet ein Rundfunkprogramm an Empfangsgeräte.</td></tr>
+              <tr><th>Halbduplex</th><td>Beide Seiten können senden und empfangen, aber auf der Verbindung nicht gleichzeitig.</td><td>Beim Walkie-Talkie spricht erst eine Person, dann antwortet die andere.</td></tr>
+              <tr><th>Vollduplex</th><td>Beide Seiten können gleichzeitig senden und empfangen.</td><td>Beim Telefonieren können beide Personen gleichzeitig sprechen und hören.</td></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Im Netzwerk:</strong> Eine moderne Ethernet-Verbindung zwischen PC und Switch arbeitet normalerweise vollduplex: Beide Geräte können gleichzeitig Daten übertragen; auf dieser Verbindung wird CSMA/CD nicht benötigt. Klassisches geteiltes Ethernet arbeitet dagegen halbduplex und nutzt CSMA/CD zur Kollisionserkennung. WLAN nutzt üblicherweise einen gemeinsam verwendeten Funkkanal und arbeitet im Halbduplexbetrieb; CSMA/CA soll Kollisionen möglichst vermeiden, kann sie aber nicht vollständig ausschließen.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Zugriffsverfahren</th><th>Prinzip</th></tr></thead>
             <tbody>
