@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../learn.css">
   <script src="../theme.js" defer></script>
   <script src="../learn-page.js" defer></script>
+  <script src="subnet-calculator.js" defer></script>
 </head>
 <body class="theme-informatik">
   <div class="page-shell">
@@ -198,6 +199,22 @@
         <details id="ip" class="learn-section">
           <summary><span class="eyebrow">05 · OSI-Schicht 3</span><span class="learn-section-title">IPv4, Subnetzmasken, Subnetting und IPv6</span></summary>
           <p>IPv4-Adressen haben <strong>32 Bit</strong> in vier Oktetten (je 0–255). Eine Subnetzmaske trennt Netz- und Hostanteil: Eins-Bits stehen für den Netzanteil, Null-Bits für Hosts. CIDR notiert die Zahl der Netzbits, z. B. <code>/24 = 255.255.255.0</code>.</p>
+          <h3>IPv4-Beispiel: Dezimal und Binär</h3>
+          <p>Die Adresse <code>192.168.10.70</code> besteht aus vier durch Punkte getrennten Oktetten. Jedes Oktett enthält genau acht Bits; die Stellenwerte sind von links nach rechts <code>128, 64, 32, 16, 8, 4, 2, 1</code>. Eine 1 bedeutet, dass der jeweilige Stellenwert mitgezählt wird. So entsteht beispielsweise <code>70 = 64 + 4 + 2</code> und damit <code>01000110₂</code>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Oktett</th><th>Zerlegung</th><th>8-Bit-Darstellung</th></tr></thead>
+            <tbody>
+              <tr><th>192</th><td>128 + 64</td><td>11000000</td></tr>
+              <tr><th>168</th><td>128 + 32 + 8</td><td>10101000</td></tr>
+              <tr><th>10</th><td>8 + 2</td><td>00001010</td></tr>
+              <tr><th>70</th><td>64 + 4 + 2</td><td>01000110</td></tr>
+            </tbody>
+          </table></div>
+          <p>Zusammen lautet dieselbe Adresse binär <code>11000000.10101000.00001010.01000110</code>. Führende Nullen sind in der Binärdarstellung wichtig, damit jedes Oktett acht Bits behält. Umgekehrt ergibt <code>11000000₂ = 128 + 64 = 192</code>. Ein Oktett kann höchstens <code>11111111₂ = 255</code> darstellen; <code>192.168.10.256</code> ist deshalb keine gültige IPv4-Adresse.</p>
+          <div class="learn-callout">
+            <strong>IPv4-Adresse und MAC-Adresse unterscheiden</strong>
+            <p>Eine IPv4-Adresse wie <code>192.168.10.70</code> ist eine logische Adresse für die Paketvermittlung. Eine MAC-Adresse wie <code>00:1A:2B:3C:4D:5E</code> wird dagegen für die lokale Ethernet-Zustellung verwendet. Beide stehen in unterschiedlichen Protokollschichten und haben unterschiedliche Aufgaben.</p>
+          </div>
           <div class="table-wrap"><table>
             <thead><tr><th>Privater Bereich</th><th>Präfix</th><th>Historische Klasse</th></tr></thead>
             <tbody>
@@ -207,6 +224,12 @@
             </tbody>
           </table></div>
           <p>Das Klassenmodell A/B/C ist historisch; heute wird mit CIDR geplant. <code>127.0.0.1</code> ist Loopback. NAT übersetzt typischerweise private Adressen auf eine öffentliche Adresse oder einen öffentlichen Pool.</p>
+          <h3>IPv4-Beispiel: Private, öffentliche und besondere Adressen</h3>
+          <p><code>192.168.1.25</code>, <code>10.2.3.4</code> und <code>172.20.5.8</code> liegen in den oben genannten privaten Bereichen. Solche Adressen dürfen in unterschiedlichen privaten Netzen wiederverwendet werden und werden nicht direkt im öffentlichen Internet geroutet. Bei <code>172.32.5.8</code> endet die Prüfung anders: Das zweite Oktett liegt nicht zwischen 16 und 31, also gehört diese Adresse nicht zum privaten Bereich <code>172.16.0.0/12</code>.</p>
+          <p><code>8.8.8.8</code> ist ein Beispiel für eine öffentliche IPv4-Adresse. <code>127.0.0.1</code> bezeichnet dagegen den eigenen Rechner über die Loopback-Schnittstelle: Ein erfolgreicher Ping dorthin prüft den lokalen IP-Stack, aber weder Netzwerkkabel noch Internetverbindung. <code>255.255.255.255</code> ist der lokale IPv4-Broadcast; er ist keine normale Adresse für einen einzelnen Host.</p>
+          <h3>IPv4-Beispiel: Konfiguration und Kommunikation</h3>
+          <p>Ein PC erhält beispielsweise die Adresse <code>192.168.1.20</code>, die Maske <code>255.255.255.0</code>, das Gateway <code>192.168.1.1</code> und einen DNS-Server. Diese Werte können manuell eingetragen oder über DHCP bezogen werden. Die IP-Adresse kennzeichnet die Schnittstelle im Netz, die Maske hilft bei der Entscheidung, ob ein Ziel lokal liegt; das Gateway ist der nächste Router für Ziele außerhalb des lokalen Netzes. DNS übersetzt Namen in IP-Adressen.</p>
+          <p>Für einen anderen PC unter <code>192.168.1.30</code> versucht der erste PC bei dieser Maske die lokale Zustellung. Möchte er dagegen einen Server unter <code>8.8.8.8</code> erreichen, sendet er das Paket zunächst an das konfigurierte Gateway. Bei einer passenden NAT-Konfiguration kann der Router die private Quelladresse für die Verbindung ins Internet übersetzen. Ob die Verbindung tatsächlich funktioniert, hängt zusätzlich von Routing, Konfiguration und Erreichbarkeit ab.</p>
           <div class="table-wrap"><table>
             <thead><tr><th>Historische Klasse</th><th>Erstes Oktett</th><th>Ursprüngliches Präfix</th></tr></thead>
             <tbody>
@@ -219,7 +242,7 @@
           <div class="learn-callout"><strong>Subnetting-Formeln</strong>
             <ul>
               <li>Hostbits: <code>H = 32 − Präfix</code>.</li>
-              <li>Nutzbare Hosts pro Subnetz: <code>2ᴴ − 2</code> (Netz- und Broadcastadresse ausgenommen).</li>
+              <li>Nutzbare Hosts pro Subnetz: <code>2ᴴ − 2</code> bei /0 bis /30 (Netz- und Broadcastadresse ausgenommen); /31 und /32 sind Sonderfälle.</li>
               <li>Ausgeliehene Bits: <code>S = neues Präfix − ursprüngliches Präfix</code>; Subnetze: <code>2ˢ</code>.</li>
               <li>Blockgröße im interessanten Oktett: <code>256 − Maskenwert</code>.</li>
               <li>Netzadresse: IP bitweise AND Subnetzmaske; Broadcast: Hostbits auf 1 setzen.</li>
@@ -259,7 +282,51 @@
             <p><strong>Typischer Fehler:</strong> Gleiche erste drei Oktette allein beweisen bei /27 nicht, dass die Hosts im selben Subnetz liegen. Netz- und Broadcastadresse sind hier keine Hostadressen.</p>
           </div>
           <p><strong>Von der Adresse zum Netz:</strong> Bei <code>192.168.10.70/27</code> ist das letzte Maskenoktett <code>11100000</code>; das letzte Adressoktett 70 ist <code>01000110</code>. Bitweises AND ergibt <code>01000000</code>, also 64. Setzt du die fünf Hostbits auf 1, entsteht <code>01011111</code>, also 95 als Broadcast. Dazwischen liegen die nutzbaren Hostadressen .65 bis .94.</p>
+          <h3>Beispiel: Ein Subnetz über mehrere Oktette</h3>
+          <p>Für <code>172.16.35.130/20</code> besteht die Maske aus 20 Einsen und 12 Nullen: <code>255.255.240.0</code>. Im dritten Oktett ist die Blockgröße <code>256 − 240 = 16</code>. Die Blöcke beginnen dort bei 0, 16, 32, 48 und so weiter; 35 liegt im Block von 32 bis 47. Das vierte Oktett gehört vollständig zum Hostanteil.</p>
+          <p>Daraus folgen Netzadresse <code>172.16.32.0</code>, letzte Adresse und Broadcast <code>172.16.47.255</code> sowie der Hostbereich <code>172.16.32.1–172.16.47.254</code>. Der gesamte Adressbereich umfasst <code>2¹² = 4096</code> Adressen, davon sind <code>4096 − 2 = 4094</code> gewöhnliche Hostadressen. Die Eingabeadresse liegt dazwischen und ist in diesem Subnetz eine Hostadresse.</p>
+          <h3>Beispiel: Subnetze nach Hostbedarf planen</h3>
+          <p>Das Netz <code>192.168.50.0/24</code> soll mindestens vier gleich große Subnetze mit jeweils mindestens 50 Hosts erhalten. Für vier Subnetze werden mindestens zwei Bits ausgeliehen: <code>2² = 4</code>. Es bleiben sechs Hostbits und damit <code>2⁶ − 2 = 62</code> nutzbare Hostadressen pro Subnetz. Das neue Präfix ist <code>/26</code>, die Maske <code>255.255.255.192</code>, und die Blockgröße beträgt <code>256 − 192 = 64</code>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Subnetz</th><th>Gesamter Adressbereich</th><th>Nutzbarer Hostbereich</th><th>Broadcast</th></tr></thead>
+            <tbody>
+              <tr><th>192.168.50.0/26</th><td>.0–.63</td><td>.1–.62</td><td>.63</td></tr>
+              <tr><th>192.168.50.64/26</th><td>.64–.127</td><td>.65–.126</td><td>.127</td></tr>
+              <tr><th>192.168.50.128/26</th><td>.128–.191</td><td>.129–.190</td><td>.191</td></tr>
+              <tr><th>192.168.50.192/26</th><td>.192–.255</td><td>.193–.254</td><td>.255</td></tr>
+            </tbody>
+          </table></div>
+          <p>Die erste Adresse eines gewöhnlichen Subnetzes bezeichnet das Netz, die letzte den gerichteten Broadcast. Der gesamte Adressbereich enthält beide; der Hostbereich nicht. Als Gateway kann eine passend konfigurierte Hostadresse dienen, sie ist aber nicht automatisch immer die erste oder letzte Hostadresse.</p>
+          <div class="cycle-calculator" id="subnetCalculator">
+            <h3>IPv4-Subnetzrechner mit Rechenweg</h3>
+            <p>Gib eine IPv4-Adresse und entweder ein CIDR-Präfix oder eine vollständige Subnetzmaske ein. Der Rechner zeigt das zugehörige Subnetz, nicht die Aufteilung eines größeren Ausgangsnetzes.</p>
+            <div class="cycle-inputs">
+              <label for="subnetAddress">IPv4-Adresse
+                <input id="subnetAddress" class="select-control" type="text" value="192.168.10.70" autocomplete="off" spellcheck="false" aria-describedby="subnetMessage">
+              </label>
+              <label for="subnetMask">Präfix oder Subnetzmaske
+                <input id="subnetMask" class="select-control" type="text" value="/27" autocomplete="off" spellcheck="false" aria-describedby="subnetMessage">
+              </label>
+            </div>
+            <p id="subnetMessage" class="calculator-message" role="status"></p>
+            <div id="subnetResult" aria-live="polite" hidden>
+              <div class="cycle-results">
+                <div><span>Präfix und Subnetzmaske</span><output id="subnetMaskResult"></output></div>
+                <div><span>Netzadresse</span><output id="subnetNetwork"></output></div>
+                <div><span>Letzte Adresse</span><output id="subnetLast"></output></div>
+                <div><span>Gesamter Adressbereich</span><output id="subnetRange"></output></div>
+                <div><span>Hostbereich</span><output id="subnetHosts"></output></div>
+                <div><span>Anzahl Adressen / Hosts</span><output id="subnetCounts"></output></div>
+              </div>
+              <p id="subnetInterpretation"></p>
+              <strong>Rechenweg</strong>
+              <pre class="learn-code"><code id="subnetSteps"></code></pre>
+              <p class="calculator-note">Die Hostzählung setzt ein gewöhnliches IPv4-Subnetz voraus; besondere und reservierte Adressbereiche können die praktische Nutzung einschränken.</p>
+            </div>
+          </div>
+          <noscript><p>Für den Subnetzrechner muss JavaScript aktiviert sein.</p></noscript>
           <p>Mit der Maske entscheidet ein Host, ob er das Ziel direkt im eigenen Netz erreichen will oder an sein Gateway übergibt. Die Regel <code>2ᴴ − 2</code> gilt für die üblichen hier gezeigten Subnetze; spezielle Präfixe wie /31 und /32 werden anders verwendet und nicht mit dieser allgemeinen Hostzählung geplant.</p>
+          <p>Auf einer Punkt-zu-Punkt-Verbindung können bei <code>/31</code> beide Adressen als Endpunkte verwendet werden; ein gerichteter Broadcast entfällt dort. <code>/32</code> bezeichnet eine einzelne Adresse, etwa als Hostroute, und kein gewöhnliches Subnetz mit einem separaten Host- und Broadcastbereich.</p>
           <p>Bei der IP-Zusammenfassung werden gemeinsame führende Bits zusammengefasst. <strong>VLSM</strong> erlaubt unterschiedlich große Subnetze passend zum jeweiligen Hostbedarf.</p>
           <p>IPv6 hat <strong>128 Bit</strong>, dargestellt als acht hexadezimale Blöcke. Führende Nullen je Block dürfen entfallen; eine zusammenhängende Folge von Nullblöcken darf genau einmal durch <code>::</code> ersetzt werden. IPv6 kennt keinen Broadcast, sondern unter anderem Unicast, Multicast und Anycast.</p>
           <div class="formula-card"><strong>IPv6-Kürzung</strong><code>2001:0db8:0000:0000:0000:ff00:0042:8329<br>→ 2001:db8::ff00:42:8329</code><span>Die Kurzform lässt führende Blocknullen und genau eine zusammenhängende Nullblockfolge weg.</span></div>

@@ -3,7 +3,6 @@
 
   const MAX_DURATION_SECONDS = 90 * 60;
   const SECONDS_PER_QUESTION = 2 * 60;
-  const STUDY_PROGRESS_STORAGE_KEY = "fg43-quiz-study-progress-v1";
   const DIFFICULTY_RANK = { leicht: 0, mittel: 1, schwer: 2, knobel: 3 };
 
   // Fachgymnasium-Klausurmaßstab, Stand September 2019: Mindestpunktzahlen je Notenpunkt.
@@ -202,7 +201,6 @@
     unsureValue: document.querySelector("#unsureValue"),
     unsureCorrectValue: document.querySelector("#unsureCorrectValue"),
     uncertainMetricLabel: document.querySelector("#uncertainMetricLabel"),
-    progressStorageWarning: document.querySelector("#progressStorageWarning"),
     resultTime: document.querySelector("#resultTime"),
     restartButton: document.querySelector("#restartButton"),
     repeatWrongButton: document.querySelector("#repeatWrongButton"),
@@ -245,86 +243,6 @@
   function renderQuizMath(element) {
     if (activeSubjectId === "mathe" || activeSubjectId === "stochastik") {
       window.renderMath(element);
-    }
-  }
-
-  function emptySubjectProgress() {
-    return {
-      overall: { attempts: 0, correct: 0 },
-      categories: {}
-    };
-  }
-
-  function isProgressRecord(record) {
-    return record
-      && Number.isSafeInteger(record.attempts)
-      && record.attempts >= 0
-      && Number.isSafeInteger(record.correct)
-      && record.correct >= 0
-      && record.correct <= record.attempts;
-  }
-
-  function loadStudyProgress() {
-    let stored;
-    try {
-      stored = window.localStorage.getItem(STUDY_PROGRESS_STORAGE_KEY);
-    } catch (error) {
-      throw new Error(`Lokaler Lernfortschritt konnte nicht gelesen werden: ${error.message}`);
-    }
-    if (!stored) return { version: 1, subjects: {} };
-
-    let progress;
-    try {
-      progress = JSON.parse(stored);
-    } catch (error) {
-      throw new Error(`Gespeicherter Lernfortschritt ist ungültig: ${error.message}`);
-    }
-    if (!progress || progress.version !== 1 || !progress.subjects
-      || typeof progress.subjects !== "object" || Array.isArray(progress.subjects)) {
-      throw new Error("Gespeicherter Lernfortschritt hat ein unbekanntes Format.");
-    }
-
-    for (const subjectProgress of Object.values(progress.subjects)) {
-      if (!subjectProgress
-        || !isProgressRecord(subjectProgress.overall)
-        || !subjectProgress.categories || typeof subjectProgress.categories !== "object" || Array.isArray(subjectProgress.categories)
-        || !Object.values(subjectProgress.categories).every(isProgressRecord)) {
-        throw new Error("Gespeicherter Lernfortschritt enthält ungültige Werte.");
-      }
-    }
-    return progress;
-  }
-
-  function subjectProgressFrom(progress) {
-    return progress.subjects[activeSubjectId] || emptySubjectProgress();
-  }
-
-  function incrementProgressRecord(records, key, correct) {
-    const record = records[key] || { attempts: 0, correct: 0 };
-    record.attempts++;
-    if (correct) record.correct++;
-    records[key] = record;
-  }
-
-  function incrementOverallProgress(record, correct) {
-    record.attempts++;
-    if (correct) record.correct++;
-  }
-
-  function recordStudyProgress() {
-    const progress = loadStudyProgress();
-    const subjectProgress = progress.subjects[activeSubjectId] || emptySubjectProgress();
-    for (const question of quizQuestions) {
-      if (!hasAnswer(question)) continue;
-      const correct = isCorrect(question);
-      incrementOverallProgress(subjectProgress.overall, correct);
-      incrementProgressRecord(subjectProgress.categories, question.category, correct);
-    }
-    progress.subjects[activeSubjectId] = subjectProgress;
-    try {
-      window.localStorage.setItem(STUDY_PROGRESS_STORAGE_KEY, JSON.stringify(progress));
-    } catch (error) {
-      throw new Error(`Lernfortschritt konnte nicht gespeichert werden: ${error.message}`);
     }
   }
 
@@ -413,16 +331,6 @@
     const choices = [90, 75, 60, 50, 40, 30, 25, 20, 15, 10].filter((count) => count <= eligibleCount);
     if (eligibleCount > 0 && !choices.includes(eligibleCount)) choices.unshift(eligibleCount);
 
-    let adaptiveStorageError = "";
-    if (mode === "adaptive") {
-      try {
-        loadStudyProgress();
-      } catch (error) {
-        console.error("Adaptiver Modus kann den Lernfortschritt nicht lesen.", error);
-        adaptiveStorageError = "Der adaptive Modus benötigt lesbaren lokalen Lernfortschritt. Prüfe den Browserspeicher oder lösche den Quiz-Fortschritt.";
-      }
-    }
-
     elements.countSelect.replaceChildren();
     for (const count of choices) {
       const option = document.createElement("option");
@@ -434,7 +342,7 @@
       elements.countSelect.append(option);
     }
     elements.countSelect.disabled = eligibleCount === 0;
-    elements.startForm.querySelector("button[type='submit']").disabled = eligibleCount === 0 || Boolean(adaptiveStorageError);
+    elements.startForm.querySelector("button[type='submit']").disabled = eligibleCount === 0;
     elements.durationBadge.textContent = mode === "flashcards"
       ? "ohne Zeitlimit"
       : mode === "strict" ? "90 min" : "max. 90 min";
@@ -445,14 +353,13 @@
       exam: "2 min pro Aufgabe, maximal 90 min · Feedback am Ende.",
       learning: "2 min pro Aufgabe, maximal 90 min · Sofort-Feedback.",
       flashcards: "Ohne Zeitlimit · Lösung aufdecken und selbst einschätzen.",
-      adaptive: "2 min pro Aufgabe, maximal 90 min · Sofort-Feedback, Schwächen zuerst, Schwierigkeit steigt schrittweise; Lernfortschritt bleibt lokal gespeichert.",
       strict: "Feste Gesamtzeit von 90 min · keine Tipps, Feedback erst nach Abgabe."
     };
-    elements.setupNoteText.textContent = adaptiveStorageError || (eligibleCount
+    elements.setupNoteText.textContent = eligibleCount
       ? `${categories.size} Kategorien ausgewählt · ${eligibleCount} Aufgaben im Pool. ${modeDescriptions[mode]}`
       : categories.size
         ? "Für diese Kombination aus Kategorien und Schwierigkeitsgrad sind keine Aufgaben vorhanden."
-        : "Wähle mindestens eine Kategorie aus, um ein Quiz zu starten.");
+        : "Wähle mindestens eine Kategorie aus, um ein Quiz zu starten.";
     syncTopicShortcuts(categories);
   }
 
@@ -504,44 +411,6 @@
     return shuffle(selected);
   }
 
-  function chooseAdaptiveQuestions(categories, requestedCount, progress) {
-    const remaining = eligibleQuestions(categories);
-    const count = Math.min(requestedCount, remaining.length);
-    const subjectProgress = subjectProgressFrom(progress);
-    const overallAccuracy = subjectProgress.overall.attempts
-      ? subjectProgress.overall.correct / subjectProgress.overall.attempts
-      : 0;
-    const availableRanks = remaining.map((question) => DIFFICULTY_RANK[question.difficulty]);
-    const minRank = Math.min(...availableRanks);
-    const maxRank = Math.max(...availableRanks);
-    const startingRank = overallAccuracy >= 0.85 ? 2 : overallAccuracy >= 0.65 ? 1 : 0;
-    const selected = [];
-
-    while (selected.length < count) {
-      const targetRank = Math.max(minRank, Math.min(maxRank, startingRank + Math.floor(selected.length / 5)));
-      const weights = remaining.map((question) => {
-        const categoryProgress = subjectProgress.categories[question.category];
-        const accuracy = categoryProgress
-          ? (categoryProgress.correct + 1) / (categoryProgress.attempts + 2)
-          : 0.5;
-        const topicWeight = 0.6 + (1 - accuracy) * 1.8;
-        const difficultyDistance = Math.abs(DIFFICULTY_RANK[question.difficulty] - targetRank);
-        return topicWeight / (1 + difficultyDistance * 0.75);
-      });
-      const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-      let selection = Math.random() * totalWeight;
-      let selectedIndex = weights.length - 1;
-      for (let index = 0; index < weights.length; index++) {
-        selection -= weights[index];
-        if (selection < 0) {
-          selectedIndex = index;
-          break;
-        }
-      }
-      selected.push(remaining.splice(selectedIndex, 1)[0]);
-    }
-    return selected;
-  }
   function mixQuestionOptions(question) {
     if (question.type === "cloze") return question;
 
@@ -653,18 +522,7 @@
       window.alert("Wähle mindestens eine Kategorie aus.");
       return;
     }
-    let questions;
-    if (elements.quizMode.value === "adaptive") {
-      try {
-        questions = chooseAdaptiveQuestions(categories, requestedCount, loadStudyProgress());
-      } catch (error) {
-        console.error("Adaptiver Modus kann nicht gestartet werden.", error);
-        elements.setupNoteText.textContent = "Der adaptive Modus kann den lokalen Lernfortschritt nicht lesen. Prüfe den Browserspeicher oder lösche den Quiz-Fortschritt.";
-        return;
-      }
-    } else {
-      questions = chooseQuestions(categories, requestedCount);
-    }
+    const questions = chooseQuestions(categories, requestedCount);
     if (questions.length === 0) {
       window.alert("Für diesen Themenbereich sind keine Aufgaben vorhanden.");
       return;
@@ -674,7 +532,6 @@
       exam: "Klausurmodus · Feedback am Ende",
       learning: "Lernmodus · Sofort-Feedback",
       flashcards: "Karteikartenmodus · Selbsteinschätzung",
-      adaptive: "Adaptiver Lernmodus · Schwächen zuerst",
       strict: "Strenge Prüfungssimulation · 90 min"
     };
     const title = titles[elements.quizMode.value];
@@ -956,7 +813,7 @@
 
   function renderInstantFeedback() {
     const question = currentQuestion();
-    const learningMode = ["learning", "adaptive"].includes(elements.quizMode.value);
+    const learningMode = elements.quizMode.value === "learning";
     if (!learningMode || !question || !hasAnswer(question)) {
       elements.instantFeedback.hidden = true;
       return;
@@ -1044,16 +901,6 @@
     const unsureCorrectCountForRetry = quizQuestions.filter((question) =>
       unsureQuestions.has(question.id) && isCorrect(question)
     ).length;
-
-    elements.progressStorageWarning.hidden = true;
-    elements.progressStorageWarning.textContent = "";
-    try {
-      recordStudyProgress();
-    } catch (error) {
-      console.error("Quiz-Lernfortschritt konnte nicht gespeichert werden.", error);
-      elements.progressStorageWarning.textContent = "Der Lernfortschritt konnte nicht lokal gespeichert werden. Der adaptive Modus kann deine Ergebnisse daher nicht für spätere Quizze berücksichtigen.";
-      elements.progressStorageWarning.hidden = false;
-    }
 
     elements.quizView.hidden = true;
     elements.resultView.hidden = false;
