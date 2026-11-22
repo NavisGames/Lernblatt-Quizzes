@@ -205,7 +205,7 @@
     },
     {
       id: "med-10", topic: "media", category: "media", difficulty: "mittel", points: 2, type: "multiple",
-      prompt: "Welche Aussagen zu WLAN-Zugriffsverfahren treffen zu?",
+      prompt: "Welche Aussagen zu Zugriffsverfahren in Netzwerken treffen zu?",
       options: ["CSMA/CA soll Kollisionen vermeiden oder minimieren.", "CSMA/CD erkennt Kollisionen und wird klassischen kollisionsfähigen Shared-Medien zugeordnet.", "Token Passing erlaubt das Senden der Station mit dem Token.", "CSMA/CA bedeutet, dass jede Station gleichzeitig senden darf."],
       correct: [0, 1, 2], tip: "Ordne Collision Avoidance, Collision Detection und Token-Zuteilung auseinander.",
       trap: "CSMA/CA erlaubt keine beliebigen gleichzeitigen Sendungen.",
@@ -230,11 +230,11 @@
     },
     {
       id: "eth-03", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "multiple",
-      prompt: "Welche Aussagen zur MAC-Adresse sind richtig?",
-      options: ["Die ersten 24 Bit bilden die Hersteller-OUI.", "Die folgenden 24 Bit sind gerätespezifisch.", "Sie wird üblicherweise hexadezimal dargestellt.", "Sie ist eine 16-Bit-Portnummer."],
+      prompt: "Welche Aussagen zu einer herstellerseitig vergebenen Ethernet-MAC-Adresse mit 48 Bit sind richtig?",
+      options: ["Die ersten 24 Bit bilden üblicherweise die Hersteller-OUI.", "Die folgenden 24 Bit kennzeichnen üblicherweise die Schnittstelle.", "Sie wird üblicherweise hexadezimal dargestellt.", "Sie ist eine 16-Bit-Portnummer."],
       correct: [0, 1, 2], tip: "Teile die 48 Bit in Hersteller- und gerätespezifischen Anteil.",
       trap: "Portnummern und MAC-Adressen haben unterschiedliche Länge und Funktion.",
-      explanation: "Die MAC-Adresse umfasst 48 Bit, meist als Hexadezimalzahl; die ersten 24 Bit sind die OUI."
+      explanation: "Eine herstellerseitig vergebene Ethernet-MAC-Adresse umfasst 48 Bit und wird meist hexadezimal geschrieben; die ersten 24 Bit bilden üblicherweise die OUI."
     },
     {
       id: "eth-04", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "single",
@@ -277,7 +277,7 @@
       options: ["Der Switch lernt die Quell-MAC zusammen mit dem Eingangsport.", "Bei bekannter Ziel-MAC kann er den Frame gezielt weiterleiten.", "Bei unbekannter Ziel-MAC floodet er üblicherweise über andere Ports.", "Er lernt die Ziel-IP und baut daraus automatisch eine Subnetzroute."],
       correct: [0, 1, 2], tip: "Die SAT/MAC-Tabelle verknüpft Quelladressen mit Switchports.",
       trap: "Ein normaler Layer-2-Switch berechnet keine IP-Routen.",
-      explanation: "Ein Switch lernt Quell-MAC/Port-Zuordnungen und flutet unbekannte Ziel-MACs aus allen anderen Ports."
+      explanation: "Ein Switch lernt Quell-MAC/Port-Zuordnungen und flutet unbekannte Ziel-MACs an die anderen geeigneten Ports desselben VLANs."
     },
     {
       id: "eth-09", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "multiple",
@@ -367,7 +367,7 @@
     },
     {
       id: "ip-09", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "multiple",
-      prompt: "Welche Aussagen zu Netz-, Broadcast- und Hostadressen sind richtig?",
+      prompt: "Welche Aussagen zu Netz-, Broadcast- und Hostadressen gelten für ein gewöhnliches IPv4-Subnetz mit Präfix /24 bis /30?",
       options: ["Die kleinste Adresse eines IPv4-Subnetzes ist die Netzadresse.", "Die größte Adresse eines IPv4-Subnetzes ist die Broadcastadresse.", "Netz- und Broadcastadresse sind üblicherweise keine nutzbaren Hostadressen.", "Das Default-Gateway muss immer die Broadcastadresse sein."],
       correct: [0, 1, 2], tip: "Die Grenzen eines Subnetzes sind reserviert.",
       trap: "Ein Gateway liegt typischerweise auf einer nutzbaren Hostadresse.",
@@ -483,27 +483,35 @@
     },
     {
       id: "net-14", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
-      prompt: "Welche OSI-Schicht verantwortet die fehlerfreie Übertragung von Daten zwischen zwei Systemen?",
+      prompt: "Welche OSI-Schicht stellt mit einem zuverlässigen Protokoll wie TCP die geordnete Ende-zu-Ende-Übertragung zwischen Anwendungen bereit?",
       options: ["Schicht 2 – Sicherungsschicht.", "Schicht 3 – Vermittlungsschicht.", "Schicht 4 – Transportschicht.", "Schicht 1 – Bitübertragung."],
-      correct: 2, tip: "Die Transportschicht nutzt TCP und UDP für end-to-end Verbindungen.",
-      trap: "Die Sicherungsschicht arbeitet lokal zwischen zwei Knoten.",
-      explanation: "Die Transportschicht (Schicht 4) ist verantwortlich für zuverlässige end-to-end Datenübertragung."
+      correct: 2, tip: "TCP arbeitet auf der Transportschicht und bestätigt empfangene Daten.",
+      trap: "Die Sicherungsschicht prüft Frames auf einem lokalen Verbindungsabschnitt; nicht jedes Protokoll auf Schicht 4 ist zuverlässig.",
+      explanation: "TCP auf Schicht 4 sorgt für zuverlässige, geordnete Übertragung zwischen Endpunkten. Schicht 2 behandelt Frames auf einem einzelnen Verbindungsabschnitt; Ethernet erkennt dort Fehler mit der FCS, garantiert aber keine Zustellung."
+    },
+    {
+      id: "net-14b", topic: "basics", category: "basics", difficulty: "leicht", points: 1, type: "single",
+      prompt: "Welche OSI-Schicht erkennt mit der Ethernet-FCS Übertragungsfehler in Frames auf einem lokalen Verbindungsabschnitt?",
+      options: ["Schicht 2 – Sicherungsschicht.", "Schicht 3 – Vermittlungsschicht.", "Schicht 4 – Transportschicht.", "Schicht 1 – Bitübertragung."],
+      correct: 0, tip: "Ethernet-Frames und MAC-Adressen gehören zur selben Schicht.",
+      trap: "Die FCS erkennt Fehler, behebt sie aber nicht selbst und garantiert keine Zustellung.",
+      explanation: "Die Sicherungsschicht (Schicht 2) verarbeitet Frames und überprüft beim Ethernet-Empfang die FCS. Zuverlässigkeit zwischen Endpunkten kann beispielsweise TCP auf Schicht 4 bereitstellen."
     },
     {
       id: "net-15", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "multiple",
       prompt: "Welche Aussagen zu TCP und UDP sind richtig?",
-      options: ["TCP ist verbindungsorientiert und zuverlässig.", "UDP ist verbindungslos und schneller als TCP.", "TCP prüft automatisch, ob Pakete ankamen.", "UDP garantiert eine fehlerfreie Zustellung."],
+      options: ["TCP ist verbindungsorientiert und bietet zuverlässige, geordnete Datenübertragung.", "UDP ist verbindungslos und hat weniger Protokollaufwand.", "TCP verwendet Bestätigungen und kann verlorene Daten erneut übertragen.", "UDP garantiert eine fehlerfreie Zustellung."],
       correct: [0, 1, 2], tip: "TCP benutzt Three-Way-Handshake; UDP sendet einfach los.",
-      trap: "UDP ist nicht zuverlässig und garantiert keine Zustellung.",
-      explanation: "TCP ist verbindungsorientiert und zuverlässig; UDP ist verbindungslos und schneller, aber nicht zuverlässig."
+      trap: "Weniger Protokollaufwand bedeutet nicht, dass UDP immer schneller ist oder die Zustellung garantiert.",
+      explanation: "TCP nutzt unter anderem Bestätigungen und erneute Übertragungen. UDP ist verbindungslos und garantiert weder Zustellung noch Reihenfolge; die tatsächliche Geschwindigkeit hängt vom Einsatz ab."
     },
     {
       id: "net-16", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
       prompt: "Welche Aussage zum OSI-Modell und Encapsulation ist korrekt?",
-      options: ["Daten auf Schicht 7 werden mit Headers von Schicht 6 bis 1 umhüllt.", "Jede Schicht fügt beim Versenden ihren eigenen Header hinzu.", "Beim Empfangen werden nur die Header der Schicht 1 geprüft.", "Headers werden beim Empfangen von unten nach oben wieder entfernt."],
-      correct: 1, tip: "Dies ist das Encapsulation-Prinzip: jede Schicht wrappt die Daten.",
-      trap: "Es werden nicht nur die Header der untersten Schicht geprüft.",
-      explanation: "Beim Versenden werden Headers von oben nach unten hinzugefügt; beim Empfangen werden sie von unten nach oben entfernt."
+      options: ["Schicht 1 fügt immer einen eigenen Header hinzu.", "Jede der sieben Schichten fügt bei jeder Übertragung zwingend einen Header hinzu.", "Beim Empfang werden ausschließlich Informationen der Schicht 1 ausgewertet.", "Beim Empfang werden die jeweiligen Protokollinformationen schrittweise von unten nach oben ausgewertet und entfernt."],
+      correct: 3, tip: "Beim Empfang werden die beim Versand entstandenen Hüllen in umgekehrter Reihenfolge verarbeitet.",
+      trap: "Nicht jede OSI-Schicht fügt zwingend einen Header hinzu; Schicht 1 überträgt Signale.",
+      explanation: "Beim Versand können Protokolle Header und auch Trailer hinzufügen. Beim Empfang werden die jeweiligen Informationen von unten nach oben ausgewertet und entfernt; Schicht 1 überträgt dabei Signale statt zwingend einen Header hinzuzufügen."
     },
     {
       id: "net-17", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "cloze",
@@ -528,18 +536,18 @@
     {
       id: "eth-12", topic: "ethernet", category: "ethernet", difficulty: "mittel", points: 2, type: "multiple",
       prompt: "Welche Aussagen zur MAC-Adressierung im Ethernet-Netz stimmen?",
-      options: ["Die OUI identifiziert den Gerätehersteller.", "Alle MAC-Adressen sind weltweit einzigartig.", "Broadcast-MAC ist FF:FF:FF:FF:FF:FF.", "Eine Multicast-MAC beginnt mit einer geraden ersten Hexadezimalziffer des ersten Bytes."],
-      correct: [0, 2], tip: "Die OUI ist der Herstellerteil; FF:FF... ist Broadcasting; Multicast beginnt mit ungerader zweiter Hexadezimalziffer.",
+      options: ["Bei einer herstellerseitig vergebenen Adresse kennzeichnet die OUI üblicherweise den Hersteller.", "Alle MAC-Adressen sind weltweit einzigartig.", "Broadcast-MAC ist FF:FF:FF:FF:FF:FF.", "Eine Multicast-MAC beginnt zwingend mit einer geraden ersten Hexadezimalziffer des ersten Bytes."],
+      correct: [0, 2], tip: "Betrachte das niederwertigste Bit des ersten Bytes; die zweite Hexadezimalziffer dieses Bytes ist bei Gruppenadressen ungerade.",
       trap: "Nicht alle MAC-Adressen sind weltweit einzigartig; lokale Adressen sind möglich.",
-      explanation: "OUI identifiziert den Hersteller, Broadcast ist FF:FF:FF:FF:FF:FF, Multicast beginnt mit ungerader Stelle im ersten Byte."
+      explanation: "Eine OUI kennzeichnet üblicherweise den Hersteller; FF:FF:FF:FF:FF:FF ist die Broadcast-Adresse. Bei Gruppenadressen ist das niederwertigste Bit des ersten Bytes gesetzt; dessen zweite Hexadezimalziffer ist ungerade."
     },
     {
       id: "eth-13", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "single",
-      prompt: "Ein Switch empfängt einen Frame mit Ziel-MAC D. Wenn die MAC nicht in der Tabelle eingetragen ist, was macht der Switch normalerweise?",
-      options: ["Er flooded den Frame über alle Ports außer dem Eingangsport.", "Er verwirft den Frame sofort.", "Er sendet eine Anfrage per ARP an alle Ports.", "Er wartet, bis ein DHCP-Server antwortet."],
-      correct: 0, tip: "Flooded bedeutet, den Frame über alle anderen Ports zu senden.",
+      prompt: "Ein Switch empfängt einen Unicast-Frame mit einer im betreffenden VLAN unbekannten Ziel-MAC. Was macht er normalerweise?",
+      options: ["Er flutet den Frame an die anderen geeigneten Ports desselben VLANs.", "Er verwirft den Frame sofort.", "Er sendet eine Anfrage per ARP an alle Ports.", "Er wartet, bis ein DHCP-Server antwortet."],
+      correct: 0, tip: "Flooding bleibt im VLAN und schließt den Eingangsport aus.",
       trap: "Verwerfen würde zu unerreichbaren Zielen führen.",
-      explanation: "Unbekannte Ziel-MACs werden geflooded, bis der Switch die MAC-Adresse irgendwann durch Learning erfährt."
+      explanation: "Der Switch flutet unbekannte Unicast-Ziele an geeignete Ports desselben VLANs außer dem Eingangsport. Antwortet das Ziel, kann er dessen Quell-MAC und Port lernen."
     },
     {
       id: "ip-13", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "cloze",
@@ -563,15 +571,15 @@
     {
       id: "ip-15", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "multiple",
       prompt: "Welche Aussagen zu IPv4-Fragmentierung und MTU sind richtig?",
-      options: ["Die MTU bestimmt die maximale Größe eines Frames ohne Fragmentierung.", "IPv4-Header können bis zu 60 Byte groß sein.", "Jedes Fragment hat seinen eigenen IPv4-Header.", "Die Ziel-IP ändert sich bei Fragmentierung."],
+      options: ["Die IP-MTU begrenzt die Größe eines IP-Pakets für einen Verbindungsabschnitt, einschließlich IP-Header.", "IPv4-Header können bis zu 60 Byte groß sein.", "Jedes Fragment hat seinen eigenen IPv4-Header.", "Die Ziel-IP ändert sich bei Fragmentierung."],
       correct: [0, 1, 2], tip: "IPv4-Fragmente müssen zusammengesetzt werden; die Ziel-IP bleibt gleich.",
-      trap: "Die Ziel-IP ist über alle Fragmente konstant.",
-      explanation: "MTU begrenzt Framegröße, IPv4-Header bis 60 Byte, jedes Fragment hat einen Header."
+      trap: "Die IP-MTU bezieht sich auf das IP-Paket, nicht auf den gesamten Ethernet-Frame. Fragmentierung ist nicht immer erlaubt.",
+      explanation: "Die IP-MTU begrenzt die Größe des IP-Pakets auf dem jeweiligen Abschnitt. Ist IPv4-Fragmentierung zulässig, erhält jedes Fragment einen eigenen IPv4-Header; die Ziel-IP bleibt gleich. IPv4-Header sind 20 bis 60 Byte lang."
     },
     {
       id: "rt-11", topic: "routing", category: "routing", difficulty: "mittel", points: 2, type: "single",
       prompt: "Welche Aussage zum ARP-Protokoll ist richtig?",
-      options: ["ARP ermittelt die MAC-Adresse zu einer bekannten IPv4-Adresse im lokalen Netz.", "ARP funktioniert auch über Router hinweg für entfernte Ziele.", "ARP arbeitet auf Schicht 3 und nutzt IP-Adressen zur Anfrage.", "ARP-Antworten werden typischerweise als Broadcast gesendet."],
+      options: ["ARP ermittelt die MAC-Adresse zu einer bekannten IPv4-Adresse im lokalen Netz.", "ARP funktioniert auch über Router hinweg für entfernte Ziele.", "ARP-Anfragen müssen als IP-Pakete über Router gesendet werden.", "ARP-Antworten werden typischerweise als Broadcast gesendet."],
       correct: 0, tip: "ARP ist auf lokale Netze beschränkt; es arbeitet auf Schicht 2/3-Grenze.",
       trap: "ARP funktioniert nicht over Router; für entfernte Ziele wird die MAC des Gateways ermittelt.",
       explanation: "ARP löst lokale IPv4-Adressen in MAC-Adressen auf; es funktioniert nicht über Router."
@@ -592,7 +600,7 @@
       prompt: "Welche Aussage zum 802.1Q-VLAN-Tag ist korrekt?",
       options: ["Es fügt 4 Bytes hinzu und enthält die 12-Bit VLAN-ID.", "Es ersetzt die Ziel-MAC-Adresse durch eine VLAN-Nummer.", "Es kann maximal 256 verschiedene VLANs auf einem Switch adressieren.", "Es funktioniert auch bei untagged Ports ohne Konfiguration."],
       correct: 0, tip: "802.1Q-Tag: TPID (2 Bytes) + PCP (3 Bit) + CFI (1 Bit) + VLAN-ID (12 Bit).",
-      trap: "Mit 12 Bit VLAN-ID können 2^12=4096 VLANs adressiert werden.",
+      trap: "Das Feld hat 4096 mögliche Bitwerte; 0 und 4095 sind besondere beziehungsweise reservierte Werte.",
       explanation: "Das 802.1Q-Tag ist 4 Bytes groß und enthält eine 12-Bit VLAN-ID."
     },
     {
@@ -625,29 +633,29 @@
     {
       id: "rt-13", topic: "routing", category: "routing", difficulty: "leicht", points: 1, type: "single",
       prompt: "Welche Aussage zum Default Gateway ist korrekt?",
-      options: ["Es ist der Router, an den der Host Pakete für unbekannte Ziele sendet.", "Es ist immer die erste Adresse im Subnetz.", "Es kann sich während einer Sitzung mehrfach ändern.", "Es wird von DNS automatisch zugeteilt."],
+      options: ["Es ist der lokale Router für Ziele, für die keine spezifischere Route verwendet wird.", "Es ist immer die erste Adresse im Subnetz.", "Es ersetzt bei jeder Verbindung die Ziel-IP im Paket.", "Es wird von DNS automatisch zugeteilt."],
       correct: 0, tip: "Der Gateway ist typischerweise die erste oder eine andere nutzbare Adresse im lokalen Netz.",
       trap: "Das Default Gateway wird nicht von DNS zugeteilt.",
-      explanation: "Das Default Gateway ist der Router, an den unbekannte Remote-Ziele weitergeleitet werden."
+      explanation: "Das Default Gateway ist der nächste Router für Ziele ohne spezifischere Route; die Ziel-IP des Pakets bleibt dabei grundsätzlich die des eigentlichen Ziels."
     },
     {
       id: "net-19", topic: "basics", category: "basics", difficulty: "mittel", points: 2, type: "single",
-      prompt: "Welche PDU-Einheit wird auf Schicht 5 des OSI-Modells verwendet?",
-      options: ["Session (bei manchen Modellen), ansonsten Layer-7-PDU.", "Paket.", "Frame.", "Bit."],
-      correct: 0, tip: "Die Schichten 5–7 werden oft unter Daten/Message zusammengefasst.",
-      trap: "Schicht 5 ist nicht standardisiert in der Praxis.",
-      explanation: "Schicht 5 (Session) nutzt bei Bedarf Session-PDU; in der Praxis werden Schichten 5–7 oft zusammengefasst."
+      prompt: "Wie werden die übertragenen Einheiten der OSI-Schichten 5 bis 7 in der vereinfachten Übersicht des Lernblatts bezeichnet?",
+      options: ["Daten.", "IP-Pakete.", "Ethernet-Frames.", "Bits."],
+      correct: 0, tip: "Die oberen drei Schichten werden in dieser Übersicht gemeinsam betrachtet.",
+      trap: "Paket, Frame und Bit gehören in dieser Übersicht zu den Schichten 3, 2 und 1.",
+      explanation: "Das Lernblatt bezeichnet die Einheiten der oberen drei Schichten vereinfacht als Daten; Paket, Frame und Bit sind die dort verwendeten Bezeichnungen für Schicht 3, 2 und 1."
     },
     {
       id: "eth-16", topic: "ethernet", category: "ethernet", difficulty: "schwer", points: 3, type: "cloze",
-      prompt: "Ein ungelabelter Port eines Switches gehört zum VLAN {{0}}; ein Tagged Port {{1}}.",
+      prompt: "Ein Access-Port ordnet untagged eingehende Frames {{0}} zu; ein passend konfigurierter Trunk-Port {{1}}.",
       blanks: [
-        { options: ["dem Management-VLAN, typischerweise VLAN 1", "einem beliebigen Passthrough-VLAN", "VLAN 65535"], correct: "dem Management-VLAN, typischerweise VLAN 1" },
-        { options: ["kann Frames mehrerer VLANs mit Tags weiterleiten", "kann nur Frames eines einzigen VLAN tragen", "hat kein spezielles VLAN"], correct: "kann Frames mehrerer VLANs mit Tags weiterleiten" }
+        { options: ["seinem konfigurierten VLAN", "immer dem Management-VLAN", "VLAN 65535"], correct: "seinem konfigurierten VLAN" },
+        { options: ["kann Frames mehrerer VLANs mit Tags weiterleiten", "kann grundsätzlich nur Frames eines einzigen VLANs tragen", "entfernt immer alle VLAN-Tags"], correct: "kann Frames mehrerer VLANs mit Tags weiterleiten" }
       ],
-      tip: "Untagged Ports führen normalerweise nur Frames eines Standard-VLAN; Tagged Ports tragen mehrere VLANs.",
-      trap: "Tagged Ports tragen Tags von vielen VLANs gleichzeitig.",
-      explanation: "Untagged Ports gehören typischerweise zu VLAN 1; Tagged Ports führen Frames mehrerer VLANs mit Tags."
+      tip: "Ein Access-Port ist einem VLAN zugeordnet; ein Trunk kann mehrere VLANs verbinden.",
+      trap: "Das Access-VLAN ist konfigurierbar und muss nicht VLAN 1 oder das Management-VLAN sein.",
+      explanation: "Untagged eingehende Frames am Access-Port werden dem konfigurierten VLAN zugeordnet. Ein Trunk kann mehrere VLANs mit Tags übertragen; ein natives VLAN kann je nach Konfiguration untagged sein."
     },
     {
       id: "ip-17", topic: "ip", category: "ip", difficulty: "mittel", points: 2, type: "multiple",
@@ -661,9 +669,9 @@
       id: "net-20", topic: "basics", category: "basics", difficulty: "schwer", points: 3, type: "single",
       prompt: "Nach einer OSI-Schicht-7-Anfrage eines Browsers müssen die Daten alle Schichten durchlaufen. Welche Reihenfolge beim Versand ist korrekt?",
       options: ["7 → 6 → 5 → 4 → 3 → 2 → 1 (oben nach unten, dazu Encapsulation)", "1 → 2 → 3 → 4 → 5 → 6 → 7 (unten nach oben, Decapsulation)", "2 → 1 → 7 → 6 → 5 (zufällige Reihenfolge)", "Nur Schicht 1 wird benutzt; der Rest ist optional."],
-      correct: 0, tip: "Die Daten werden von oben nach unten mit Headers umwickelt.",
+      correct: 0, tip: "Im OSI-Modell laufen die Daten beim Versand von oben nach unten; Protokolle können Hüllen hinzufügen.",
       trap: "Decapsulation passiert beim Empfang, nicht beim Versand.",
-      explanation: "Beim Versand werden Daten von Schicht 7 bis 1 mit Headers umwickelt (Encapsulation)."
+      explanation: "Im OSI-Modell werden Daten beim Versand von oben nach unten weitergereicht. Protokolle können dabei Header und Trailer hinzufügen; Schicht 1 überträgt Signale."
     },
     {
       id: "net-hard-01", topic: "basics", category: "basics", difficulty: "knobel", points: 4, type: "single",

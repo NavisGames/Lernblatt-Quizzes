@@ -122,9 +122,10 @@
               <tr><th>1 Bitübertragung</th><td>Signale, Leitungspegel und Medium</td><td>Bit</td></tr>
             </tbody>
           </table></div>
-          <p>Beim Senden werden Nutzdaten von oben nach unten schichtweise um Header (teilweise auch Trailer) ergänzt: <strong>Kapselung</strong>. Beim Empfangen werden diese Informationen von unten nach oben ausgewertet und entfernt. Für die Klausur besonders wichtig: Layer 1 = Signal/Medium, Layer 2 = Frame/MAC, Layer 3 = Paket/IP, Layer 4 = Ende-zu-Ende-Transport.</p>
+          <p>Beim Senden können Protokolle den Nutzdaten von oben nach unten Header und teilweise Trailer hinzufügen: <strong>Kapselung</strong>. Beim Empfangen werden die jeweiligen Informationen von unten nach oben ausgewertet und entfernt. Nicht jede Schicht fügt zwingend einen Header hinzu: Schicht 1 überträgt Signale. Für die Klausur besonders wichtig: Layer 1 = Signal/Medium, Layer 2 = Frame/MAC, Layer 3 = Paket/IP, Layer 4 = Ende-zu-Ende-Transport.</p>
           <p>Beim Aufruf einer Webseite erzeugt die Anwendung zunächst eine Anfrage. Die Transportschicht ergänzt unter anderem Portinformationen, IP ergänzt Quell- und Zieladresse, und Ethernet verpackt das IP-Paket für den lokalen Abschnitt in einen Frame. Das Medium überträgt anschließend die zugehörigen Signale. Beim Empfänger werden die Hüllen in umgekehrter Reihenfolge ausgewertet; die Anwendung erhält wieder die für sie bestimmten Daten.</p>
           <p>Die Aufteilung vereinfacht auch die Fehlersuche: Eine beschädigte Leitung betrifft zunächst die Übertragung auf Schicht 1. Eine falsche IP-Konfiguration betrifft die Vermittlung auf Schicht 3. Dass eine untere Schicht funktioniert, garantiert aber noch nicht, dass auch ein Dienst auf einer höheren Schicht erreichbar ist.</p>
+          <p><strong>Schicht 2 oder Schicht 4?</strong> Die Sicherungsschicht arbeitet auf einem lokalen Verbindungsabschnitt: Ethernet kann mit der FCS Übertragungsfehler in Frames erkennen, aber die FCS behebt sie nicht und garantiert keine Zustellung. Die Transportschicht arbeitet zwischen den Endpunkten: TCP kann durch Bestätigungen und erneutes Senden eine zuverlässige, geordnete Übertragung bereitstellen. UDP auf derselben Schicht bietet diese Garantie nicht. Bei einer Frage nach „fehlerfreier Übertragung“ ist daher entscheidend, ob der lokale Abschnitt oder die Ende-zu-Ende-Verbindung gemeint ist.</p>
           <div class="learn-callout"><strong>Eselsbrücke für Schicht 1 bis 7</strong>
             <p>Von unten nach oben: Physikalisch, Sicherung, Vermittlung, Transport, Sitzung, Darstellung, Anwendung (PSVTSDA).</p>
           </div>
@@ -177,6 +178,22 @@
           <p>Ein <strong>802.1Q-Tag</strong> ist eine vier Byte große Zusatzinformation im Ethernet-Frame. Es steht zwischen Quell-MAC-Adresse und dem ursprünglichen Typ-/Längenfeld. Der Tag enthält eine Kennzeichnung als VLAN-Tag sowie unter anderem die <strong>VLAN-ID</strong>, die angibt, zu welchem VLAN der Frame gehört. Ein Frame mit dieser Zusatzinformation heißt <strong>tagged</strong>; ohne sie heißt er <strong>untagged</strong>. Die MAC-Adressen bleiben für die lokale Zustellung wichtig: Die VLAN-ID ersetzt sie nicht.</p>
           <p><strong>Beispiel mit zwei Switches:</strong> Ein PC sendet an einem Access-Port von Switch A üblicherweise einen untagged Frame. Der Port ist VLAN 10 zugeordnet, sodass der Switch den Frame diesem VLAN zuordnet. Über eine Verbindung zwischen den Switches, die mehrere VLANs transportiert, sendet A den Frame mit VLAN-10-Tag. Switch B erkennt daran die Zuordnung und gibt ihn an einem Access-Port für VLAN 10 üblicherweise wieder ohne Tag an den Ziel-PC aus. VLAN 20 kann dieselbe Verbindung nutzen, bleibt aber logisch getrennt.</p>
           <p>Eine solche Verbindung heißt <strong>Trunk</strong>. Dort werden Frames für mehrere VLANs normalerweise mit Tags übertragen; je nach Konfiguration kann ein natives VLAN auch untagged übertragen werden. Ob und wie ein Port taggt, hängt also von seiner Konfiguration ab.</p>
+          <h3>Kollisionsdomäne, Broadcast-Domäne und weitere Domänen</h3>
+          <p>Eine <strong>Domäne</strong> ist in diesem Zusammenhang ein Bereich, in dem eine bestimmte Netzwerkeigenschaft gilt. In der Ethernet-Grundlage sind vor allem Kollisions- und Broadcast-Domänen wichtig:</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Domäne</th><th>Bedeutung</th><th>Typische Abgrenzung</th></tr></thead>
+            <tbody>
+              <tr><th>Kollisionsdomäne</th><td>Bereich eines gemeinsam genutzten Übertragungsmediums, in dem gleichzeitiges Senden zu einer Kollision führen kann.</td><td>Ein Hub verbindet seine Ports in einer gemeinsamen Kollisionsdomäne. Ein Switch trennt die Kollisionsdomänen an seinen Ports; bei Vollduplex treten dort keine Ethernet-Kollisionen auf.</td></tr>
+              <tr><th>Broadcast-Domäne</th><td>Bereich, in dem ein Layer-2-Broadcast (z. B. an <code>FF:FF:FF:FF:FF:FF</code>) verteilt wird.</td><td>Ein Switch leitet Broadcasts innerhalb des jeweiligen VLANs weiter. Jedes VLAN ist eine eigene Broadcast-Domäne; ein Router leitet Layer-2-Broadcasts nicht ins nächste Netz weiter.</td></tr>
+              <tr><th>Fehlerdomäne</th><td>Geräte oder Verbindungen, die von demselben Ausfall betroffen sein können.</td><td>Fällt ein Switch aus, können alle daran angeschlossenen Geräte betroffen sein. Ein VLAN allein verhindert diesen physischen Ausfall nicht.</td></tr>
+              <tr><th>Routing-Domäne</th><td>Netzbereich, dessen Routing gemeinsam verwaltet wird.</td><td>Ein autonomes System (AS) im Internet ist ein Beispiel; BGP tauscht Routen zwischen solchen Systemen aus.</td></tr>
+              <tr><th>Sicherheitsdomäne</th><td>Bereich, für den gemeinsame Sicherheitsregeln und Vertrauensannahmen gelten.</td><td>Zum Beispiel kann ein Unternehmensnetz in getrennt verwaltete Zonen für Gäste und interne Systeme aufgeteilt werden.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="learn-callout">
+            <strong>Merke: Switchports und VLANs grenzen unterschiedliche Domänen ab</strong>
+            <p>Mehrere PCs an einem Switch können im selben VLAN sein: Jeder Switchport ist eine eigene Kollisionsdomäne, aber alle PCs teilen eine Broadcast-Domäne. Werden Ports auf VLAN 10 und VLAN 20 verteilt, entstehen zwei Broadcast-Domänen. Zwischen ihnen kann nur eine Routingfunktion (z. B. Router oder Layer-3-Switch) Pakete weiterleiten.</p>
+          </div>
           <div class="table-wrap"><table>
             <thead><tr><th>Gerät</th><th>Wirkung / Domäne</th></tr></thead>
             <tbody>
