@@ -159,6 +159,25 @@
           </table></div>
           <p>In Glasfasern wird Licht durch Totalreflexion im Kern geführt. Glasfaser bietet hohe Bandbreite, große Reichweite und Unempfindlichkeit gegenüber elektromagnetischen Störungen.</p>
           <p>Bei Twisted Pair werden zwei zusammengehörige Adern verdrillt, damit äußere Störungen beide möglichst ähnlich beeinflussen und am Empfänger besser unterdrückt werden können. Eine zusätzliche Schirmung schützt gegen weitere Störeinflüsse, ersetzt aber keine fachgerechte Installation. Bei Glasfaser wird statt eines elektrischen Signals Licht übertragen; die Leitung verbindet die Geräte daher nicht als elektrischer Leiter.</p>
+          <h3>Strukturierte Verkabelung: Primär, Sekundär und Tertiär</h3>
+          <p>Die <strong>strukturierte Verkabelung</strong> gliedert die feste Netzwerkinfrastruktur eines Standorts in übersichtliche Bereiche. Verteiler verbinden dabei die Leitungsabschnitte miteinander. Das Lernblatt nennt dafür unter anderem die Normen EN 50173-1 und ISO/IEC 11801. Die Bereiche beschreiben, <em>welche Orte verbunden werden</em>, nicht unterschiedliche Arten von IP-Netzen.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Bereich</th><th>Verbindung und Aufgabe</th><th>Beispiel</th></tr></thead>
+            <tbody>
+              <tr><th>Primärbereich<br>Standortverkabelung</th><td>Verbindet Gebäude beziehungsweise Gebäudeverteiler auf einem Standort mit dem Standortverteiler. Dieser Bereich wird auch Campus-Backbone genannt.</td><td>Eine Glasfaser verbindet den Standortverteiler im Hauptgebäude mit dem Gebäudeverteiler eines Nebengebäudes.</td></tr>
+              <tr><th>Sekundärbereich<br>Gebäudeverkabelung</th><td>Verbindet innerhalb eines Gebäudes den Gebäudeverteiler mit Etagenverteilern. Er erschließt Etagen oder andere Gebäudebereiche und wird auch Gebäude-Backbone genannt.</td><td>Eine Steigleitung führt vom Gebäudeverteiler im Keller zu den Etagenverteilern im ersten und zweiten Stock.</td></tr>
+              <tr><th>Tertiärbereich<br>Etagenverkabelung</th><td>Verbindet den Etagenverteiler mit den Telekommunikationsanschlüssen in den Räumen. Über Anschluss- und Patchkabel werden dort Geräte angeschlossen.</td><td>Vom Etagenverteiler führt eine feste Kupferleitung zur Netzwerkdose im Klassenraum; ein Patchkabel verbindet die Dose mit dem PC.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Welche Medien tatsächlich verwendet werden, hängt von Strecke und Planung ab: Für längere Verbindungen zwischen Gebäuden oder Etagen wird häufig Glasfaser eingesetzt; im arbeitsplatznahen Bereich ist Twisted-Pair-Kupfer verbreitet. Diese Beispiele sind keine starre Zuordnung: Der Bereich wird durch seine Aufgabe und Verbindung bestimmt, nicht allein durch das Kabelmaterial.</p>
+          <div class="learn-callout">
+            <strong>Der Weg bis zum Arbeitsplatz</strong>
+            <p><code>Standortverteiler (SV) → Gebäudeverteiler (GV) → Etagenverteiler (EV) → Telekommunikationsanschluss (TA) → PC</code></p>
+            <p>Die Strecke <strong>SV → GV</strong> gehört zum Primärbereich, <strong>GV → EV</strong> zum Sekundärbereich und <strong>EV → TA</strong> zum Tertiärbereich. Die TA ist beispielsweise die Netzwerkdose im Raum. Der PC wird anschließend mit einem Anschlusskabel daran verbunden; Patchkabel im Verteiler verbinden die feste Leitung mit aktiven Geräten wie einem Switch.</p>
+            <p><strong>Merksatz:</strong> Primär zwischen Gebäuden, sekundär im Gebäude zu den Etagen, tertiär auf der Etage zum Arbeitsplatz.</p>
+          </div>
+          <p>Für die übliche Twisted-Pair-Strecke im Tertiärbereich unterscheidet das Lernblatt den <strong>Permanent Link</strong> und den <strong>Channel Link</strong>: Der Permanent Link umfasst die feste Installationsstrecke zwischen Verteiler und Anschlussdose und darf bis zu <code>90 m</code> lang sein. Der Channel umfasst diese Strecke einschließlich der Anschluss- und Patchkabel und ist typischerweise auf <code>100 m</code> begrenzt. Das bedeutet nicht, dass die feste Leitung allein 100 m lang sein darf; konkrete Streckenanforderungen hängen von der jeweiligen Anwendung und Norm ab.</p>
+          <p><strong>Typische Falle:</strong> Der Sekundärbereich endet nicht direkt am PC, sondern erschließt die Etagenverteiler. Die Leitung vom Etagenverteiler zur Netzwerkdose gehört zum Tertiärbereich. Ein Patchkabel von der Dose zum PC ist nicht Teil des Permanent Links.</p>
         </details>
 
         <details id="ethernet" class="learn-section">
